@@ -3,6 +3,7 @@ on:
   schedule: [{ cron: "17 9 4 * *" }]   # 4th of each month (World Bank updates on the 2nd business day)
   workflow_dispatch: {}
 permissions: { contents: write }
+concurrency: { group: refresh, cancel-in-progress: false }
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -14,4 +15,4 @@ jobs:
       - run: python scripts/build_data.py
       - run: |
           git config user.name "data-bot"; git config user.email "data-bot@users.noreply.github.com"
-          git add data.json; git diff --cached --quiet || git commit -m "Monthly data refresh"; git push
+          git add data.json; git diff --cached --quiet || git commit -m "Monthly data refresh"; git pull --rebase; git push
