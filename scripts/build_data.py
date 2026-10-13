@@ -59,6 +59,16 @@ with z.open("ELEC.txt") as f:
             break
 add("elec", "US electricity (all sectors)", "MWh", "monthly avg", pts)
 
+# rates (percent, not priced in gold): Federal Reserve H.15 via FRED, monthly averages of daily data
+today = datetime.date.today().strftime("%Y-%m")
+for id, label, sid in [("fedfunds", "Fed funds rate (effective)", "FEDFUNDS"), ("ust10", "US 10Y Treasury yield", "DGS10"),
+                       ("real10", "US 10Y real yield (TIPS)", "DFII10")]:
+    pts = []
+    for dt, v in list(csv.reader(io.StringIO(get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Monthly&fam=avg").decode())))[1:]:
+        if v and v != "." and dt[:7] < today: pts.append((dt, float(v), float(v), 0))
+    items.append(dict(id=id, kind="rate", label=label, unit="%", freq="monthly avg", asof=pts[-1][0][:7], usd=pts[-1][1], goldusd=0, ozau=0,
+                      prev=pts[-13][1] if len(pts) > 12 else None, points=[[a, b] for a, b, _, _ in pts]))
+
 # uranium: manual weekly entries in scripts/uranium.csv (date,usd_per_lb), typed in by the account holder
 import os
 up = os.path.join(os.path.dirname(__file__), "uranium.csv")
