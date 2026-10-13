@@ -34,7 +34,7 @@ def add(id, label, unit, freq, pts):
                       goldusd=pts[-1][3], ozau=pts[-1][1], points=[[a, b] for a, b, _, _ in pts]))
 for id, label, unit, name in [("wti", "Crude oil (WTI)", "bbl", "Crude oil, WTI"), ("brent", "Crude oil (Brent)", "bbl", "Crude oil, Brent"),
         ("gas", "Natural gas (US)", "MMBtu", "Natural gas, US"), ("copper", "Copper", "tonne", "Copper"),
-        ("silver", "Silver", "oz", "Silver"), ("platinum", "Platinum", "oz", "Platinum")]:
+        ("silver", "Silver", "oz", "Silver"), ("coal", "Coal (Australian, Newcastle)", "tonne", "Coal, Australian")]:
     add(id, label, unit, "monthly avg", series(col(name)))
 
 # housing: FRED MSPUS quarterly, gold = mean of the quarter's three monthly averages
