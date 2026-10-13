@@ -81,17 +81,43 @@ for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/
 items.append(dict(id="mortgage", kind="rate", label="US 30Y mortgage rate (Freddie Mac)", unit="%", freq="weekly", asof=pts[-1][0], usd=pts[-1][1], goldusd=0, ozau=0,
                   prev=pts[-53][1] if len(pts) > 52 else None, points=[[a, b] for a, b in pts]))
 
-# uranium: manual weekly entries in scripts/uranium.csv (date,usd_per_lb), typed in by the account holder
+# uranium: Cameco month-end spot history (scraped, no login; snapshot in scripts/cameco.csv as fallback)
+# + latest UxC weekly readings from scripts/uranium.csv (typed in by the account holder)
 import os
-up = os.path.join(os.path.dirname(__file__), "uranium.csv")
+here = os.path.dirname(__file__)
+cam = {}
+try:
+    html = get("https://www.cameco.com/invest/markets/uranium-price", 60).decode("utf8", "ignore")
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", html, re.S):
+        tds = [re.sub(r"<[^>]+>", "", t).strip() for t in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]
+        if len(tds) >= 2 and re.match(r"\d{4}/\d{2}/\d{2}$", tds[0]):
+            try: cam[tds[0].replace("/", "-")] = float(tds[1])
+            except ValueError: pass
+    if len(cam) > 400:
+        with open(os.path.join(here, "cameco.csv"), "w") as f:
+            f.write("date,usd_per_lb\n" + "".join(f"{k},{v}\n" for k, v in sorted(cam.items())))
+    else: cam = {}
+except Exception as e:
+    print("cameco scrape failed:", e); cam = {}
+if not cam:
+    for row in csv.reader(open(os.path.join(here, "cameco.csv"))):
+        if row and row[0][:1].isdigit(): cam[row[0]] = float(row[1])
+last_gold = gold[max(gold)]
+mon = {k[:7]: (k, v) for k, v in cam.items()}
+latest = None
+up = os.path.join(here, "uranium.csv")
 if os.path.exists(up):
-    last_gold = gold[max(gold)]; pts = []
-    for row in csv.reader(open(up)):
-        if not row or not row[0][:1].isdigit(): continue
-        dt, v = row[0], float(row[1]); g = gold.get(f"{dt[:4]}M{dt[5:7]}", last_gold)
-        pts.append((dt, v / g, v, g))
-    if pts: add("uranium", "Uranium U3O8 (UxC weekly)", "lb", "weekly, delayed up to 72h", sorted(pts))
-
+    ux = sorted((r[0], float(r[1])) for r in csv.reader(open(up)) if r and r[0][:1].isdigit())
+    last_cam = max(mon)
+    for dt, v in ux:
+        if dt[:7] > last_cam: mon[dt[:7]] = (dt, v)  # last UxC weekly reading in each month after Cameco's last
+    if ux: latest = ux[-1]
+pts = []
+for m, (dt, v) in sorted(mon.items()):
+    g = gold.get(f"{m[:4]}M{m[5:7]}", last_gold); pts.append((dt, v / g, v, g))
+if pts:
+    add("uranium", "Uranium U3O8 (spot)", "lb", "month-end history, latest UxC weekly", pts)
+    if latest: items[-1]["asof"] = latest[0]
 order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
