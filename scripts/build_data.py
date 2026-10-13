@@ -74,6 +74,13 @@ for id, label, sid in [("fedfunds", "Fed funds rate (effective)", "FEDFUNDS"), (
     items.append(dict(id=id, kind="rate", label=label, unit="%", freq="monthly avg", asof=pts[-1][0][:7], usd=pts[-1][1], goldusd=0, ozau=0,
                       prev=pts[-13][1] if len(pts) > 12 else None, points=[[a, b] for a, b, _, _ in pts]))
 
+# mortgage rate: Freddie Mac PMMS 30Y fixed via FRED, weekly (publishing permission is the site owner's to arrange)
+pts = []
+for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US").decode())))[1:]:
+    if v and v != ".": pts.append((dt, float(v)))
+items.append(dict(id="mortgage", kind="rate", label="US 30Y mortgage rate (Freddie Mac)", unit="%", freq="weekly", asof=pts[-1][0], usd=pts[-1][1], goldusd=0, ozau=0,
+                  prev=pts[-53][1] if len(pts) > 52 else None, points=[[a, b] for a, b in pts]))
+
 # uranium: manual weekly entries in scripts/uranium.csv (date,usd_per_lb), typed in by the account holder
 import os
 up = os.path.join(os.path.dirname(__file__), "uranium.csv")
@@ -85,7 +92,7 @@ if os.path.exists(up):
         pts.append((dt, v / g, v, g))
     if pts: add("uranium", "Uranium U3O8 (UxC weekly)", "lb", "weekly, delayed up to 72h", sorted(pts))
 
-order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "fedfunds", "ust10", "real10"]
+order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "fedfunds", "mortgage", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
 print("ok", [(i["id"], i["asof"]) for i in items])
