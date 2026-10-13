@@ -92,7 +92,7 @@ if os.path.exists(up):
         pts.append((dt, v / g, v, g))
     if pts: add("uranium", "Uranium U3O8 (UxC weekly)", "lb", "weekly, delayed up to 72h", sorted(pts))
 
-order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "fedfunds", "mortgage", "ust10", "real10"]
+order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
 print("ok", [(i["id"], i["asof"]) for i in items])
