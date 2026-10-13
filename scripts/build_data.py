@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds data.json for the Priced in Gold widget. Keyless sources only:
 World Bank Pink Sheet (monthly xlsx), FRED MSPUS CSV, EIA bulk ELEC.zip."""
-import csv, io, json, re, urllib.request, zipfile, datetime
+import csv, io, json, os, re, urllib.request, zipfile, datetime
 import openpyxl
 
 def get(url, timeout=300):
@@ -50,6 +50,7 @@ for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/
     y, m, _ = dt.split("-"); m = int(m)
     g = [gold[k] for k in (f"{y}M{mm:02d}" for mm in (m, m + 1, m + 2)) if k in gold]
     if len(g) == 3: pts.append((dt, float(v) / (sum(g) / 3), float(v), sum(g) / 3))
+pts_housing = pts
 add("housing", "US median home price", "home", "quarterly", pts)
 
 # electricity: EIA bulk, cents/kWh -> $/MWh
@@ -84,7 +85,7 @@ items.append(dict(id="mortgage", kind="rate", label="US 30Y mortgage rate (Fredd
 # uranium: Cameco month-end spot history (scraped, no login; snapshot in scripts/cameco.csv as fallback)
 # + latest UxC weekly readings from scripts/uranium.csv (typed in by the account holder)
 import os
-here = os.path.dirname(__file__)
+here = os.path.dirname(os.path.abspath(__file__))
 cam = {}
 try:
     html = get("https://www.cameco.com/invest/markets/uranium-price", 60).decode("utf8", "ignore")
@@ -118,6 +119,25 @@ for m, (dt, v) in sorted(mon.items()):
 if pts:
     add("uranium", "Uranium U3O8 (spot)", "lb", "month-end history, latest UxC weekly", pts)
     if latest: items[-1]["asof"] = latest[0]
+# long-run history (annual early points, fixed files built once; see footer for sources), prepended before each series starts
+H = json.load(open(os.path.join(here, "history.json")))
+gann = {}
+for k, v in gold.items(): gann.setdefault(int(k[:4]), []).append(v)
+gann = {y: sum(v) / len(v) for y, v in gann.items()}
+for dt, v in H["gold"]: gann.setdefault(int(dt[:4]), v)
+byid = {i["id"]: i for i in items}
+for id in ("gold", "silver", "wti", "brent", "gas", "elec"):
+    it = byid[id]; first = it["points"][0][0]
+    hp = [[dt, v if id == "gold" else v / gann[int(dt[:4])]] for dt, v in H[id] if dt < first]
+    it["points"] = hp + it["points"]
+hs = byid["housing"]; first = hs["points"][0][0]
+idx = [(dt, v) for dt, v in H["housing_index"] if dt < first]
+scale = hs["usd"] and None
+mspus_first = [p for p in pts_housing if p[0] == first][0][2]
+scale = mspus_first / idx[-1][1]
+hs["points"] = [[dt, v * scale / gann[int(dt[:4])]] for dt, v in idx] + hs["points"]
+u = byid["ust10"]; first = u["points"][0][0]
+u["points"] = [[dt, v] for dt, v in H["ust10"] if dt < first] + u["points"]
 order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
