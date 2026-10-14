@@ -138,6 +138,16 @@ scale = mspus_first / idx[-1][1]
 hs["points"] = [[dt, v * scale / gann[int(dt[:4])]] for dt, v in idx] + hs["points"]
 u = byid["ust10"]; first = u["points"][0][0]
 u["points"] = [[dt, v] for dt, v in H["ust10"] if dt < first] + u["points"]
+# priced in silver: oz Ag per unit for the latest value (silver from the same Pink Sheet month, quarter average for housing)
+sc = col("Silver")
+silv = {r[0]: num(r[sc]) for r in data if r[0] and num(r[sc])}
+last_silv = silv[max(silv)]
+for it in items:
+    if it.get("kind"): continue
+    a = it["asof"]; y, m = a[:4], int(a[5:7])
+    ks = [f"{y}M{mm:02d}" for mm in ((m, m + 1, m + 2) if it["id"] == "housing" else (m,))]
+    sv = [silv[k] for k in ks if k in silv]
+    it["ozag"] = it["usd"] / (sum(sv) / len(sv) if len(sv) == len(ks) else last_silv)
 order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
