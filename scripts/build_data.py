@@ -138,6 +138,16 @@ scale = mspus_first / idx[-1][1]
 hs["points"] = [[dt, v * scale / gann[int(dt[:4])], v * scale] for dt, v in idx] + hs["points"]
 u = byid["ust10"]; first = u["points"][0][0]
 u["points"] = [[dt, v] for dt, v in H["ust10"] if dt < first] + u["points"]
+# M2 money supply: Federal Reserve H.6 via FRED M2SL (public domain), $ billion, monthly, seasonally adjusted.
+# Shown as $ trillion; oz Au / oz Ag in billions of ounces (= $bn / price per oz)
+pts = []
+for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/fredgraph.csv?id=M2SL").decode())))[1:]:
+    if not v or v == ".": continue
+    g = gold.get(f"{dt[:4]}M{dt[5:7]}") or gann[int(dt[:4])]
+    pts.append((dt, float(v) / g, float(v) / 1000, g))
+add("m2", "US M2 money supply", "total", "monthly, seasonally adjusted", pts)
+byid["m2"] = items[-1]
+
 # priced in silver: oz Ag per unit for the latest value (silver from the same Pink Sheet month, quarter average for housing)
 sc = col("Silver")
 silv = {r[0]: num(r[sc]) for r in data if r[0] and num(r[sc])}
@@ -147,7 +157,7 @@ for it in items:
     a = it["asof"]; y, m = a[:4], int(a[5:7])
     ks = [f"{y}M{mm:02d}" for mm in ((m, m + 1, m + 2) if it["id"] == "housing" else (m,))]
     sv = [silv[k] for k in ks if k in silv]
-    it["ozag"] = it["usd"] / (sum(sv) / len(sv) if len(sv) == len(ks) else last_silv)
+    it["ozag"] = it["usd"] * (1000 if it["id"] == "m2" else 1) / (sum(sv) / len(sv) if len(sv) == len(ks) else last_silv)
 # per-point oz Ag and compact rounding: points are [date, oz Au, USD, oz Ag]
 sp = {p[0]: p[2] for p in byid["silver"]["points"]}
 def silv_at(dt, quarter):
@@ -157,13 +167,15 @@ def silv_at(dt, quarter):
         if len(v) == len(ks): return sum(v) / len(v)
     if dt in sp: return sp[dt]
     k = dt[:7] + "-01"
-    return sp.get(k, last_silv)
+    if k in sp: return sp[k]
+    if int(dt[:4]) < 1960 and f"{dt[:4]}-07-01" in sp: return sp[f"{dt[:4]}-07-01"]
+    return last_silv
 r5 = lambda x: float(f"{x:.5g}")
 for it in items:
     if it.get("kind"): continue
     q = it["id"] == "housing"
-    it["points"] = [[dt, r5(o), r5(u), r5(u / silv_at(dt, q))] for dt, o, u in it["points"]]
-order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "mortgage", "fedfunds", "ust10", "real10"]
+    it["points"] = [[dt, r5(o), r5(u), r5(u * (1000 if it["id"] == "m2" else 1) / silv_at(dt, q))] for dt, o, u in it["points"]]
+order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "m2", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
 print("ok", [(i["id"], i["asof"]) for i in items])
