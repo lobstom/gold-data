@@ -31,12 +31,12 @@ def series(c, mult=1.0):
 items = []
 def add(id, label, unit, freq, pts):
     items.append(dict(id=id, label=label, unit=unit, freq=freq, asof=pts[-1][0][:7], usd=pts[-1][2],
-                      goldusd=pts[-1][3], ozau=pts[-1][1], points=[[a, b] for a, b, _, _ in pts]))
+                      goldusd=pts[-1][3], ozau=pts[-1][1], points=[[a, b, c] for a, b, c, _ in pts]))
 # gold first: priced in USD (its oz Au value is 1 by definition), so the chart shows the USD price
 gp = [(d(k), 1.0, v, v) for k, v in gold.items()]
 add("gold", "Gold", "oz", "monthly avg", gp)
 items[-1]["usdchart"] = True
-items[-1]["points"] = [[a, c] for a, _, c, _ in gp]
+items[-1]["points"] = [[a, 1.0, c] for a, _, c, _ in gp]
 for id, label, unit, name in [("silver", "Silver", "oz", "Silver"), ("wti", "Crude oil (WTI)", "bbl", "Crude oil, WTI"),
         ("brent", "Crude oil (Brent)", "bbl", "Crude oil, Brent"),
         ("gas", "Natural gas (US)", "MMBtu", "Natural gas, US"), ("ttf", "Natural gas (Europe, TTF)", "MMBtu", "Natural gas, Europe"),
@@ -128,14 +128,14 @@ for dt, v in H["gold"]: gann.setdefault(int(dt[:4]), v)
 byid = {i["id"]: i for i in items}
 for id in ("gold", "silver", "wti", "brent", "gas", "elec"):
     it = byid[id]; first = it["points"][0][0]
-    hp = [[dt, v if id == "gold" else v / gann[int(dt[:4])]] for dt, v in H[id] if dt < first]
+    hp = [[dt, 1.0 if id == "gold" else v / gann[int(dt[:4])], v] for dt, v in H[id] if dt < first]
     it["points"] = hp + it["points"]
 hs = byid["housing"]; first = hs["points"][0][0]
 idx = [(dt, v) for dt, v in H["housing_index"] if dt < first]
 scale = hs["usd"] and None
 mspus_first = [p for p in pts_housing if p[0] == first][0][2]
 scale = mspus_first / idx[-1][1]
-hs["points"] = [[dt, v * scale / gann[int(dt[:4])]] for dt, v in idx] + hs["points"]
+hs["points"] = [[dt, v * scale / gann[int(dt[:4])], v * scale] for dt, v in idx] + hs["points"]
 u = byid["ust10"]; first = u["points"][0][0]
 u["points"] = [[dt, v] for dt, v in H["ust10"] if dt < first] + u["points"]
 # priced in silver: oz Ag per unit for the latest value (silver from the same Pink Sheet month, quarter average for housing)
@@ -148,6 +148,21 @@ for it in items:
     ks = [f"{y}M{mm:02d}" for mm in ((m, m + 1, m + 2) if it["id"] == "housing" else (m,))]
     sv = [silv[k] for k in ks if k in silv]
     it["ozag"] = it["usd"] / (sum(sv) / len(sv) if len(sv) == len(ks) else last_silv)
+# per-point oz Ag and compact rounding: points are [date, oz Au, USD, oz Ag]
+sp = {p[0]: p[2] for p in byid["silver"]["points"]}
+def silv_at(dt, quarter):
+    if quarter:
+        y, m = int(dt[:4]), int(dt[5:7]); ks = [f"{y}-{mm:02d}-01" for mm in (m, m + 1, m + 2)]
+        v = [sp[k] for k in ks if k in sp]
+        if len(v) == len(ks): return sum(v) / len(v)
+    if dt in sp: return sp[dt]
+    k = dt[:7] + "-01"
+    return sp.get(k, last_silv)
+r5 = lambda x: float(f"{x:.5g}")
+for it in items:
+    if it.get("kind"): continue
+    q = it["id"] == "housing"
+    it["points"] = [[dt, r5(o), r5(u), r5(u / silv_at(dt, q))] for dt, o, u in it["points"]]
 order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
