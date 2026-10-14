@@ -146,7 +146,31 @@ for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/
     g = gold.get(f"{dt[:4]}M{dt[5:7]}") or gann[int(dt[:4])]
     pts.append((dt, float(v) / g, float(v) / 1000, g))
 add("m2", "US M2 money supply", "total", "monthly, seasonally adjusted", pts)
+items[-1]["big"] = 1
 byid["m2"] = items[-1]
+
+def fred(sid, extra=""):
+    return [(r[0], float(r[1])) for r in list(csv.reader(io.StringIO(get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}{extra}").decode())))[1:] if len(r) > 1 and r[1] not in ("", ".")]
+def gfor(dt):
+    return gold.get(f"{dt[:4]}M{dt[5:7]}") or gann[int(dt[:4])]
+today_m = datetime.date.today().strftime("%Y-%m")
+def mk(id, label, unit, freq, rows, big=False):
+    pts = [(dt, v * (1000 if big else 1) / gfor(dt), v, gfor(dt)) for dt, v in rows]
+    add(id, label, unit, freq, pts)
+    if big: items[-1]["big"] = 1
+    byid[id] = items[-1]
+# federal debt: US Treasury total public debt; annual (June) before 1966, quarterly after ($ trillion)
+rows = [(d, v / 1000) for d, v in H["debt_fy"]] + [(d, v / 1e6) for d, v in fred("GFDEBTN")]
+mk("debt", "US federal debt", "total", "quarterly (annual before 1966)", [(d, v * 1000 / 1) if False else (d, v) for d, v in rows], big=True)
+# average hourly earnings: BLS production and nonsupervisory (AHETPI) from 1964; before that, manufacturing production workers rescaled
+ah = [(d, v) for d, v in fred("AHETPI") if d[:7] < today_m]
+man = dict(fred("CES3000000008")); f0 = ah[0][1] / man[ah[0][0]]
+mk("ahe", "Avg hourly earnings (production workers)", "hour", "monthly", [(d, v * f0) for d, v in H["ahe_man"]] + ah)
+# S&P 500 price index: Shiller monthly to Aug 2023, then FRED SP500 monthly average (S&P Dow Jones Indices)
+sp5 = [(d, v) for d, v in H["sp500"]] + [(d, v) for d, v in fred("SP500", "&fq=Monthly&fam=avg") if "2023-09-01" <= d and d[:7] < today_m]
+mk("sp500", "S&P 500 (price index)", "index pt", "monthly avg", sp5)
+dj = [(d, v) for d, v in H["dow"]] + [(d, v) for d, v in fred("DJIA", "&fq=Monthly&fam=avg") if "2017-01-01" <= d and d[:7] < today_m]
+mk("dow", "Dow Jones Industrial Average", "index pt", "monthly avg", dj)
 
 # priced in silver: oz Ag per unit for the latest value (silver from the same Pink Sheet month, quarter average for housing)
 sc = col("Silver")
@@ -157,7 +181,7 @@ for it in items:
     a = it["asof"]; y, m = a[:4], int(a[5:7])
     ks = [f"{y}M{mm:02d}" for mm in ((m, m + 1, m + 2) if it["id"] == "housing" else (m,))]
     sv = [silv[k] for k in ks if k in silv]
-    it["ozag"] = it["usd"] * (1000 if it["id"] == "m2" else 1) / (sum(sv) / len(sv) if len(sv) == len(ks) else last_silv)
+    it["ozag"] = it["usd"] * (1000 if it.get("big") else 1) / (sum(sv) / len(sv) if len(sv) == len(ks) else last_silv)
 # per-point oz Ag and compact rounding: points are [date, oz Au, USD, oz Ag]
 sp = {p[0]: p[2] for p in byid["silver"]["points"]}
 def silv_at(dt, quarter):
@@ -174,8 +198,8 @@ r5 = lambda x: float(f"{x:.5g}")
 for it in items:
     if it.get("kind"): continue
     q = it["id"] == "housing"
-    it["points"] = [[dt, r5(o), r5(u), r5(u * (1000 if it["id"] == "m2" else 1) / silv_at(dt, q))] for dt, o, u in it["points"]]
-order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "m2", "mortgage", "fedfunds", "ust10", "real10"]
+    it["points"] = [[dt, r5(o), r5(u), r5(u * (1000 if it.get("big") else 1) / silv_at(dt, q))] for dt, o, u in it["points"]]
+order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "m2", "debt", "ahe", "sp500", "dow", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
 print("ok", [(i["id"], i["asof"]) for i in items])
