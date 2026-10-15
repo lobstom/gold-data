@@ -45,6 +45,37 @@ USD trillion / billion troy ounces. Not physical gold holdings or reserve covera
 """
 import csv, io, calendar, datetime
 
+TIC = 'https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/'
+def tic_quarters(get):
+    """{'YYYY-MM-DD': {'tot': $bn, 'off': $bn}} for quarter-end months. slt_table5 (recent, latest revisions) overrides mfhhis01 (history)."""
+    mon = ['Dec','Nov','Oct','Sep','Aug','Jul','Jun','May','Apr','Mar','Feb','Jan']
+    qe = {'Mar': '03-31', 'Jun': '06-30', 'Sep': '09-30', 'Dec': '12-31'}
+    out = {}
+    rows = list(csv.reader(io.StringIO(get(TIC + 'mfhhis01.csv').decode('latin-1'))))
+    yr = None
+    for r in rows:
+        if not r: continue
+        k = r[0].strip()
+        if k == 'Country' and len(r) > 1 and r[1].strip().isdigit(): yr = int(r[1])
+        key = {'Grand Total': 'tot', 'For. Official': 'off'}.get(k)
+        if key and yr:
+            for m, v in zip(mon, r[1:13]):
+                if m in qe:
+                    try: out.setdefault(f'{yr}-{qe[m]}', {})[key] = float(v)
+                    except ValueError: pass
+    lines = [l.split('\t') for l in get(TIC + 'slt_table5.txt').decode('latin-1').splitlines()]
+    hdr = next(l for l in lines if l[0] == 'Country')
+    for l in lines:
+        key = {'Grand Total': 'tot', 'Of Which: Foreign Official': 'off'}.get(l[0].strip())
+        if not key: continue
+        for d, v in zip(hdr[1:], l[1:]):
+            d = d.strip()
+            if len(d) == 7 and d[5:] in ('03', '06', '09', '12'):
+                y, m = int(d[:4]), int(d[5:])
+                try: out.setdefault(f'{y}-{m:02d}-{calendar.monthrange(y, m)[1]:02d}', {})[key] = float(v)
+                except ValueError: pass
+    return out
+
 def extend_v3(doc, get):
     byid = {i['id']: i for i in doc['items']}
     gold = {p[0][:7]: p[2] for p in byid['gold']['points'] if p[0] >= '1960-01-01'}
@@ -101,9 +132,21 @@ def extend_v3(doc, get):
         rest = p[2]-government[d]-f  # residual against the authoritative displayed total
         if min(government[d],f,rest,a-f) < 0: raise ValueError('Negative ownership component')
         debt['parts'].append([d,government[d],f,rest,a-f,fd])
+    # Foreign holders: Treasury TIC "Major Foreign Holders of Treasury Securities" (Grand Total and Foreign Official),
+    # quarter-end months, $ trillion. Appended as parts[6]=foreign official, parts[7]=foreign private/other.
+    # The card reorders these and shows other domestic = other public - foreign. Failure is non-fatal (card handles rows without them).
+    try:
+        tic = tic_quarters(get)
+        for r in debt['parts']:
+            k = tic.get(r[0])
+            if k and 'tot' in k and 'off' in k:
+                r.extend([round(k['off']/1000, 4), round((k['tot']-k['off'])/1000, 4)])
+                if r[3] - r[6] - r[7] < 0: raise ValueError('Foreign holdings exceed other public holders')
+    except Exception as e:
+        print('WARNING: TIC foreign holdings skipped:', e)
     debt['label'] = 'Who owns the federal debt (and the Fed\'s balance sheet)'
     debt['stack'] = True
-    debt['note'] = 'Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month; other public holders are residual total debt minus government accounts minus Fed Treasuries; historical source revisions may differ from the separately published public-debt series. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned.'
+    debt['note'] = 'Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned.'
     # FHFA MIRS Table 9, annual all-term conventional contract rates, not PMMS.
     # Official workbook: https://www.fhfa.gov/sites/default/files/Table9-2018-by-Year.xls
     # Midyear dates represent annual means, not a dated weekly quote.
