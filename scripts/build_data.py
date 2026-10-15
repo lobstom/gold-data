@@ -205,5 +205,8 @@ for it in items:
     it["points"] = [[dt, r5(o), r5(u), r5(u * (1000 if it.get("big") else 1) / silv_at(dt, q))] for dt, o, u in it["points"]]
 order = ["gold", "silver", "uranium", "wti", "brent", "gas", "ttf", "coal", "elec", "housing", "m2", "debt", "ahe", "sp500", "dow", "mortgage", "fedfunds", "ust10", "real10"]
 items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
-json.dump({"updated": datetime.date.today().isoformat(), "items": items}, open("data.json", "w"), separators=(",", ":"))
+doc = {"updated": datetime.date.today().isoformat(), "items": items}
+import sys; sys.path.insert(0, here)
+import extras; extras.extend(doc, get)  # CPI, yield curve, credit/GDP, ratios, recessions
+json.dump(doc, open("data.json", "w"), separators=(",", ":"))
 print("ok", [(i["id"], i["asof"]) for i in items])
