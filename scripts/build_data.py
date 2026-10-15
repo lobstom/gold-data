@@ -138,6 +138,10 @@ scale = mspus_first / idx[-1][1]
 hs["points"] = [[dt, v * scale / gann[int(dt[:4])], v * scale] for dt, v in idx] + hs["points"]
 u = byid["ust10"]; first = u["points"][0][0]
 u["points"] = [[dt, v] for dt, v in H["ust10"] if dt < first] + u["points"]
+# fed funds: effective rate starts 1954-07; before that splice in the Fed discount rate (NBER M13009, NY Fed, 1914-11 to 1954-06)
+ff = byid["fedfunds"]; first = ff["points"][0][0]
+ff["label"] = "Fed funds (effective); discount rate before 1954"
+ff["points"] = [[dt, float(v)] for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/fredgraph.csv?id=M13009USM156NNBR").decode())))[1:] if v and v != "." and dt < first] + ff["points"]
 # M2 money supply: Federal Reserve H.6 via FRED M2SL (public domain), $ billion, monthly, seasonally adjusted.
 # Shown as $ trillion; oz Au / oz Ag in billions of ounces (= $bn / price per oz)
 pts = []
