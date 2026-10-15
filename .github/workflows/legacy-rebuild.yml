@@ -1,0 +1,57 @@
+name: Rebuild legacy card data
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install openpyxl xlrd
+      - name: Rebuild in isolation and validate v4 additions
+        run: |
+          mkdir -p /tmp/card-build
+          cd /tmp/card-build
+          python "$GITHUB_WORKSPACE/scripts/build_data.py"
+          python - <<'PY'
+          import json, math, os, pathlib, shutil
+          root = pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          doc = json.loads(pathlib.Path('data.json').read_text())
+          old = json.loads((root/'data.json').read_text())
+          assert {x['id'] for x in old['items']} == {x['id'] for x in doc['items']}
+          assert {x['id'] for x in old['more']} == {x['id'] for x in doc['more']}
+          assert len(doc['recessions']) > 0
+          assert {'fedassets','fedtreas','publicdebt','govdebt'} == {x['id'] for x in doc['more_v3']}
+          debt = doc['overrides_v3']['debt']
+          assert debt['stack'] and len(debt['parts']) >= 90
+          totals = {p[0]:p[2] for p in debt['points']}
+          for p in debt['parts']:
+              assert all(math.isfinite(x) and x >= 0 for x in p[1:5])
+              assert abs(sum(p[1:4])-totals[p[0]]) < 1e-8
+          assert doc['overrides_v3']['mortgage']['points'][0] == ['1963-07-01',5.9]
+          def finite(x):
+              if isinstance(x,float): assert math.isfinite(x)
+              elif isinstance(x,dict):
+                  for v in x.values(): finite(v)
+              elif isinstance(x,list):
+                  for v in x: finite(v)
+          finite(doc)
+          shutil.copyfile('data.json', root/'data.json')
+          print('Validated v4 additions and preserved legacy row IDs')
+          PY
+      - name: Commit only legacy card data
+        run: |
+          git config user.name "data-bot"
+          git config user.email "data-bot@users.noreply.github.com"
+          git add data.json scripts/cameco.csv
+          git diff --cached --quiet || git commit -m "Rebuild card data with v4 additions"
+          git pull --rebase
+          git push
