@@ -7,11 +7,12 @@ def extend(doc, get):
         t = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}{extra}").decode()
         return [(r[0], float(r[1])) for r in list(csv.reader(io.StringIO(t)))[1:] if len(r) > 1 and r[1] not in ("", ".")]
     items = doc["items"]; byid = {i["id"]: i for i in items}
+    more = doc["more"] = []  # kept apart from "items" so the older widget card ignores the new rows
     cur = doc["updated"][:7]
     def rate(id, label, unit, freq, pts, sfx="%", dec=2):
         pts = [(d, v) for d, v in pts if d[:7] < cur]
         if not pts: return
-        items.append(dict(id=id, kind="rate", label=label, unit=unit, freq=freq, asof=pts[-1][0][:7], usd=pts[-1][1], goldusd=0, ozau=0,
+        more.append(dict(id=id, kind="rate", label=label, unit=unit, freq=freq, asof=pts[-1][0][:7], usd=pts[-1][1], goldusd=0, ozau=0,
                           prev=pts[-13][1] if len(pts) > 12 else None, sfx=sfx, dec=dec, points=[[a, round(b, 4)] for a, b in pts]))
     # yield curve: 10Y minus 2Y, monthly average of daily data, from 1976
     rate("curve", "Yield curve: 10Y minus 2Y Treasury (pp)", "pp", "monthly avg", fred("T10Y2Y", "&fq=Monthly&fam=avg"), sfx=" pp")
