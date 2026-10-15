@@ -1,18 +1,44 @@
 name: Refresh data
 on:
-  schedule: [{ cron: "17 9 4 * *" }]   # 4th of each month (World Bank updates on the 2nd business day)
-  workflow_dispatch: {}
+  schedule:
+    - cron: '17 4 * * 1'
+      timezone: America/Los_Angeles
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish Monday snapshot and legacy data.json (false = isolated test)'
+        type: boolean
+        default: false
 permissions: { contents: write }
 concurrency: { group: refresh, cancel-in-progress: false }
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: { python-version: "3.12" }
-      - run: pip install openpyxl
-      - run: python scripts/build_data.py
-      - run: |
-          git config user.name "data-bot"; git config user.email "data-bot@users.noreply.github.com"
-          git add data.json scripts/cameco.csv; git diff --cached --quiet || git commit -m "Monthly data refresh"; git pull --rebase; git push
+        with: { python-version: '3.12' }
+      - run: pip install openpyxl xlrd
+      - name: Validate snapshot logic against current legacy data
+        run: python scripts/weekly_snapshot.py --self-test
+      - name: Fetch, validate and freeze snapshot
+        env:
+          PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish }}
+        run: |
+          if [ "$PUBLISH" = "true" ]; then
+            python scripts/weekly_snapshot.py --publish
+          else
+            python scripts/weekly_snapshot.py
+          fi
+      - name: Commit validated output
+        run: |
+          git config user.name "data-bot"
+          git config user.email "data-bot@users.noreply.github.com"
+          git add data.json scripts/cameco.csv snapshots/
+          git diff --cached --quiet || git commit -m "Weekly data snapshot"
+          git pull --rebase
+          git push
+      - name: Failure notice
+        if: failure()
+        run: echo '::error::Weekly refresh failed. Last valid data and snapshot remain unchanged. Newsletter must label any prior snapshot explicitly.'
