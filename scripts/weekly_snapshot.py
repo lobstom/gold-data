@@ -5,7 +5,7 @@ No weekly price series is inferred from a monthly source.
 """
 import argparse, copy, datetime as dt, hashlib, json, math, os
 from pathlib import Path
-import subprocess, sys, tempfile
+import subprocess, sys, tempfile, csv, io, urllib.request
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -91,12 +91,50 @@ def metadata(doc, prev, now, log):
                 caveat='Historical/proxy segments retain original series conventions; not a synchronized weekly spot ratio.')
     return out
 
+def weekly_prices(now):
+    result = dict(status='partial', gold=dict(status='pending_user_choice', note='Weekly indicative gold addition awaits approval. No weekly gold ratio is computed.'))
+    def entry(points, source, url, unit, frequency):
+        points=sorted(points)
+        assert points and all(math.isfinite(v) and v>0 for _,v in points)
+        d,v=points[-1]
+        out=dict(status='available', value=v, unit=unit, observation_date=d, source=source, source_url=url, frequency=frequency, checked_at=now.isoformat())
+        if len(points)>1:
+            pd,pv=points[-2]; gap=(dt.date.fromisoformat(d)-dt.date.fromisoformat(pd)).days
+            out.update(previous_observation_date=pd,previous_value=pv,days_between_observations=gap,
+                       change_pct=(v/pv-1)*100,change_basis='week_over_week' if gap==7 else 'since_previous_observation')
+        else: out.update(change_pct=None,change_basis='baseline')
+        out['age_days']=(now.date()-dt.date.fromisoformat(d)).days
+        if out['age_days']>14: out['status']='overdue'
+        return out
+    for rid,code,title in [('wti','RWTC','WTI Cushing spot'),('brent','RBRTE','Europe Brent spot')]:
+        url='https://www.eia.gov/dnav/pet/hist_xls/'+code+'w.xls'
+        try:
+            import xlrd
+            req=urllib.request.Request(url,headers={'User-Agent':'gold-data weekly research snapshot'})
+            data=urllib.request.urlopen(req,timeout=90).read()
+            book=xlrd.open_workbook(file_contents=data); sheet=book.sheet_by_name('Data 1')
+            points=[(xlrd.xldate_as_datetime(sheet.cell_value(i,0),book.datemode).date().isoformat(),float(sheet.cell_value(i,1))) for i in range(3,sheet.nrows) if sheet.cell_type(i,0)==xlrd.XL_CELL_DATE and isinstance(sheet.cell_value(i,1),(float,int))]
+            result[rid]=entry(points,'EIA '+title+' weekly average',url,'USD/bbl','weekly average, week ending Friday')
+            result[rid]['note']='Latest source-published completed week; not necessarily the immediately preceding Friday. No carry-forward or monthly gold denominator.'
+        except Exception as e:
+            result[rid]=dict(status='unavailable',source_url=url,error=str(e),checked_at=now.isoformat())
+            print('::warning::Weekly '+rid+' unavailable: '+str(e))
+    try:
+        with (ROOT/'scripts'/'uranium.csv').open() as f:
+            points=[(r['date'],float(r['usd_per_lb'])) for r in csv.DictReader(f)]
+        result['uranium']=entry(points,'UxC free-account weekly quote, authenticated retrieval stored in CSV','https://www.uxc.com/p/price','USD/lb','weekly quote; latest available at Monday cut')
+        result['uranium']['note']='Input file, not fetched by this build. Separate authenticated weekly retrieval is required before the run. Free quote can lag 72h; not Monday evening release. Do not describe as week-ending Friday.'
+    except Exception as e:
+        result['uranium']=dict(status='unavailable',error=str(e),checked_at=now.isoformat())
+        print('::warning::Weekly uranium input unavailable: '+str(e))
+    return result
+
 def create(doc, prev, now, kind, source_commit, log=''):
     validate(doc)
     return dict(schema_version=1, kind=kind, snapshot_date=now.date().isoformat(), captured_at=now.isoformat(), timezone=str(TZ),
         complete=True, source_commit=source_commit, data_sha256=digest(doc), previous_snapshot=prev.get('_path') if prev else None,
         data=doc, series=metadata(doc,prev,now,log),
-        weekly_prices=dict(status='not_configured', note='Separate verified weekly gold/oil sources pending. Do not describe monthly data as weekly price moves.'),
+        weekly_prices=dict(status='not_collected'),
         notes=['Monday observation vintage for Wednesday issue. Use this exact snapshot for chart and text.',
                'New source observation, revision, unchanged and retrieval failure are different states.',
                'Baseline has no prior frozen Monday. Never infer zero weekly movement from unchanged monthly data.',
@@ -139,6 +177,7 @@ def main():
         if run.returncode: raise SystemExit('Builder failed; last valid live data/snapshots retained')
         doc=validate(json.loads((Path(tmp)/'data.json').read_text()))
     snap=create(doc,prev,now,'monday' if args.publish else 'test',os.environ.get('GITHUB_SHA','local'),run.stdout)
+    snap['weekly_prices']=weekly_prices(now)
     manifest=dict(schema_version=1, snapshot_date=snap['snapshot_date'],captured_at=snap['captured_at'], complete=True, kind=snap['kind'],
         path=str(dest.relative_to(ROOT)), data_sha256=snap['data_sha256'],snapshot_sha256=digest(snap),previous_snapshot=snap['previous_snapshot'])
     atomic(dest,snap)
