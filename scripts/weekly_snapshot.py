@@ -92,7 +92,7 @@ def metadata(doc, prev, now, log):
     return out
 
 def weekly_prices(now):
-    result = dict(status='partial', gold=dict(status='pending_user_choice', note='Weekly indicative gold addition awaits approval. No weekly gold ratio is computed.'))
+    result = dict(status='partial')
     def entry(points, source, url, unit, frequency):
         points=sorted(points)
         assert points and all(math.isfinite(v) and v>0 for _,v in points)
@@ -106,6 +106,29 @@ def weekly_prices(now):
         out['age_days']=(now.date()-dt.date.fromisoformat(d)).days
         if out['age_days']>14: out['status']='overdue'
         return out
+    # Short daily window avoids chart-level long-range sampling. Only complete weeks.
+    start=now.date()-dt.timedelta(days=70)
+    stamp=int(dt.datetime.combine(start,dt.time(),tzinfo=dt.timezone.utc).timestamp()*1000)
+    url='https://fsapi.gold.org/api/goldprice/v11/chart/price/usd/oz/'+str(stamp)+','
+    try:
+        run=subprocess.run(['curl','--fail','--silent','--show-error','--location','--max-time','90',url],check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=100)
+        response=json.loads(run.stdout); raw=response['chartData']['USD']
+        days={dt.datetime.fromtimestamp(t/1000,dt.timezone.utc).date():float(v) for t,v in raw if v is not None}
+        cutoff=now.date()-dt.timedelta(days=(now.weekday()-4 if now.weekday()>=5 else now.weekday()+3))  # most recent completed Friday
+        groups={}
+        for day,value in sorted(days.items()):
+            if day.weekday()>4 or day>cutoff: continue
+            friday=day+dt.timedelta(days=4-day.weekday())
+            groups.setdefault(friday,[]).append((day,value))
+        weeks=[(day.isoformat(),sum(v for _,v in values)/len(values)) for day,values in sorted(groups.items()) if len(values)>=3]
+        assert len(weeks)>=2, 'Insufficient complete daily coverage for two weeks'
+        result['gold']=entry(weeks,'World Gold Council gold price',url,'USD/troy oz','completed-week average of available daily observations, Monday-Friday')
+        latest=dt.date.fromisoformat(weeks[-1][0]); values=groups[latest]
+        result['gold'].update(week_start=(latest-dt.timedelta(days=4)).isoformat(),daily_observation_dates=[d.isoformat() for d,_ in values],daily_observation_count=len(values),source_asof=response['chartData'].get('asOfDate'),
+            note='World Gold Council chart data, not identified here as the LBMA fixing. Weekly average includes available business-day observations (at least 3); holidays reduce count. Short daily window avoids long-range chart sampling. No intraday quote or monthly gold substitution.')
+    except Exception as e:
+        result['gold']=dict(status='unavailable',source='World Gold Council gold price',source_url=url,error=str(e),checked_at=now.isoformat())
+        print('::warning::Weekly WGC gold unavailable: '+str(e))
     for rid,code,title in [('wti','RWTC','WTI Cushing spot'),('brent','RBRTE','Europe Brent spot')]:
         url='https://www.eia.gov/dnav/pet/hist_xls/'+code+'w.xls'
         try:
@@ -127,6 +150,14 @@ def weekly_prices(now):
     except Exception as e:
         result['uranium']=dict(status='unavailable',error=str(e),checked_at=now.isoformat())
         print('::warning::Weekly uranium input unavailable: '+str(e))
+    for rid in ('wti','brent'):
+        oil,gold=result[rid],result['gold']
+        if oil.get('status')=='available' and gold.get('status')=='available' and oil['observation_date']==gold['observation_date'] and oil.get('previous_observation_date')==gold.get('previous_observation_date'):
+            ratio=oil['value']/gold['value']; previous=oil['previous_value']/gold['previous_value']
+            oil['in_gold']=dict(value=ratio,unit='oz Au/bbl',previous_value=previous,change_pct=(ratio/previous-1)*100,
+                observation_date=oil['observation_date'],previous_observation_date=oil['previous_observation_date'],
+                convention='ratio of EIA weekly oil average to WGC same-week gold average, not average of daily ratios')
+    result['status']='available' if all(result.get(k,{}).get('status')=='available' for k in ('gold','wti','brent','uranium')) else 'partial'
     return result
 
 def create(doc, prev, now, kind, source_commit, log=''):
