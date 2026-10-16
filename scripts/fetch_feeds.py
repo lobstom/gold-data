@@ -7,7 +7,6 @@ HDRS = {"User-Agent":UA, "Accept":"text/html,application/xhtml+xml,application/x
 PER_SOURCE = 15
 SOURCES = [
  {"id":"debriefing","name":"The Debriefing","topic":"Politics","type":"tg","arg":"Castlerock2021"},
- {"id":"treasury","name":"Treasury / Bessent","topic":"Treasury","type":"combo"},
  {"id":"rattletrap","name":"RattleTrap 1776","topic":"Politics","type":"tg","arg":"rattletrap1776"},
  {"id":"bioclandestine","name":"BioClandestine","topic":"Politics","type":"tg","arg":"bioclandestine"},
  {"id":"yurta","name":"Yurta Capital","topic":"Markets","type":"tg","arg":"yurta06"},
@@ -19,7 +18,6 @@ SOURCES = [
  {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
  {"id":"pig","name":"Priced in Gold","topic":"Gold","type":"rss","arg":"https://pricedingold.com/feed"},
  {"id":"aier","name":"AIER","topic":"Markets","type":"rss","arg":"https://www.aier.org/feed/"},
- {"id":"wolf","name":"Wolf Street","topic":"Markets","type":"rss","arg":"https://wolfstreet.com/feed/"},
  {"id":"gcaptain","name":"gCaptain","topic":"Energy","type":"rss","arg":"https://gcaptain.com/feed/"},
  {"id":"stonge","name":"Peter St Onge","topic":"Markets","type":"rss","arg":"https://www.profstonge.com/feed"},
  {"id":"shirk","name":"Cody Shirk","topic":"Markets","type":"rss","arg":"https://www.codyshirk.com/feed"},
