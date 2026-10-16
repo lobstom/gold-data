@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Hourly feed aggregator. Writes feeds.json (stdlib only)."""
-import json, re, html, sys, urllib.request, datetime as D, xml.etree.ElementTree as ET
+import json, re, html, sys, urllib.request, urllib.parse, datetime as D, xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 HDRS = {"User-Agent":UA, "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language":"en-US,en;q=0.9"}
@@ -17,6 +17,10 @@ SOURCES = [
  {"id":"gr","name":"Goehring & Rozencwajg","topic":"Energy","type":"rss","arg":"https://blog.gorozen.com/blog/rss.xml"},
  {"id":"bison","name":"Josh Young - Bison Insights","topic":"Energy","type":"rss","arg":"https://bisoninterests.substack.com/feed"},
  {"id":"emedia","name":"eMedia Press","topic":"Newsletters","type":"rss","arg":"https://emediapress.com/feed"},
+ {"id":"igwt","name":"In Gold We Trust","topic":"Gold","type":"rss","arg":"https://www.incrementum.li/feed/"},
+ {"id":"gata","name":"GATA","topic":"Gold","type":"rss","arg":"https://www.gata.org/rss.xml"},
+ {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
+ {"id":"pig","name":"Priced in Gold","topic":"Gold","type":"rss","arg":"https://pricedingold.com/feed"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
@@ -31,6 +35,9 @@ def get(u):
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt == 0:
                 time.sleep(25); continue
+            if e.code == 403 and "substack.com" in u:
+                p = "https://api.allorigins.win/raw?url=" + urllib.parse.quote(u, safe="")
+                return urllib.request.urlopen(urllib.request.Request(p, headers=HDRS), timeout=30).read().decode("utf-8","replace")
             raise
 def clean(s, n=220):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or "")); s = re.sub(r"\s+", " ", s).strip()
