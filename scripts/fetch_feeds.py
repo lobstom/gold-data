@@ -38,7 +38,7 @@ def get(u):
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt == 0:
                 time.sleep(25); continue
-            if e.code == 403 and "substack.com" in u:
+            if e.code == 403 and ("substack.com" in u or "marksdailyapple.com" in u):
                 return get_substack_proxied(u)
             raise
 
@@ -84,7 +84,9 @@ def clean(s, n=220):
     return s if len(s) <= n else s[:n].rsplit(" ",1)[0] + "…"
 def iso(d): return d.astimezone(D.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 def rss(u, s_social=False):
-    r = ET.fromstring(get(u)); out=[]
+    x = get(u)
+    x = re.sub(r"&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)([A-Za-z][A-Za-z0-9]*);", lambda m: html.unescape(m.group(0)) if html.unescape(m.group(0))!=m.group(0) else "", x)
+    r = ET.fromstring(x); out=[]
     for it in r.iter("item"):
         d = it.findtext("pubDate")
         try: dt = parsedate_to_datetime(d)
@@ -139,6 +141,14 @@ def treasury():
     for m in re.finditer(r'<time datetime=([\dTZ:-]+)[^>]*>.*?<a href=(/news/press-releases/[^ >]+)[^>]*>(.*?)</a>', h, re.S):
         out.append({"title":clean(m.group(3),160),"url":"https://home.treasury.gov"+m.group(2),"date":m.group(1),"summary":""})
     return out
+SOURCES_VF = [
+ {"id":"mda","name":"Mark's Daily Apple","topic":"Primal","type":"rss","arg":"https://www.marksdailyapple.com/feed"},
+ {"id":"ferriss","name":"Tim Ferriss","topic":"Performance","type":"rss","arg":"https://tim.blog/feed/"},
+ {"id":"paleo","name":"The Paleo Diet","topic":"Paleo","type":"rss","arg":"https://www.thepaleodiet.com/feed/"},
+ {"id":"dietdoctor","name":"Diet Doctor","topic":"Low carb","type":"rss","arg":"https://www.dietdoctor.com/feed"},
+ {"id":"attia","name":"Peter Attia","topic":"Longevity","type":"rss","arg":"https://peterattiamd.com/feed/"},
+]
+if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
 FN = {"rss":rss,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn}
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
@@ -166,6 +176,7 @@ for s in SOURCES:
             k = g["url"] or g["title"][:80]
             if k in seen: continue
             seen.add(k); ded.append(g)
+        if s["id"]=="ferriss": ded = [g for g in ded if "transcript" not in g["title"].lower()]
         if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+g["summary"])]
         got = ded[:PER_SOURCE]
         for g in got: g.update(source=s["id"])
