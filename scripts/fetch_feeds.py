@@ -35,15 +35,41 @@ def get(u):
             if e.code == 429 and attempt == 0:
                 time.sleep(25); continue
             if e.code == 403 and "substack.com" in u:
-                p = "https://api.allorigins.win/raw?url=" + urllib.parse.quote(u, safe="")
-                last = None
-                for _ in range(3):
-                    try:
-                        return urllib.request.urlopen(urllib.request.Request(p, headers=HDRS), timeout=60).read().decode("utf-8","replace")
-                    except Exception as ex:
-                        last = ex; time.sleep(10)
-                raise last
+                return get_substack_proxied(u)
             raise
+
+def get_substack_proxied(u):
+    """Substack Cloudflare-blocks runner IPs. Try allorigins on the RSS feed,
+    then allorigins on the public archive API (synthesized back into RSS)."""
+    import time
+    from email.utils import format_datetime
+    def proxied(target, tries=3):
+        p = "https://api.allorigins.win/raw?url=" + urllib.parse.quote(target, safe="")
+        last = None
+        for _ in range(tries):
+            try:
+                return urllib.request.urlopen(urllib.request.Request(p, headers=HDRS), timeout=60).read().decode("utf-8","replace")
+            except Exception as ex:
+                last = ex; time.sleep(10)
+        raise last
+    try:
+        return proxied(u)
+    except Exception:
+        pass
+    a = u.replace("/feed", "/api/v1/archive?sort=new&offset=0&limit=15")
+    posts = json.loads(proxied(a))
+    items = []
+    for p_ in posts:
+        try:
+            dt = D.datetime.fromisoformat(p_["post_date"].replace("Z","+00:00"))
+            pub = format_datetime(dt)
+        except Exception:
+            continue
+        items.append("<item><title>%s</title><link>%s</link><pubDate>%s</pubDate><description>%s</description></item>" % (
+            html.escape(p_.get("title","") or ""), html.escape(p_.get("canonical_url","") or ""),
+            pub, html.escape(p_.get("description","") or p_.get("subtitle","") or "")))
+    return '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>%s</channel></rss>' % "".join(items)
+
 def clean(s, n=220):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or "")); s = re.sub(r"\s+", " ", s).strip()
     return s if len(s) <= n else s[:n].rsplit(" ",1)[0] + "…"
