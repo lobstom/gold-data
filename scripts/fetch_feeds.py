@@ -18,6 +18,9 @@ SOURCES = [
  {"id":"gata","name":"GATA","topic":"Gold","type":"rss","arg":"https://www.gata.org/rss.xml"},
  {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
  {"id":"pig","name":"Priced in Gold","topic":"Gold","type":"rss","arg":"https://pricedingold.com/feed"},
+ {"id":"aier","name":"AIER","topic":"Markets","type":"rss","arg":"https://www.aier.org/feed/"},
+ {"id":"wolf","name":"Wolf Street","topic":"Markets","type":"rss","arg":"https://wolfstreet.com/feed/"},
+ {"id":"gcaptain","name":"gCaptain","topic":"Energy","type":"rss","arg":"https://gcaptain.com/feed/"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
@@ -145,6 +148,7 @@ def noisy(t):
     if re.fullmatch(r"https?://\S+", t): return True
     return False
 FILTER = {"rattletrap"}
+KEYWORDS = {"gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I)}
 for s in SOURCES:
     try:
         if s["type"]=="combo":
@@ -159,6 +163,7 @@ for s in SOURCES:
             k = g["url"] or g["title"][:80]
             if k in seen: continue
             seen.add(k); ded.append(g)
+        if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+g["summary"])]
         got = ded[:PER_SOURCE]
         for g in got: g.update(source=s["id"])
         items += got
