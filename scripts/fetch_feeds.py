@@ -39,36 +39,41 @@ def get(u):
             raise
 
 def get_substack_proxied(u):
-    """Substack Cloudflare-blocks runner IPs. Try allorigins on the RSS feed,
-    then allorigins on the public archive API (synthesized back into RSS)."""
+    """Substack Cloudflare-blocks runner IPs. Free routes, in order:
+    allorigins on the RSS feed, r.jina.ai on the archive API, allorigins on the archive API."""
     import time
-    from email.utils import format_datetime
-    def proxied(target, tries=3):
-        p = "https://api.allorigins.win/raw?url=" + urllib.parse.quote(target, safe="")
+    archive = u.replace("/feed", "/api/v1/archive?sort=new&offset=0&limit=15")
+    def fetch(target, tries=2, timeout=30):
         last = None
         for _ in range(tries):
             try:
-                return urllib.request.urlopen(urllib.request.Request(p, headers=HDRS), timeout=60).read().decode("utf-8","replace")
+                return urllib.request.urlopen(urllib.request.Request(target, headers=HDRS), timeout=timeout).read().decode("utf-8","replace")
             except Exception as ex:
-                last = ex; time.sleep(10)
+                last = ex; time.sleep(5)
         raise last
+    def synth(body):
+        from email.utils import format_datetime
+        posts, _ = json.JSONDecoder().raw_decode(body[body.index("["):])
+        items = []
+        for p_ in posts:
+            try:
+                dt = D.datetime.fromisoformat(p_["post_date"].replace("Z","+00:00"))
+                pub = format_datetime(dt)
+            except Exception:
+                continue
+            items.append("<item><title>%s</title><link>%s</link><pubDate>%s</pubDate><description>%s</description></item>" % (
+                html.escape(p_.get("title","") or ""), html.escape(p_.get("canonical_url","") or ""),
+                pub, html.escape(p_.get("description","") or p_.get("subtitle","") or "")))
+        return '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>%s</channel></rss>' % "".join(items)
     try:
-        return proxied(u)
+        return fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(u, safe=""))
     except Exception:
         pass
-    a = u.replace("/feed", "/api/v1/archive?sort=new&offset=0&limit=15")
-    posts = json.loads(proxied(a))
-    items = []
-    for p_ in posts:
-        try:
-            dt = D.datetime.fromisoformat(p_["post_date"].replace("Z","+00:00"))
-            pub = format_datetime(dt)
-        except Exception:
-            continue
-        items.append("<item><title>%s</title><link>%s</link><pubDate>%s</pubDate><description>%s</description></item>" % (
-            html.escape(p_.get("title","") or ""), html.escape(p_.get("canonical_url","") or ""),
-            pub, html.escape(p_.get("description","") or p_.get("subtitle","") or "")))
-    return '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>%s</channel></rss>' % "".join(items)
+    try:
+        return synth(fetch("https://r.jina.ai/" + archive, timeout=45))
+    except Exception:
+        pass
+    return synth(fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(archive, safe="")))
 
 def clean(s, n=220):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or "")); s = re.sub(r"\s+", " ", s).strip()
