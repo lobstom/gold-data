@@ -120,8 +120,6 @@ for s in SOURCES:
     try:
         if s["type"]=="combo":
             got = treasury()
-            try: got += xsyn("SecScottBessent")
-            except Exception as ex: print("FAIL bessent-x", ex, file=sys.stderr)
         elif s["type"]=="treasury":
             got = treasury()
         else:
