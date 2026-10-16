@@ -37,7 +37,13 @@ def get(u):
                 time.sleep(25); continue
             if e.code == 403 and "substack.com" in u:
                 p = "https://api.allorigins.win/raw?url=" + urllib.parse.quote(u, safe="")
-                return urllib.request.urlopen(urllib.request.Request(p, headers=HDRS), timeout=30).read().decode("utf-8","replace")
+                last = None
+                for _ in range(3):
+                    try:
+                        return urllib.request.urlopen(urllib.request.Request(p, headers=HDRS), timeout=60).read().decode("utf-8","replace")
+                    except Exception as ex:
+                        last = ex; time.sleep(10)
+                raise last
             raise
 def clean(s, n=220):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or "")); s = re.sub(r"\s+", " ", s).strip()
