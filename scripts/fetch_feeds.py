@@ -2,7 +2,8 @@
 """Hourly feed aggregator. Writes feeds.json (stdlib only)."""
 import json, re, html, sys, urllib.request, datetime as D, xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
-UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+HDRS = {"User-Agent":UA, "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language":"en-US,en;q=0.9"}
 PER_SOURCE = 15
 SOURCES = [
  {"id":"debriefing","name":"The Debriefing (Telegram)","topic":"Politics","type":"tg","arg":"Castlerock2021"},
@@ -23,7 +24,14 @@ def get(u):
     if os.environ.get("PROTO"):
         for k,v in FIX.items():
             if u.endswith(k): return open(v).read()
-    return urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":UA}), timeout=25).read().decode("utf-8","replace")
+    import time
+    for attempt in range(2):
+        try:
+            return urllib.request.urlopen(urllib.request.Request(u, headers=HDRS), timeout=25).read().decode("utf-8","replace")
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt == 0:
+                time.sleep(25); continue
+            raise
 def clean(s, n=220):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or "")); s = re.sub(r"\s+", " ", s).strip()
     return s if len(s) <= n else s[:n].rsplit(" ",1)[0] + "…"
