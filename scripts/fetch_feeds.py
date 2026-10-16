@@ -89,14 +89,26 @@ def rss(u, s_social=False):
     x = get(u)
     x = re.sub(r"&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)([A-Za-z][A-Za-z0-9]*);", lambda m: html.unescape(m.group(0)) if html.unescape(m.group(0))!=m.group(0) else "", x)
     r = ET.fromstring(x); out=[]
-    for it in r.iter("item"):
-        d = it.findtext("pubDate")
-        try: dt = parsedate_to_datetime(d)
-        except Exception: continue
-        t = clean(it.findtext("title"), 300 if s_social else 160)
-        body = it.findtext("{http://purl.org/rss/1.0/modules/content/}encoded") or it.findtext("description") or ""
+    atom = r.tag.endswith("feed")
+    ns = "{http://www.w3.org/2005/Atom}"
+    entries = r.findall(ns + "entry") if atom else r.iter("item")
+    for it in entries:
+        if atom:
+            d = it.findtext(ns + "published") or it.findtext(ns + "updated")
+            try: dt = D.datetime.fromisoformat(d.replace("Z", "+00:00"))
+            except Exception: continue
+            t = clean(it.findtext(ns + "title"), 300 if s_social else 160)
+            body = it.findtext(ns + "content") or it.findtext(ns + "summary") or ""
+            url = next((link.get("href") for link in it.findall(ns + "link") if link.get("rel", "alternate") == "alternate"), None)
+        else:
+            d = it.findtext("pubDate")
+            try: dt = parsedate_to_datetime(d)
+            except Exception: continue
+            t = clean(it.findtext("title"), 300 if s_social else 160)
+            body = it.findtext("{http://purl.org/rss/1.0/modules/content/}encoded") or it.findtext("description") or ""
+            url = it.findtext("link")
         if t.startswith("Quote post") or not t: t = clean(body, 300) or t
-        out.append({"title":t,"url":it.findtext("link"),"date":iso(dt),"summary":"" if s_social else clean(body)})
+        out.append({"title":t,"url":url,"date":iso(dt),"summary":"" if s_social else clean(body)})
     return out
 def oembed_text(u):
     try:
@@ -149,6 +161,7 @@ SOURCES_VF = [
  {"id":"paleo","name":"The Paleo Diet","topic":"Paleo","type":"rss","arg":"https://www.thepaleodiet.com/feed/"},
  {"id":"dietdoctor","name":"Diet Doctor","topic":"Low carb","type":"rss","arg":"https://www.dietdoctor.com/feed"},
  {"id":"attia","name":"Peter Attia","topic":"Longevity","type":"rss","arg":"https://peterattiamd.com/feed/"},
+ {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Longevity","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
 ]
 if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
 FN = {"rss":rss,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn}
@@ -163,6 +176,7 @@ def noisy(t):
     if re.fullmatch(r"https?://\S+", t): return True
     return False
 FILTER = {"rattletrap"}
+PROMO = {"dietdoctor": re.compile(r"\bmember benefit\b|sign up for diet doctor plus|\bfree trial\b", re.I)}
 KEYWORDS = {"debriefing": re.compile(r"econom|financ|\brails?\b|railroad|\btrad(?:e|es|ing|er|ers)\b|\bdebts?\b|\bbank|\bfund(?:s|ed|ing)?\b|\bfed\b|federal reserve|treasury|dollar|tariff|sanction|sovereign wealth|\boil\b|energy|\bgold\b|inflation|\brates?\b|credit|currenc|\bmarkets?\b|shipping|\bports?\b|supply chain|\biran|china|chinese|bessent", re.I), "attila": re.compile(r"\besg\b|fossil|energy|\bgold\b|\boil\b|bubble|\bdebt|crisis|\bcredit|value invest|economic|profit|valuing|inflation|monetary|\bprices?\b|financ|depression|commodit|uranium|\bmining|interest rate|\bfed\b|central bank|dollar|currenc|\btrade\b|stock market|\bmarkets?\b", re.I), "gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I)}
 for s in SOURCES:
     try:
@@ -182,13 +196,16 @@ for s in SOURCES:
         if s["id"]=="debriefing": ded = [g for g in ded if len((g["title"] or "").strip())>=60]
         if s["id"]=="attila": ded = [g for g in ded if not re.search(r"personal essay|balzac|self-help|\bmiser\b|roman emperor|\bluck\b", g["title"]+" "+g["summary"], re.I)]
         if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+re.sub(r"Subscribe free and.*$","",g["summary"],flags=re.S))]
+        if s["id"] in PROMO: ded = [g for g in ded if not PROMO[s["id"]].search(g["title"]+" "+g["summary"])]
         got = ded[:PER_SOURCE]
         for g in got: g.update(source=s["id"])
         items += got
         res.append({**{k:s[k] for k in("id","name","topic")},"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
     except Exception as ex:
         print("FAIL",s["id"],ex,file=sys.stderr)
-        old=[i for i in prev["items"] if i["source"]==s["id"]]; items+=old
+        old=[i for i in prev["items"] if i["source"]==s["id"]]
+        if s["id"] in PROMO: old = [i for i in old if not PROMO[s["id"]].search(i.get("title","")+" "+i.get("summary",""))]
+        items+=old
         res.append({**{k:s[k] for k in("id","name","topic")},"ok":False,"count":len(old),"latest":old[0]["date"] if old else None,"error":str(ex)[:120]})
 items.sort(key=lambda x:x["date"], reverse=True)
 json.dump({"generated":iso(now),"sources":res,"items":items}, open(sys.argv[1] if len(sys.argv)>1 else "feeds.json","w"), ensure_ascii=False, separators=(",",":"))
