@@ -1,8 +1,0 @@
-== direct-feed | HTTP 403 | 5644 bytes | <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/htm
-== archive-api | HTTP 403 | 5879 bytes | <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/htm
-== allorigins | HTTP 200 | 146544 bytes | <?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rs
-== codetabs | HTTP 503 | 17 bytes | error code: 1200 
-== corslol | HTTP 429 | 20 bytes | Rate limit exceeded 
-== jina | HTTP 200 | 5331 bytes | Title:   URL Source: https://thecrudechronicles.substack.com/feed  Markdown Content: ### [](https://thecrudechronicles.s
-== direct-feed-bison | HTTP 403 | 5619 bytes | <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/htm
-== archive-api-bison | HTTP 403 | 5875 bytes | <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/htm
