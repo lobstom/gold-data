@@ -6,12 +6,12 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chr
 HDRS = {"User-Agent":UA, "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language":"en-US,en;q=0.9"}
 PER_SOURCE = 15
 SOURCES = [
- {"id":"debriefing","name":"The Debriefing (Telegram)","topic":"Politics","type":"tg","arg":"Castlerock2021"},
+ {"id":"debriefing","name":"The Debriefing","topic":"Politics","type":"tg","arg":"Castlerock2021"},
  {"id":"treasury","name":"Treasury / Bessent","topic":"Treasury","type":"combo"},
- {"id":"rattletrap","name":"RattleTrap 1776 (Telegram)","topic":"Politics","type":"tg","arg":"rattletrap1776"},
- {"id":"bioclandestine","name":"BioClandestine (Telegram)","topic":"Politics","type":"tg","arg":"bioclandestine"},
- {"id":"yurta","name":"Yurta Capital (Telegram)","topic":"Markets","type":"tg","arg":"yurta06"},
- {"id":"trump","name":"Trump (Truth Social mirror)","topic":"Politics","type":"rsssocial","arg":"https://trumpstruth.org/feed"},
+ {"id":"rattletrap","name":"RattleTrap 1776","topic":"Politics","type":"tg","arg":"rattletrap1776"},
+ {"id":"bioclandestine","name":"BioClandestine","topic":"Politics","type":"tg","arg":"bioclandestine"},
+ {"id":"yurta","name":"Yurta Capital","topic":"Markets","type":"tg","arg":"yurta06"},
+ {"id":"trump","name":"Trump","topic":"Politics","type":"rsssocial","arg":"https://trumpstruth.org/feed"},
  {"id":"crude","name":"The Crude Chronicles","topic":"Energy","type":"rss","arg":"https://thecrudechronicles.substack.com/feed"},
  {"id":"gr","name":"Goehring & Rozencwajg","topic":"Energy","type":"rss","arg":"https://blog.gorozen.com/blog/rss.xml"},
  {"id":"bison","name":"Josh Young - Bison Insights","topic":"Energy","type":"rss","arg":"https://bisoninterests.substack.com/feed"},
