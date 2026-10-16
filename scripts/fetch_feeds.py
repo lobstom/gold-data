@@ -26,6 +26,7 @@ SOURCES = [
  {"id":"lorenz","name":"Swen Lorenz - Undervalued Shares","topic":"Markets","type":"rss","arg":"https://www.undervalued-shares.com/feed/"},
  {"id":"attila","name":"Attila Rebak","topic":"Markets","type":"rss","arg":"https://attilarebak.substack.com/feed"},
  {"id":"frontierviking","name":"FrontierViking","topic":"Markets","type":"rss","arg":"https://frontierviking.substack.com/feed"},
+ {"id":"timprice","name":"Tim Price","topic":"Markets","type":"rss","arg":"https://timprice.substack.com/feed"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
