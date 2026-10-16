@@ -1,8 +1,8 @@
 name: Refresh data
 on:
   schedule:
-    - cron: '17 4 * * 1'
-      timezone: America/Los_Angeles
+    # GitHub cron is UTC-only; 14:17 UTC = 7:17 AM PDT / 6:17 AM PST Monday
+    - cron: '17 14 * * 1'
   workflow_dispatch:
     inputs:
       publish:
