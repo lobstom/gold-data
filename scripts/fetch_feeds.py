@@ -24,6 +24,7 @@ SOURCES = [
  {"id":"stonge","name":"Peter St Onge","topic":"Markets","type":"rss","arg":"https://www.profstonge.com/feed"},
  {"id":"shirk","name":"Cody Shirk","topic":"Markets","type":"rss","arg":"https://www.codyshirk.com/feed"},
  {"id":"lorenz","name":"Swen Lorenz - Undervalued Shares","topic":"Markets","type":"rss","arg":"https://www.undervalued-shares.com/feed/"},
+ {"id":"attila","name":"Attila Rebak","topic":"Markets","type":"rss","arg":"https://attilarebak.substack.com/feed"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
