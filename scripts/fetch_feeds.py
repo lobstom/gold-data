@@ -7,8 +7,7 @@ HDRS = {"User-Agent":UA, "Accept":"text/html,application/xhtml+xml,application/x
 PER_SOURCE = 15
 SOURCES = [
  {"id":"debriefing","name":"The Debriefing (Telegram)","topic":"Politics","type":"tg","arg":"Castlerock2021"},
- {"id":"bessent-x","name":"Scott Bessent (X)","topic":"Treasury","type":"xsyn","arg":"SecScottBessent"},
- {"id":"treasury","name":"US Treasury press releases","topic":"Treasury","type":"treasury"},
+ {"id":"treasury","name":"Treasury / Bessent","topic":"Treasury","type":"combo"},
  {"id":"rattletrap","name":"RattleTrap 1776 (Telegram)","topic":"Politics","type":"tg","arg":"rattletrap1776"},
  {"id":"bioclandestine","name":"BioClandestine (Telegram)","topic":"Politics","type":"tg","arg":"bioclandestine"},
  {"id":"yurta","name":"Yurta Capital (Telegram)","topic":"Markets","type":"tg","arg":"yurta06"},
@@ -16,7 +15,6 @@ SOURCES = [
  {"id":"crude","name":"The Crude Chronicles","topic":"Energy","type":"rss","arg":"https://thecrudechronicles.substack.com/feed"},
  {"id":"gr","name":"Goehring & Rozencwajg","topic":"Energy","type":"rss","arg":"https://blog.gorozen.com/blog/rss.xml"},
  {"id":"bison","name":"Josh Young - Bison Insights","topic":"Energy","type":"rss","arg":"https://bisoninterests.substack.com/feed"},
- {"id":"emedia","name":"eMedia Press","topic":"Newsletters","type":"rss","arg":"https://emediapress.com/feed"},
  {"id":"igwt","name":"In Gold We Trust","topic":"Gold","type":"rss","arg":"https://www.incrementum.li/feed/"},
  {"id":"gata","name":"GATA","topic":"Gold","type":"rss","arg":"https://www.gata.org/rss.xml"},
  {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
@@ -109,10 +107,31 @@ FN = {"rss":rss,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn}
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
+def noisy(t):
+    t = (t or "").strip()
+    if len(t) < 20: return True
+    if t.startswith(("RT http","RT: http","Quote post","(media post)")): return True
+    if re.match(r"^(Video|Image) post from", t): return True
+    if re.fullmatch(r"https?://\S+", t): return True
+    return False
+FILTER = {"trump","rattletrap"}
 for s in SOURCES:
     try:
-        got = treasury() if s["type"]=="treasury" else FN[s["type"]](s["arg"])
-        got = sorted(got, key=lambda x:x["date"], reverse=True)[:PER_SOURCE]
+        if s["type"]=="combo":
+            got = treasury()
+            try: got += xsyn("SecScottBessent")
+            except Exception as ex: print("FAIL bessent-x", ex, file=sys.stderr)
+        elif s["type"]=="treasury":
+            got = treasury()
+        else:
+            got = FN[s["type"]](s["arg"])
+        if s["id"] in FILTER: got = [g for g in got if not noisy(g["title"])]
+        seen=set(); ded=[]
+        for g in sorted(got, key=lambda x:x["date"], reverse=True):
+            k = g["url"] or g["title"][:80]
+            if k in seen: continue
+            seen.add(k); ded.append(g)
+        got = ded[:PER_SOURCE]
         for g in got: g.update(source=s["id"])
         items += got
         res.append({**{k:s[k] for k in("id","name","topic")},"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
