@@ -161,7 +161,7 @@ def noisy(t):
     if re.fullmatch(r"https?://\S+", t): return True
     return False
 FILTER = {"rattletrap"}
-KEYWORDS = {"gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I)}
+KEYWORDS = {"debriefing": re.compile(r"econom|financ|\brails?\b|railroad|\btrad(?:e|es|ing|er|ers)\b|\bdebts?\b|\bbank|\bfund(?:s|ed|ing)?\b|\bfed\b|federal reserve|treasury", re.I), "gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I)}
 for s in SOURCES:
     try:
         if s["type"]=="combo":
@@ -177,6 +177,7 @@ for s in SOURCES:
             if k in seen: continue
             seen.add(k); ded.append(g)
         if s["id"]=="ferriss": ded = [g for g in ded if "transcript" not in g["title"].lower()]
+        if s["id"]=="debriefing": ded = [g for g in ded if len((g["title"] or "").strip())>=60]
         if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+g["summary"])]
         got = ded[:PER_SOURCE]
         for g in got: g.update(source=s["id"])
