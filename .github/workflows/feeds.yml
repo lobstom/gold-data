@@ -14,7 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/fetch_feeds.py feeds.json
-      - run: |
-          git config user.name "feeds-bot"; git config user.email "feeds-bot@users.noreply.github.com"
+      - name: commit and push
+        run: |
+          git config user.name "feeds-bot"
+          git config user.email "feeds-bot@users.noreply.github.com"
           git add feeds.json
-          git diff --cached --quiet || (git commit -m "feeds update" && git push)
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "feeds update"
+          for i in 1 2 3; do
+            if git pull --rebase -X theirs origin main; then
+              git push && exit 0
+            fi
+            git rebase --abort 2>/dev/null
+            sleep 5
+          done
+          echo "push failed after retries"
+          exit 1
