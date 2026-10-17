@@ -97,6 +97,7 @@ def feedly(u):
         for a in it.get("alternate") or []:
             if a.get("href"): url = re.sub(r"[?&]utm_[^&]*","",a["href"]).rstrip("?&"); break
         body = ((it.get("summary") or {}).get("content") or (it.get("content") or {}).get("content") or "")
+        body = re.sub(r"^\s*<p[^>]*>By\s.*?(?:Comments?|Likes?).*?</p>", "", body, count=1, flags=re.S)
         out.append({"title":clean(it.get("title",""),160),"url":url,"date":iso(dt),"summary":clean(body)})
     if not out: raise RuntimeError("feedly stream empty")
     return out
