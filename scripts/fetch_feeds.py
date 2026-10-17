@@ -43,6 +43,8 @@ SOURCES = [
  {"id":"jcpa","name":"JCPA","topic":"Strategy & Policy","type":"rss","arg":"https://jcpa.org/feed/"},
  {"id":"brandao","name":"Shannon Brandao - China Boss News","topic":"Strategy & Policy","type":"rss","arg":"https://shannonbrandao.substack.com/feed"},
  {"id":"jinf","name":"JINF","topic":"Strategy & Policy","type":"rss","arg":"https://en.jinf.jp/feed"},
+ {"id":"taipeitimes","name":"Taipei Times","topic":"Strategy & Policy","type":"rdf","arg":"https://www.taipeitimes.com/xml/index.rss"},
+ {"id":"afc","name":"Asia Frontier Capital","topic":"Markets","type":"afc","arg":"https://www.asiafrontiercapital.com"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
@@ -252,7 +254,38 @@ SOURCES_VF = [
  {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Longevity","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
 ]
 if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
-FN = {"rss":rss,"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj}
+
+def rdf(u):
+    """RSS 1.0 (RDF) feeds: namespaced items with dc:date. Titles only."""
+    x = get(u)
+    r = ET.fromstring(x); out = []
+    R = "{http://purl.org/rss/1.0/}"; DC = "{http://purl.org/dc/elements/1.1/}"
+    for it in r.iter(R + "item"):
+        d = it.findtext(DC + "date")
+        try: dt = D.datetime.fromisoformat(d.replace("Z", "+00:00"))
+        except Exception: continue
+        t = clean(it.findtext(R + "title"), 160)
+        url = it.findtext(R + "link") or it.get("{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about")
+        if not t: continue
+        out.append({"title": t, "url": url, "date": iso(dt), "summary": ""})
+    return out
+def afc(u):
+    """Asia Frontier Capital monthly newsletters: scrape the year index pages
+    (/YYYY.html) for issue links; issues are HTML pages, no PDFs exist."""
+    out = []
+    now = D.datetime.now(D.timezone.utc)
+    years = [now.year] + ([now.year - 1] if now.month == 1 else [])
+    for y in years:
+        try: h = get("%s/%d.html" % (u, y))
+        except Exception: continue
+        for m in re.finditer(r'<a[^>]+href="(/newsletter-\d{4}/[^"]+\.html)"[^>]*>\s*(Newsletter Issue[^<]+?)\s*</a>', h, re.I):
+            url, t = m.group(1), clean(m.group(2), 120)
+            mm = re.search(r'(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})', t)
+            if not mm: continue
+            dt = D.datetime.strptime("%s %s" % (mm.group(1), mm.group(2)), "%B %Y").replace(tzinfo=D.timezone.utc)
+            out.append({"title": t, "url": u + url, "date": iso(dt), "summary": ""})
+    return out
+FN = {"rss":rss,"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
@@ -266,7 +299,7 @@ def noisy(t):
 FILTER = {"rattletrap","medvedev","dmitriev"}
 TRANSLATE_RU = {"medvedev","dmitriev"}
 PROMO = {"dietdoctor": re.compile(r"\bmember benefit\b|sign up for diet doctor plus|\bfree trial\b", re.I)}
-KEYWORDS = {"debriefing": re.compile(r"econom|financ|\brails?\b|railroad|\btrad(?:e|es|ing|er|ers)\b|\bdebts?\b|\bbank|\bfund(?:s|ed|ing)?\b|\bfed\b|federal reserve|treasury|dollar|tariff|sanction|sovereign wealth|\boil\b|energy|\bgold\b|inflation|\brates?\b|credit|currenc|\bmarkets?\b|shipping|\bports?\b|supply chain|\biran|china|chinese|bessent", re.I), "attila": re.compile(r"\besg\b|fossil|energy|\bgold\b|\boil\b|bubble|\bdebt|crisis|\bcredit|value invest|economic|profit|valuing|inflation|monetary|\bprices?\b|financ|depression|commodit|uranium|\bmining|interest rate|\bfed\b|central bank|dollar|currenc|\btrade\b|stock market|\bmarkets?\b", re.I), "gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I)}
+KEYWORDS = {"debriefing": re.compile(r"econom|financ|\brails?\b|railroad|\btrad(?:e|es|ing|er|ers)\b|\bdebts?\b|\bbank|\bfund(?:s|ed|ing)?\b|\bfed\b|federal reserve|treasury|dollar|tariff|sanction|sovereign wealth|\boil\b|energy|\bgold\b|inflation|\brates?\b|credit|currenc|\bmarkets?\b|shipping|\bports?\b|supply chain|\biran|china|chinese|bessent", re.I), "attila": re.compile(r"\besg\b|fossil|energy|\bgold\b|\boil\b|bubble|\bdebt|crisis|\bcredit|value invest|economic|profit|valuing|inflation|monetary|\bprices?\b|financ|depression|commodit|uranium|\bmining|interest rate|\bfed\b|central bank|dollar|currenc|\btrade\b|stock market|\bmarkets?\b", re.I), "gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I), "taipeitimes": re.compile(r"trade|tariff|econom|energy|nuclear|\boil\b|\bgas\b|\bgold\b|chip|tsmc|semiconductor|export|import|fiscal|\bfed\b|monetary|central bank|interest rate|inflation|defen[cs]e|military|\barms\b|sanction|supply chain|china|beijing|rare earth|dollar|yuan|currenc|shipping|strait|export control|\bai\b", re.I)}
 for s in SOURCES:
     try:
         if s["type"]=="combo":
