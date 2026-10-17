@@ -34,6 +34,8 @@ SOURCES = [
  {"id":"armstrong","name":"Armstrong Economics","topic":"Markets","type":"rss","arg":"https://www.armstrongeconomics.com/feed/"},
  {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Strategy & Policy","type":"tg","arg":"kadmitriev"},
  {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Strategy & Policy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
+ {"id":"sonar21","name":"Larry Johnson - Sonar21","topic":"Strategy & Policy","type":"rss","arg":"https://sonar21.com/feed/"},
+ {"id":"ritter","name":"Scott Ritter","topic":"Strategy & Policy","type":"rss","arg":"https://scottritter.substack.com/feed"},
  {"id":"americancompass","name":"American Compass","topic":"Strategy & Policy","type":"feedly","arg":"https://americancompass.org/feed/"},
  {"id":"simplicius","name":"Simplicius","topic":"Strategy & Policy","type":"rss","arg":"https://simplicius76.substack.com/feed"},
  {"id":"alhajji","name":"Anas Alhajji","topic":"Energy","type":"rss","arg":"https://anasalhajjieoa.substack.com/feed"},
@@ -316,6 +318,9 @@ for s in SOURCES:
         if s["id"]=="armstrong": ded = [g for g in ded if not g["title"].startswith("PRIVATE BLOG")]
         if s["id"]=="debriefing": ded = [g for g in ded if len((g["title"] or "").strip())>=60]
         if s["id"]=="attila": ded = [g for g in ded if not re.search(r"personal essay|balzac|self-help|\bmiser\b|roman emperor|\bluck\b", g["title"]+" "+g["summary"], re.I)]
+        if s["id"]=="ritter":
+            for g in ded: g["summary"]=re.sub(r"\s*Donat\w*\s*Real Scott Ritter is a reader-supported.*$", "", g["summary"], flags=re.S)
+            ded = [g for g in ded if (g["summary"] or "").strip()]
         if s["id"]=="kremlin": ded = [g for g in ded if not re.search(r"birthday greetings|^greetings\b|^congratulations\b|^condolences\b|awarded honorary|welcome address", g["title"], re.I)]
         if s["id"]=="medvedev": ded = [g for g in ded if len((g["title"] or "").strip())>=80]
         if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+re.sub(r"Subscribe free and.*$","",g["summary"],flags=re.S))]
