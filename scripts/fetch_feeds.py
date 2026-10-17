@@ -295,6 +295,14 @@ def noisy(t):
     if re.fullmatch(r"https?://\S+", t): return True
     return False
 FILTER = {"rattletrap","medvedev","dmitriev"}
+# Tom 2026-10-17: /feeds shows proper text only - strip raw links and emoji
+# from visible titles/previews for every source (no source should go empty).
+LINK_RE = re.compile(r"https?://\S+|t\.me/\S+", re.I)
+EMOJI_RE = re.compile("[\U0001F300-\U0001F64F\U0001F680-\U0001F6FF\U0001F900-\U0001FAFF\u2600-\u26FF\u2700-\u27BF\u203C\u2049\uFE0F\u200D\u20E3]")
+def strip_noise(s):
+    s = LINK_RE.sub(" ", s or "")
+    s = EMOJI_RE.sub(" ", s)
+    return re.sub(r"\s+", " ", s).strip()
 # RattleTrap includes Telegram service notices alongside its actual posts.
 # Keep this narrowly scoped to livestream lifecycle/announcement titles.
 RATTLETRAP_NOTICE = re.compile(
@@ -348,12 +356,20 @@ for s in SOURCES:
                 else:
                     g["ru"] = g["title"]
                     g["title"] = clean(translate(g["title"]), 300)
+        for g in got:
+            g["title"] = strip_noise(g["title"])
+            g["summary"] = strip_noise(g["summary"])
+        got = [g for g in got if g["title"]]
         for g in got: g.update(source=s["id"])
         items += got
         res.append({**{k:s[k] for k in("id","name","topic")},"desc":DESCS.get(s["id"],""),"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
     except Exception as ex:
         print("FAIL",s["id"],ex,file=sys.stderr)
         old=[i for i in prev["items"] if i["source"]==s["id"]]
+        for g in old:
+            g["title"] = strip_noise(g.get("title",""))
+            g["summary"] = strip_noise(g.get("summary",""))
+        old = [g for g in old if g["title"]]
         if s["id"] in PROMO: old = [i for i in old if not PROMO[s["id"]].search(i.get("title","")+" "+i.get("summary",""))]
         items+=old
         res.append({**{k:s[k] for k in("id","name","topic")},"desc":DESCS.get(s["id"],""),"ok":False,"count":len(old),"latest":old[0]["date"] if old else None,"error":str(ex)[:120]})
