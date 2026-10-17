@@ -32,6 +32,10 @@ SOURCES = [
  {"id":"felder","name":"The Felder Report","topic":"Markets","type":"felder","arg":"https://thefelderreport.com/feed/"},
  {"id":"visegrad","name":"Visegrad24","topic":"Politics","type":"rss","arg":"https://www.visegrad24.com/rss.xml"},
  {"id":"armstrong","name":"Armstrong Economics","topic":"Markets","type":"rss","arg":"https://www.armstrongeconomics.com/feed/"},
+ {"id":"kremlin","name":"Kremlin (EN)","topic":"Politics","type":"rss","arg":"http://en.kremlin.ru/feeds"},
+ {"id":"medvedev","name":"Dmitry Medvedev","topic":"Politics","type":"tg","arg":"medvedev_telegram"},
+ {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Politics","type":"tg","arg":"kadmitriev"},
+ {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Energy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
@@ -180,6 +184,23 @@ def oembed_text(u):
         return clean(t, 400)
     except Exception:
         return ""
+def translate(t, sl="ru", tl="en"):
+    """Free Google MT: Chrome-extension endpoint first, gtx fallback.
+    Returns the original text if both fail."""
+    if not t: return t
+    q = urllib.parse.quote(t[:1500])
+    for u in ("https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=%s&tl=%s&q=%s" % (sl, tl, q),
+              "https://translate.googleapis.com/translate_a/single?client=gtx&sl=%s&tl=%s&dt=t&q=%s" % (sl, tl, q)):
+        try:
+            d = json.loads(get(u))
+            if isinstance(d, list) and d:
+                if isinstance(d[0], str) and d[0].strip(): return d[0]
+                if isinstance(d[0], list):
+                    out = "".join(seg[0] for seg in d[0] if seg and seg[0])
+                    if out.strip(): return out
+        except Exception:
+            pass
+    return t
 def tg(ch):
     h = get(f"https://t.me/s/{ch}"); out=[]
     for blk in h.split('tgme_widget_message_wrap')[1:]:
@@ -235,7 +256,8 @@ def noisy(t):
     if re.match(r"^(Video|Image) post from", t): return True
     if re.fullmatch(r"https?://\S+", t): return True
     return False
-FILTER = {"rattletrap"}
+FILTER = {"rattletrap","medvedev","dmitriev"}
+TRANSLATE_RU = {"medvedev","dmitriev"}
 PROMO = {"dietdoctor": re.compile(r"\bmember benefit\b|sign up for diet doctor plus|\bfree trial\b", re.I)}
 KEYWORDS = {"debriefing": re.compile(r"econom|financ|\brails?\b|railroad|\btrad(?:e|es|ing|er|ers)\b|\bdebts?\b|\bbank|\bfund(?:s|ed|ing)?\b|\bfed\b|federal reserve|treasury|dollar|tariff|sanction|sovereign wealth|\boil\b|energy|\bgold\b|inflation|\brates?\b|credit|currenc|\bmarkets?\b|shipping|\bports?\b|supply chain|\biran|china|chinese|bessent", re.I), "attila": re.compile(r"\besg\b|fossil|energy|\bgold\b|\boil\b|bubble|\bdebt|crisis|\bcredit|value invest|economic|profit|valuing|inflation|monetary|\bprices?\b|financ|depression|commodit|uranium|\bmining|interest rate|\bfed\b|central bank|dollar|currenc|\btrade\b|stock market|\bmarkets?\b", re.I), "gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I)}
 for s in SOURCES:
@@ -256,9 +278,20 @@ for s in SOURCES:
         if s["id"]=="armstrong": ded = [g for g in ded if not g["title"].startswith("PRIVATE BLOG")]
         if s["id"]=="debriefing": ded = [g for g in ded if len((g["title"] or "").strip())>=60]
         if s["id"]=="attila": ded = [g for g in ded if not re.search(r"personal essay|balzac|self-help|\bmiser\b|roman emperor|\bluck\b", g["title"]+" "+g["summary"], re.I)]
+        if s["id"]=="kremlin": ded = [g for g in ded if not re.search(r"birthday greetings|^greetings\b|^congratulations\b|^condolences\b|awarded honorary|welcome address", g["title"], re.I)]
+        if s["id"]=="medvedev": ded = [g for g in ded if len((g["title"] or "").strip())>=80]
         if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+re.sub(r"Subscribe free and.*$","",g["summary"],flags=re.S))]
         if s["id"] in PROMO: ded = [g for g in ded if not PROMO[s["id"]].search(g["title"]+" "+g["summary"])]
         got = ded[:PER_SOURCE]
+        if s["id"] in TRANSLATE_RU:
+            pmap = {i["url"]: i for i in prev["items"] if i.get("source")==s["id"]}
+            for g in got:
+                old = pmap.get(g["url"])
+                if old and old.get("ru")==g["title"]:
+                    g["title"] = old["title"]
+                else:
+                    g["ru"] = g["title"]
+                    g["title"] = clean(translate(g["title"]), 300)
         for g in got: g.update(source=s["id"])
         items += got
         res.append({**{k:s[k] for k in("id","name","topic")},"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
