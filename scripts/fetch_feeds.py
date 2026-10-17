@@ -32,11 +32,11 @@ SOURCES = [
  {"id":"felder","name":"The Felder Report","topic":"Markets","type":"felder","arg":"https://thefelderreport.com/feed/"},
  {"id":"visegrad","name":"Visegrad24","topic":"Politics","type":"rss","arg":"https://www.visegrad24.com/rss.xml"},
  {"id":"armstrong","name":"Armstrong Economics","topic":"Markets","type":"rss","arg":"https://www.armstrongeconomics.com/feed/"},
- {"id":"kremlin","name":"Kremlin (EN)","topic":"Politics","type":"rss","arg":"http://en.kremlin.ru/feeds"},
- {"id":"medvedev","name":"Dmitry Medvedev","topic":"Politics","type":"tg","arg":"medvedev_telegram"},
- {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Politics","type":"tg","arg":"kadmitriev"},
- {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Energy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
- {"id":"americancompass","name":"American Compass","topic":"Politics","type":"feedly","arg":"https://americancompass.org/feed/"},
+ {"id":"kremlin","name":"Kremlin (EN)","topic":"Strategy & Policy","type":"rss","arg":"http://en.kremlin.ru/feeds"},
+ {"id":"medvedev","name":"Dmitry Medvedev","topic":"Strategy & Policy","type":"tg","arg":"medvedev_telegram"},
+ {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Strategy & Policy","type":"tg","arg":"kadmitriev"},
+ {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Strategy & Policy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
+ {"id":"americancompass","name":"American Compass","topic":"Strategy & Policy","type":"feedly","arg":"https://americancompass.org/feed/"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
