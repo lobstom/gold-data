@@ -36,6 +36,7 @@ SOURCES = [
  {"id":"medvedev","name":"Dmitry Medvedev","topic":"Politics","type":"tg","arg":"medvedev_telegram"},
  {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Politics","type":"tg","arg":"kadmitriev"},
  {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Energy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
+ {"id":"americancompass","name":"American Compass","topic":"Politics","type":"feedly","arg":"https://americancompass.org/feed/"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
