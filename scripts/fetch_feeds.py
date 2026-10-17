@@ -37,6 +37,7 @@ SOURCES = [
  {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Strategy & Policy","type":"tg","arg":"kadmitriev"},
  {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Strategy & Policy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
  {"id":"americancompass","name":"American Compass","topic":"Strategy & Policy","type":"feedly","arg":"https://americancompass.org/feed/"},
+ {"id":"simplicius","name":"Simplicius","topic":"Strategy & Policy","type":"rss","arg":"https://simplicius76.substack.com/feed"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
