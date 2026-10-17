@@ -41,6 +41,7 @@ SOURCES = [
  {"id":"brandao","name":"Shannon Brandao - China Boss News","topic":"Strategy & Policy","type":"rss","arg":"https://shannonbrandao.substack.com/feed"},
  {"id":"jinf","name":"JINF","topic":"Strategy & Policy","type":"rss","arg":"https://en.jinf.jp/feed"},
  {"id":"taipeitimes","name":"Taipei Times","topic":"Strategy & Policy","type":"rdf","arg":"https://www.taipeitimes.com/xml/index.rss"},
+ {"id":"helmer","name":"John Helmer - Dances With Bears","topic":"Strategy & Policy","type":"rss","arg":"https://johnhelmer.net/feed/"},
  {"id":"afc","name":"Asia Frontier Capital","topic":"Markets","type":"afc","arg":"https://www.asiafrontiercapital.com"},
 ]
 import os
