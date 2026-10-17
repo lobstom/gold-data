@@ -39,7 +39,6 @@ SOURCES = [
  {"id":"americancompass","name":"American Compass","topic":"Strategy & Policy","type":"feedly","arg":"https://americancompass.org/feed/"},
  {"id":"simplicius","name":"Simplicius","topic":"Strategy & Policy","type":"rss","arg":"https://simplicius76.substack.com/feed"},
  {"id":"alhajji","name":"Anas Alhajji","topic":"Energy","type":"rss","arg":"https://anasalhajjieoa.substack.com/feed"},
- {"id":"dorsey","name":"James Dorsey","topic":"Strategy & Policy","type":"rss","arg":"https://jamesmdorsey.substack.com/feed"},
  {"id":"jcpa","name":"JCPA","topic":"Strategy & Policy","type":"rss","arg":"https://jcpa.org/feed/"},
  {"id":"brandao","name":"Shannon Brandao - China Boss News","topic":"Strategy & Policy","type":"rss","arg":"https://shannonbrandao.substack.com/feed"},
  {"id":"jinf","name":"JINF","topic":"Strategy & Policy","type":"rss","arg":"https://en.jinf.jp/feed"},
