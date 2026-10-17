@@ -17,7 +17,7 @@ SOURCES = [
  {"id":"gata","name":"GATA","topic":"Gold","type":"rss","arg":"https://www.gata.org/rss.xml"},
  {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
  {"id":"pig","name":"Priced in Gold","topic":"Gold","type":"rss","arg":"https://pricedingold.com/feed"},
- {"id":"monetarymetals","name":"Monetary Metals","topic":"Gold","type":"rss","arg":"https://www.monetary-metals.com/feed/?post_type=article"},
+ {"id":"monetarymetals","name":"Monetary Metals","topic":"Gold","type":"wpj","arg":"https://www.monetary-metals.com/wp-json/wp/v2/article?per_page=15"},
  {"id":"aier","name":"AIER","topic":"Markets","type":"rss","arg":"https://www.aier.org/feed/"},
  {"id":"gcaptain","name":"gCaptain","topic":"Energy","type":"rss","arg":"https://gcaptain.com/feed/"},
  {"id":"stonge","name":"Peter St Onge","topic":"Markets","type":"rss","arg":"https://www.profstonge.com/feed"},
@@ -82,6 +82,21 @@ def get_substack_proxied(u):
         pass
     return synth(fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(archive, safe="")))
 
+def wpj(u):
+    """WordPress REST posts as feed items. Site WAF blocks some IPs: direct first, r.jina.ai fallback."""
+    try:
+        body = get(u)
+    except urllib.error.HTTPError as e:
+        if e.code != 403: raise
+        body = get("https://r.jina.ai/" + u)
+    posts, _ = json.JSONDecoder().raw_decode(body[body.index("["):])
+    out=[]
+    for p_ in posts:
+        try: dt = D.datetime.fromisoformat(p_["date_gmt"]+"+00:00")
+        except Exception: continue
+        bh = (p_.get("content") or {}).get("rendered") or (p_.get("excerpt") or {}).get("rendered") or ""
+        out.append({"title":clean(p_["title"]["rendered"],160),"url":p_["link"],"date":iso(dt),"summary":clean(bh)})
+    return out
 def clean(s, n=220):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or "")); s = re.sub(r"\s+", " ", s).strip()
     return s if len(s) <= n else s[:n].rsplit(" ",1)[0] + "…"
@@ -165,7 +180,7 @@ SOURCES_VF = [
  {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Longevity","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
 ]
 if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
-FN = {"rss":rss,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn}
+FN = {"rss":rss,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj}
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
