@@ -42,6 +42,7 @@ SOURCES = [
  {"id":"dorsey","name":"James Dorsey","topic":"Strategy & Policy","type":"rss","arg":"https://jamesmdorsey.substack.com/feed"},
  {"id":"jcpa","name":"JCPA","topic":"Strategy & Policy","type":"rss","arg":"https://jcpa.org/feed/"},
  {"id":"brandao","name":"Shannon Brandao - China Boss News","topic":"Strategy & Policy","type":"rss","arg":"https://shannonbrandao.substack.com/feed"},
+ {"id":"jinf","name":"JINF","topic":"Strategy & Policy","type":"rss","arg":"https://en.jinf.jp/feed"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
