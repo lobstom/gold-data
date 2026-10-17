@@ -18,6 +18,7 @@ SOURCES = [
  {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
  {"id":"pig","name":"Priced in Gold","topic":"Gold","type":"rss","arg":"https://pricedingold.com/feed"},
  {"id":"monetarymetals","name":"Monetary Metals","topic":"Gold","type":"wpj","arg":"https://www.monetary-metals.com/wp-json/wp/v2/article?per_page=15"},
+ {"id":"tfm","name":"TF Metals Report","topic":"Gold","type":"feedly","arg":"http://www.tfmetalsreport.com/blog/feed"},
  {"id":"aier","name":"AIER","topic":"Markets","type":"rss","arg":"https://www.aier.org/feed/"},
  {"id":"gcaptain","name":"gCaptain","topic":"Energy","type":"rss","arg":"https://gcaptain.com/feed/"},
  {"id":"stonge","name":"Peter St Onge","topic":"Markets","type":"rss","arg":"https://www.profstonge.com/feed"},
@@ -82,6 +83,23 @@ def get_substack_proxied(u):
         pass
     return synth(fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(archive, safe="")))
 
+def feedly(u):
+    """Feedly reader cache (streams API, no auth, low rate) for sites whose
+    Cloudflare blocks datacenter IPs. u = the feed URL Feedly indexes (http)."""
+    fid = "feed/" + u
+    q = "https://cloud.feedly.com/v3/streams/contents?streamId=" + urllib.parse.quote(fid, safe="") + "&count=15"
+    d = json.loads(get(q))
+    out=[]
+    for it in d.get("items", []):
+        try: dt = D.datetime.fromtimestamp((it.get("published") or it.get("crawled"))/1000, D.timezone.utc)
+        except Exception: continue
+        url = ""
+        for a in it.get("alternate") or []:
+            if a.get("href"): url = re.sub(r"[?&]utm_[^&]*","",a["href"]).rstrip("?&"); break
+        body = ((it.get("summary") or {}).get("content") or (it.get("content") or {}).get("content") or "")
+        out.append({"title":clean(it.get("title",""),160),"url":url,"date":iso(dt),"summary":clean(body)})
+    if not out: raise RuntimeError("feedly stream empty")
+    return out
 def wpj(u):
     """WordPress REST posts as feed items. Site WAF blocks some IPs: direct first, r.jina.ai fallback."""
     try:
@@ -180,7 +198,7 @@ SOURCES_VF = [
  {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Longevity","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
 ]
 if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
-FN = {"rss":rss,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj}
+FN = {"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj}
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
