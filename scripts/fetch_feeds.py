@@ -295,6 +295,19 @@ def noisy(t):
     if re.fullmatch(r"https?://\S+", t): return True
     return False
 FILTER = {"rattletrap","medvedev","dmitriev"}
+# RattleTrap includes Telegram service notices alongside its actual posts.
+# Keep this narrowly scoped to livestream lifecycle/announcement titles.
+RATTLETRAP_NOTICE = re.compile(
+    r"^(?:"
+    r"(?:(?:the|a|my|our)\s+)?(?:live[\s-]?stream|livestream|stream|broadcast|voice chat)\s+(?:(?:has|is|was)\s+(?:been\s+)?)?(?:started|finished|ended|stopped|starting|over|scheduled|will start|starts|going live|live|cancelled|canceled)\b"
+    r"|(?:[\w .'-]{1,60}\s+)?(?:has\s+)?(?:started|finished|ended|stopped)\s+(?:a\s+)?(?:live[\s-]?stream|livestream|stream|broadcast)\b"
+    r"|(?:we are|we're|i am|i'm)\s+(?:going live|live now|live)\b"
+    r"|(?:going live|live now|now live|streaming now|starting (?:a )?(?:live )?stream)\b"
+    r"|(?:join|watch|tune in to)\s+(?:the\s+)?(?:live[\s-]?stream|livestream|stream|broadcast)\b"
+    r"|derek johnson\s+(?:is going live|went live|is live now)\b"
+    r")(?:\b|$).*$",
+    re.I,
+)
 TRANSLATE_RU = {"medvedev","dmitriev"}
 DESCS = {'debriefing': 'Telegram commentary on markets and geopolitics; filtered to economics and finance.', 'rattletrap': "Derek Johnson's Telegram channel, arguing from military and constitutional documents that Trump remains commander-in-chief.", 'bioclandestine': 'Anonymous Telegram commentator on US politics, Ukraine, and bioweapon programs; pro-Trump, anti-establishment lean.', 'americancompass': 'Conservative think tank for post-free-market economics: industrial policy, labor, and finance reform.', 'dmitriev': "Head of the Russian Direct Investment Fund and Putin's deal negotiator; Telegram posts machine-translated to English.", 'simplicius': 'Anonymous long-form Substack on the Russia-Ukraine war and geopolitics; pro-Russian perspective.', 'jcpa': 'Jerusalem Center for Public Affairs; Israeli security and diplomacy analysis from a hawkish perspective.', 'brandao': 'China geopolitics and political economy, hawkish on the CCP. Paywalled posts show free teasers.', 'jinf': 'Japan Institute for National Fundamentals; conservative Japanese think tank on security, history, and the constitution.', 'taipeitimes': "Taiwan's main English-language daily, pro-independence editorial lean; filtered to NTFB topics.", 'rpsmith': 'Monitors Russian and global oil & gas: production, exports, sanctions, and shadow fleets.', 'sonar21': 'Former CIA analyst; daily commentary on the Russia-Ukraine war and US foreign policy, sharply critical of Western policy.', 'ritter': 'Former UN weapons inspector and Marine intelligence officer on the war and US-Russia relations; critical of NATO. Paywalled posts dropped.', 'afc': 'Fund manager focused on Asian frontier markets; free monthly newsletters.', 'yurta': 'Telegram channel on markets and investing.', 'acqmult': "Tobias Carlisle's deep value investing site: funds, podcast, and books.", 'aier': 'American Institute for Economic Research; free-market and Austrian-school economics commentary.', 'stonge': 'Economist writing daily on markets, inflation, and the Fed from an Austrian perspective.', 'shirk': 'Newsletter on private deals, resource stocks, and frontier markets.', 'lorenz': 'Deep value and special situations newsletter; long-form and contrarian.', 'attila': 'Markets and energy Substack; filtered to NTFB topics, personal essays dropped.', 'frontierviking': 'Substack on frontier and emerging market investing.', 'timprice': 'UK value fund manager at Price Value Partners; weekly market and macro commentaries.', 'riskhedge': 'Investment research newsletter on growth, technology, and disruption themes.', 'felder': "Jesse Felder's contrarian macro and market analysis; valuation-focused with a bearish lean.", 'armstrong': "Martin Armstrong's public posts on markets, cycles, and geopolitics; private blog posts excluded.", 'alhajji': 'Energy economist covering oil markets, OPEC, and energy geopolitics.', 'crude': 'Historic perspectives on the oil industry and markets.', 'gr': 'Natural resource investment firm; deeply researched quarterly commodity letters, bullish on real assets.', 'bison': 'Oil & gas equity investor; public posts on E&P stocks and energy macro.', 'gcaptain': 'Maritime news site; filtered to oil, freight, and shipping.', 'superspiked': 'Arjun Murti, former Goldman Sachs oil analyst; weekly energy macro commentary.', 'igwt': "Ronald-Peter Stoeferle's annual In Gold We Trust report with Mark Valek.", 'gata': 'Gold Anti-Trust Action Committee; documented record of precious-metals market manipulation.', 'pig': "Charles Vollum's market prices measured in gold.", 'monetarymetals': "Keith Weiner's firm and research on yield paid in gold.", 'tfm': "Turd Ferguson's metals and macro commentary."}
 PROMO = {"dietdoctor": re.compile(r"\bmember benefit\b|sign up for diet doctor plus|\bfree trial\b", re.I)}
@@ -308,6 +321,7 @@ for s in SOURCES:
         else:
             got = FN[s["type"]](s["arg"])
         if s["id"] in FILTER: got = [g for g in got if not noisy(g["title"])]
+        if s["id"] == "rattletrap": got = [g for g in got if not RATTLETRAP_NOTICE.search(g["title"])]
         seen=set(); ded=[]
         for g in sorted(got, key=lambda x:x["date"], reverse=True):
             k = g["url"] or g["title"][:80]
