@@ -28,6 +28,10 @@ SOURCES = [
  {"id":"frontierviking","name":"FrontierViking","topic":"Markets","type":"rss","arg":"https://frontierviking.substack.com/feed"},
  {"id":"timprice","name":"Tim Price","topic":"Markets","type":"rss","arg":"https://timprice.substack.com/feed"},
  {"id":"riskhedge","name":"RiskHedge","topic":"Markets","type":"rss","arg":"https://riskhedgeresearch.substack.com/feed"},
+ {"id":"superspiked","name":"Super-Spiked","topic":"Energy","type":"rss","arg":"https://arjunmurti.substack.com/feed"},
+ {"id":"felder","name":"The Felder Report","topic":"Markets","type":"rss","arg":"https://thefelderreport.com/feed/"},
+ {"id":"visegrad","name":"Visegrad24","topic":"Politics","type":"rss","arg":"https://www.visegrad24.com/rss.xml"},
+ {"id":"armstrong","name":"Armstrong Economics","topic":"Markets","type":"rss","arg":"https://www.armstrongeconomics.com/feed/"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
@@ -138,7 +142,9 @@ def rss(u, s_social=False):
         else:
             d = it.findtext("pubDate")
             try: dt = parsedate_to_datetime(d)
-            except Exception: continue
+            except Exception:
+                try: dt = D.datetime.fromisoformat(d.replace("Z","+00:00"))
+                except Exception: continue
             t = clean(it.findtext("title"), 300 if s_social else 160)
             body = it.findtext("{http://purl.org/rss/1.0/modules/content/}encoded") or it.findtext("description") or ""
             url = it.findtext("link")
@@ -228,6 +234,7 @@ for s in SOURCES:
             if k in seen: continue
             seen.add(k); ded.append(g)
         if s["id"]=="ferriss": ded = [g for g in ded if "transcript" not in g["title"].lower()]
+        if s["id"]=="armstrong": ded = [g for g in ded if not g["title"].startswith("PRIVATE BLOG")]
         if s["id"]=="debriefing": ded = [g for g in ded if len((g["title"] or "").strip())>=60]
         if s["id"]=="attila": ded = [g for g in ded if not re.search(r"personal essay|balzac|self-help|\bmiser\b|roman emperor|\bluck\b", g["title"]+" "+g["summary"], re.I)]
         if s["id"] in KEYWORDS: ded = [g for g in ded if KEYWORDS[s["id"]].search(g["title"]+" "+re.sub(r"Subscribe free and.*$","",g["summary"],flags=re.S))]
