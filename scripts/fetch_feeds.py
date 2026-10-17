@@ -39,6 +39,8 @@ SOURCES = [
  {"id":"americancompass","name":"American Compass","topic":"Strategy & Policy","type":"feedly","arg":"https://americancompass.org/feed/"},
  {"id":"simplicius","name":"Simplicius","topic":"Strategy & Policy","type":"rss","arg":"https://simplicius76.substack.com/feed"},
  {"id":"alhajji","name":"Anas Alhajji","topic":"Energy","type":"rss","arg":"https://anasalhajjieoa.substack.com/feed"},
+ {"id":"dorsey","name":"James Dorsey","topic":"Strategy & Policy","type":"rss","arg":"https://jamesmdorsey.substack.com/feed"},
+ {"id":"jcpa","name":"JCPA","topic":"Strategy & Policy","type":"rss","arg":"https://jcpa.org/feed/"},
 ]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
