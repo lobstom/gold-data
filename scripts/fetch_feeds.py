@@ -29,7 +29,7 @@ SOURCES = [
  {"id":"timprice","name":"Tim Price","topic":"Markets","type":"rss","arg":"https://timprice.substack.com/feed"},
  {"id":"riskhedge","name":"RiskHedge","topic":"Markets","type":"rss","arg":"https://riskhedgeresearch.substack.com/feed"},
  {"id":"superspiked","name":"Super-Spiked","topic":"Energy","type":"rss","arg":"https://arjunmurti.substack.com/feed"},
- {"id":"felder","name":"The Felder Report","topic":"Markets","type":"rss","arg":"https://thefelderreport.com/feed/"},
+ {"id":"felder","name":"The Felder Report","topic":"Markets","type":"felder","arg":"https://thefelderreport.com/feed/"},
  {"id":"visegrad","name":"Visegrad24","topic":"Politics","type":"rss","arg":"https://www.visegrad24.com/rss.xml"},
  {"id":"armstrong","name":"Armstrong Economics","topic":"Markets","type":"rss","arg":"https://www.armstrongeconomics.com/feed/"},
 ]
@@ -105,6 +105,25 @@ def feedly(u):
         out.append({"title":clean(it.get("title",""),160),"url":url,"date":iso(dt),"summary":clean(body)})
     if not out: raise RuntimeError("feedly stream empty")
     return out
+def felder(u):
+    """Felder's RSS descriptions are boilerplate excerpts; pull the first real
+    paragraph from each article page instead (weekly pub, so ~10 fetches/run)."""
+    items = rss(u)
+    for g in items:
+        if "most interesting things" not in (g["summary"] or "").lower(): continue
+        try:
+            h = get(g["url"])
+            i = h.find('class="post-content"')
+            seg = h[i:i+80000] if i >= 0 else h
+            for m in re.finditer(r"<p[^>]*>(.*?)</p>", seg, re.S):
+                txt = clean(m.group(1), 400)
+                if not txt or txt in ("LINK","STAT","QUOTE","CHART","TWEET"): continue
+                if txt.lower().startswith("below are some of the most interesting things"): continue
+                g["summary"] = clean(txt)
+                break
+        except Exception:
+            pass
+    return items
 def wpj(u):
     """WordPress REST posts as feed items. Site WAF blocks some IPs: direct first, r.jina.ai fallback."""
     try:
@@ -205,7 +224,7 @@ SOURCES_VF = [
  {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Longevity","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
 ]
 if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
-FN = {"rss":rss,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj}
+FN = {"rss":rss,"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj}
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
