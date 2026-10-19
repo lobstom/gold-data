@@ -27,6 +27,9 @@
  {"id":"attila","name":"Attila Rebak","topic":"Markets","type":"rss","arg":"https://attilarebak.substack.com/feed"},
  {"id":"frontierviking","name":"FrontierViking","topic":"Markets","type":"rss","arg":"https://frontierviking.substack.com/feed"},
  {"id":"timprice","name":"Tim Price","topic":"Markets","type":"rss","arg":"https://timprice.substack.com/feed"},
+ 
+{"id":"pelletier","name":"Martin Pelletier - Financial Post","topic":"Markets","type":"rss","arg":"https://financialpost.com/tag/martin-pelletier/feed.xml"},
+
  {"id":"riskhedge","name":"RiskHedge","topic":"Markets","type":"rss","arg":"https://riskhedgeresearch.substack.com/feed"},
  {"id":"superspiked","name":"Super-Spiked","topic":"Energy","type":"rss","arg":"https://arjunmurti.substack.com/feed"},
  {"id":"felder","name":"The Felder Report","topic":"Markets","type":"felder","arg":"https://thefelderreport.com/feed/"},
