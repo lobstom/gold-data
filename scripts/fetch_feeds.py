@@ -303,6 +303,18 @@ for s in SOURCES:
         else:
             got = FN[s["type"]](s["arg"])
         if s["id"] in FILTER: got = [g for g in got if not noisy(g["title"])]
+            
+        if s.get("author"):  # optional sources.json key: keep only items whose dc:creator matches
+            
+            _x = ET.fromstring(get(s["arg"])); _dc = "{http://purl.org/dc/elements/1.1/}creator"
+            
+            _ok = {(i.findtext("link") or "").strip() for i in _x.iter("item") if s["author"].lower() in (i.findtext(_dc) or "").lower()}
+            
+            got = [g for g in got if (g["url"] or "").strip() in _ok]
+
+
+
+
         if s["id"] == "rattletrap": got = [g for g in got if not RATTLETRAP_NOTICE.search(g["title"])]
         seen=set(); ded=[]
         for g in sorted(got, key=lambda x:x["date"], reverse=True):
