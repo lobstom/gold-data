@@ -6,75 +6,7 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chr
 HDRS = {"User-Agent":UA, "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language":"en-US,en;q=0.9"}
 HDRS_MIN = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/131 Safari/537.36", "Accept":"*/*"}
 PER_SOURCE = 15
-SOURCES = [
- {"id":"debriefing","name":"The Debriefing","topic":"Strategy & Policy","type":"tg","arg":"Castlerock2021"},
- {"id":"rattletrap","name":"RattleTrap 1776","topic":"Strategy & Policy","type":"tg","arg":"rattletrap1776"},
- {"id":"bioclandestine","name":"BioClandestine","topic":"Strategy & Policy","type":"tg","arg":"bioclandestine"},
- {"id":"yurta","name":"Yurta Capital","topic":"Markets","type":"tg","arg":"yurta06"},
- {"id":"crude","name":"The Crude Chronicles","topic":"Energy","type":"rss","arg":"https://thecrudechronicles.substack.com/feed"},
- {"id":"gr","name":"Goehring & Rozencwajg","topic":"Energy","type":"rss","arg":"https://blog.gorozen.com/blog/rss.xml"},
- {"id":"bison","name":"Josh Young - Bison Insights","topic":"Energy","type":"rss","arg":"https://bisoninterests.substack.com/feed"},
- {"id":"igwt","name":"In Gold We Trust","topic":"Gold","type":"rss","arg":"https://www.incrementum.li/feed/"},
- {"id":"gata","name":"GATA","topic":"Gold","type":"rss","arg":"https://www.gata.org/rss.xml"},
- {"id":"acqmult","name":"Acquirer's Multiple","topic":"Markets","type":"rss","arg":"https://acquirersmultiple.com/feed/"},
- {"id":"pig","name":"Priced in Gold","topic":"Gold","type":"rss","arg":"https://pricedingold.com/feed"},
- {"id":"monetarymetals","name":"Monetary Metals","topic":"Gold","type":"wpj","arg":"https://www.monetary-metals.com/wp-json/wp/v2/article?per_page=15"},
- {"id":"tfm","name":"TF Metals Report","topic":"Gold","type":"feedly","arg":"http://www.tfmetalsreport.com/blog/feed"},
- {"id":"aier","name":"AIER","topic":"Markets","type":"rss","arg":"https://www.aier.org/feed/"},
- {"id":"gcaptain","name":"gCaptain","topic":"Energy","type":"rss","arg":"https://gcaptain.com/feed/"},
- {"id":"stonge","name":"Peter St Onge","topic":"Markets","type":"rss","arg":"https://www.profstonge.com/feed"},
- {"id":"pafere","name":"Krzysztof Szczawinski - PAFERE","topic":"Markets","type":"rss","arg":"https://www.pafere.org/author/krzysztof-szczawinski/feed/"},
- {"id":"bowtiedmara","name":"BowTiedMara","topic":"Strategy & Policy","type":"rss","arg":"https://www.bowtiedmara.io/feed"},
- {"id":"aasecon","name":"AAS Economics","topic":"Markets","type":"rss","arg":"https://aaseconomics.substack.com/feed"},
- {"id":"oldeconomy","name":"TheOldEconomy","topic":"Markets","type":"rss","arg":"https://theoldeconomy.substack.com/feed"},
- {"id":"eugyppius","name":"eugyppius","topic":"Strategy & Policy","type":"rss","arg":"https://eugyppius.substack.com/feed"},
- {"id":"lacalle","name":"Daniel Lacalle","topic":"Markets","type":"rss","arg":"https://dlacalle.com/en/feed/"},
- {"id":"shirk","name":"Cody Shirk","topic":"Markets","type":"rss","arg":"https://www.codyshirk.com/feed"},
- {"id":"lorenz","name":"Swen Lorenz - Undervalued Shares","topic":"Markets","type":"rss","arg":"https://www.undervalued-shares.com/feed/"},
- {"id":"attila","name":"Attila Rebak","topic":"Markets","type":"rss","arg":"https://attilarebak.substack.com/feed"},
- {"id":"frontierviking","name":"FrontierViking","topic":"Markets","type":"rss","arg":"https://frontierviking.substack.com/feed"},
- {"id":"timprice","name":"Tim Price","topic":"Markets","type":"rss","arg":"https://timprice.substack.com/feed"},
- {"id":"riskhedge","name":"RiskHedge","topic":"Markets","type":"rss","arg":"https://riskhedgeresearch.substack.com/feed"},
- {"id":"superspiked","name":"Super-Spiked","topic":"Energy","type":"rss","arg":"https://arjunmurti.substack.com/feed"},
- {"id":"felder","name":"The Felder Report","topic":"Markets","type":"felder","arg":"https://thefelderreport.com/feed/"},
- {"id":"armstrong","name":"Armstrong Economics","topic":"Markets","type":"rss","arg":"https://www.armstrongeconomics.com/feed/"},
- {"id":"dmitriev","name":"Kirill Dmitriev","topic":"Strategy & Policy","type":"tg","arg":"kadmitriev"},
- {"id":"rpsmith","name":"Ronald P. Smith - EMOGCP","topic":"Energy","type":"rss","arg":"https://ronaldpsmith.substack.com/feed"},
- {"id":"sonar21","name":"Larry Johnson - Sonar21","topic":"Strategy & Policy","type":"rss","arg":"https://sonar21.com/feed/"},
- {"id":"ritter","name":"Scott Ritter","topic":"Strategy & Policy","type":"rss","arg":"https://scottritter.substack.com/feed"},
- {"id":"americancompass","name":"American Compass","topic":"Strategy & Policy","type":"feedly","arg":"https://americancompass.org/feed/"},
- {"id":"simplicius","name":"Simplicius","topic":"Strategy & Policy","type":"rss","arg":"https://simplicius76.substack.com/feed"},
- {"id":"alhajji","name":"Anas Alhajji","topic":"Energy","type":"rss","arg":"https://anasalhajjieoa.substack.com/feed"},
- {"id":"criterium","name":"Criterium Energy","topic":"Energy","type":"rss","arg":"https://feeds.newsfilecorp.com/company/7241"},
- {"id":"hfir","name":"HFI Research","topic":"Energy","type":"rss","arg":"https://hfir.com/feed"},
- {"id":"jkemp","name":"John Kemp - JKempEnergy","topic":"Energy","type":"rss","arg":"https://jkempenergy.com/feed/"},
- {"id":"epstein","name":"Alex Epstein - Energy Talking Points","topic":"Energy","type":"rss","arg":"https://alexepstein.substack.com/feed"},
- {"id":"comctx","name":"Commodity Context - Rory Johnston","topic":"Energy","type":"rssdesc","arg":"https://commoditycontext.substack.com/feed"},
- {"id":"jcpa","name":"JCPA","topic":"Strategy & Policy","type":"rss","arg":"https://jcpa.org/feed/"},
- {"id":"brandao","name":"Shannon Brandao - China Boss News","topic":"Strategy & Policy","type":"rss","arg":"https://shannonbrandao.substack.com/feed"},
- {"id":"jinf","name":"JINF","topic":"Strategy & Policy","type":"rss","arg":"https://en.jinf.jp/feed"},
- {"id":"taipeitimes","name":"Taipei Times","topic":"Strategy & Policy","type":"rdf","arg":"https://www.taipeitimes.com/xml/index.rss"},
- {"id":"afc","name":"Asia Frontier Capital","topic":"Markets","type":"afc","arg":"https://www.asiafrontiercapital.com"},
- {"id":"decouple","name":"Decouple - Chris Keefer","topic":"Energy","type":"rss","arg":"https://decouple.substack.com/feed"},
- {"id":"traderferg","name":"Trader Ferg","topic":"Energy","type":"rss","arg":"https://traderferg.substack.com/feed"},
- {"id":"nuclearbarbarians","name":"Nuclear Barbarians","topic":"Energy","type":"rss","arg":"https://nuclearbarbarians.substack.com/feed"},
- {"id":"mda","name":"Mark's Daily Apple","topic":"Health","type":"rss","arg":"https://www.marksdailyapple.com/feed"},
- {"id":"ferriss","name":"Tim Ferriss","topic":"Health","type":"rss","arg":"https://tim.blog/feed/"},
- {"id":"paleo","name":"The Paleo Diet","topic":"Health","type":"rss","arg":"https://www.thepaleodiet.com/feed/"},
- {"id":"dietdoctor","name":"Diet Doctor","topic":"Health","type":"rss","arg":"https://www.dietdoctor.com/feed"},
- {"id":"attia","name":"Peter Attia","topic":"Health","type":"rss","arg":"https://peterattiamd.com/feed/"},
- {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Health","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
- {"id":"malone","name":"Malone News","topic":"Health","type":"rss","arg":"https://www.malone.news/feed"},
- {"id":"midwesterndoctor","name":"The Forgotten Side of Medicine","topic":"Health","type":"rss","arg":"https://www.midwesterndoctor.com/feed"},
- {"id":"kory","name":"Pierre Kory","topic":"Health","type":"rss","arg":"https://pierrekorymedicalmusings.com/feed"},
- {"id":"emedia","name":"E-Media Press","topic":"Health","type":"rss","arg":"https://emediapress.com/feed/"},
- {"id":"rpstrength","name":"RP Strength","topic":"Health","type":"rss","arg":"https://rpstrength.com/blogs/articles.atom"},
- {"id":"gentilcore","name":"Tony Gentilcore","topic":"Health","type":"rss","arg":"https://tonygentilcore.com/feed/"},
- {"id":"magness","name":"Steve Magness","topic":"Training","type":"rss","arg":"https://stevemagness.substack.com/feed"},
- {"id":"scienceofrunning","name":"Science of Running","topic":"Training","type":"rss","arg":"https://www.scienceofrunning.com/feed"},
- {"id":"strengthrunning","name":"Strength Running","topic":"Training","type":"rss","arg":"https://strengthrunning.com/feed/"},
- {"id":"kresser","name":"Chris Kresser","topic":"Health","type":"rss","arg":"https://chriskresser.com/feed/"},
-]
+import os; SOURCES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sources.json")))["ntfb"]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
 def get(u):
@@ -278,20 +210,7 @@ def treasury():
     for m in re.finditer(r'<time datetime=([\dTZ:-]+)[^>]*>.*?<a href=(/news/press-releases/[^ >]+)[^>]*>(.*?)</a>', h, re.S):
         out.append({"title":clean(m.group(3),160),"url":"https://home.treasury.gov"+m.group(2),"date":m.group(1),"summary":""})
     return out
-SOURCES_VF = [
- {"id":"kresser","name":"Chris Kresser","topic":"Health","type":"rss","arg":"https://chriskresser.com/feed/"},
- {"id":"rpstrength","name":"RP Strength","topic":"Training","type":"rss","arg":"https://rpstrength.com/blogs/articles.atom"},
- {"id":"gentilcore","name":"Tony Gentilcore","topic":"Strength","type":"rss","arg":"https://tonygentilcore.com/feed/"},
- {"id":"magness","name":"Steve Magness","topic":"Training","type":"rss","arg":"https://stevemagness.substack.com/feed"},
- {"id":"scienceofrunning","name":"Science of Running","topic":"Training","type":"rss","arg":"https://www.scienceofrunning.com/feed"},
- {"id":"strengthrunning","name":"Strength Running","topic":"Training","type":"rss","arg":"https://strengthrunning.com/feed/"},
- {"id":"mda","name":"Mark's Daily Apple","topic":"Primal","type":"rss","arg":"https://www.marksdailyapple.com/feed"},
- {"id":"ferriss","name":"Tim Ferriss","topic":"Performance","type":"rss","arg":"https://tim.blog/feed/"},
- {"id":"paleo","name":"The Paleo Diet","topic":"Paleo","type":"rss","arg":"https://www.thepaleodiet.com/feed/"},
- {"id":"dietdoctor","name":"Diet Doctor","topic":"Low carb","type":"rss","arg":"https://www.dietdoctor.com/feed"},
- {"id":"attia","name":"Peter Attia","topic":"Longevity","type":"rss","arg":"https://peterattiamd.com/feed/"},
- {"id":"blueprint","name":"Blueprint (Bryan Johnson)","topic":"Longevity","type":"rss","arg":"https://blueprint.bryanjohnson.com/blogs/news.atom"},
-]
+SOURCES_VF = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sources.json")))["vf"]
 if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"): SOURCES = SOURCES_VF
 
 def rdf(u):
