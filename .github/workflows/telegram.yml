@@ -1,0 +1,24 @@
+name: Telegram channel posts
+on:
+  schedule:
+    - cron: "17 * * * *"   # hourly, offset from the feeds job
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Post new items to Telegram
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHANNEL: "@notimeforbull00"
+        run: python3 telegram_post.py
+      - name: Commit state
+        run: |
+          git config user.name "ntfb-bot"
+          git config user.email "bot@notimeforbull.com"
+          git add telegram_state.json telegram_queue.json
+          git diff --cached --quiet || git commit -m "telegram state update"
+          git push || (git pull --rebase && git push)
