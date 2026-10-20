@@ -26,6 +26,18 @@ def extend(doc, get):
     g, s, o = usd("gold"), usd("silver"), usd("wti")
     rate("gsr", "Gold / silver ratio (oz Ag per oz Au)", "ratio", "monthly avg", [(d, g[d] / s[d]) for d in sorted(g) if d in s and s[d]], sfx="", dec=1)
     rate("goldoil", "Gold / oil ratio (WTI bbl per oz Au)", "ratio", "monthly avg", [(d, g[d] / o[d]) for d in sorted(g) if d in o and o[d]], sfx="", dec=1)
+    # Case-Shiller national home price index relative to gold: both rebased to 100 in January 2000, shown as one fixed index row in every unit mode
+    cs = dict(fred("CSUSHPINSA"))
+    base = "2000-01-01"
+    pts = []
+    for d in sorted(cs):
+        if d[:7] < cur and d in g and g[d] and base in cs and base in g:
+            pts.append((d, (cs[d] / cs[base]) / (g[d] / g[base]) * 100, g[d]))
+    if pts:
+        more.append(dict(id="cshomegold", label="US home price index vs gold", unit="index pt", freq="monthly (3-month average, published about two months late)",
+                         asof=pts[-1][0][:7], usd=round(pts[-1][1], 3), goldusd=pts[-1][2], ozau=0, ozag=0, fixed=1,
+                         note="US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Price Index (repeat sales of single-family homes, FRED CSUSHPINSA, from 1987) divided by the monthly average gold price, with both set to 100 in January 2000. It is an index, not ounces per home, and it is shown in index points in every unit mode. Case-Shiller is a three-month average and is revised.",
+                         points=[[a, round(b, 3), round(b, 3), round(b, 3)] for a, b, _ in pts]))
     # NBER recession months (USREC), merged into [start, end] month ranges
     rec, start, prev = [], None, None
     for d, v in fred("USREC"):
