@@ -34,7 +34,7 @@ def extend(doc, get):
         if d[:7] < cur and d in g and g[d] and base in cs and base in g:
             pts.append((d, (cs[d] / cs[base]) / (g[d] / g[base]) * 100, g[d]))
     if pts:
-        more.append(dict(id="cshomegold", label="US home price index vs gold", unit="index pt", freq="monthly (3-month average, published about two months late)",
+        more.append(dict(id="cshomegold", label="US home price index vs gold, Jan 2000 = 100", unit="index pt", freq="monthly (3-month average, published about two months late)",
                          asof=pts[-1][0][:7], usd=round(pts[-1][1], 3), goldusd=pts[-1][2], ozau=0, ozag=0, fixed=1,
                          note="US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Price Index (repeat sales of single-family homes, FRED CSUSHPINSA, from 1987) divided by the monthly average gold price, with both set to 100 in January 2000. It is an index, not ounces per home, and it is shown in index points in every unit mode. Case-Shiller is a three-month average and is revised.",
                          points=[[a, round(b, 3), round(b, 3), round(b, 3)] for a, b, _ in pts]))
