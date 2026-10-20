@@ -47,6 +47,7 @@ def extend(doc, get):
     if start: rec.append([start[:7], prev[:7]])
     doc["recessions"] = [r for r in rec if r[0] >= "1857"]
     extend_dxy(doc, get)
+    extend_usd(doc)
     extend_v3(doc, get)
     return doc
 
@@ -97,6 +98,33 @@ def extend_dxy(doc, get):
             doc["more"].extend(prev)
         except Exception as e2:
             print("WARNING: no previous DXY row:", e2)
+
+
+USD_NOTE = ("US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row "
+            "(same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series.")
+
+def extend_usd(doc):
+    """US dollar as a row: reciprocal of the gold row (oz Au and oz Ag per $1). Added to "more" so old cards
+    ignore it. Non-fatal: on any failure the previous usd row is kept (or none) and a warning is printed."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    try:
+        byid = {i['id']: i for i in doc['items']}
+        r5 = lambda x: float(f'{x:.5g}')
+        pts = []
+        for p in byid['gold']['points']:
+            dt, gu, ag = p[0], p[2], (p[3] if len(p) > 3 else None)
+            if not gu: continue
+            pts.append([dt, r5(1.0 / gu), 1.0, r5(ag / gu) if ag else None])
+        if len(pts) < 100 or pts[-1][1] <= 0: raise ValueError('bad USD series: %d points' % len(pts))
+        doc['more'].append(dict(id='usd', label='US dollar', unit='$1', freq='monthly avg', asof=byid['gold']['asof'],
+                                usd=1.0, goldusd=byid['gold']['usd'], ozau=pts[-1][1], ozag=pts[-1][3], points=pts, note=USD_NOTE))
+    except Exception as e:
+        print('WARNING: USD row skipped, previous row kept if any:', e)
+        try:
+            old = json.load(open(os.path.join(here, '..', 'data.json')))
+            doc['more'].extend([r for r in old.get('more', []) if r['id'] == 'usd'])
+        except Exception as e2:
+            print('WARNING: no previous USD row:', e2)
 
 
 """Staged v3 additions. Never modifies existing items/more, so v1/v2 cards ignore them.
