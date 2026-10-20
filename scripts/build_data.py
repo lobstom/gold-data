@@ -51,7 +51,7 @@ for dt, v in list(csv.reader(io.StringIO(get("https://fred.stlouisfed.org/graph/
     g = [gold[k] for k in (f"{y}M{mm:02d}" for mm in (m, m + 1, m + 2)) if k in gold]
     if len(g) == 3: pts.append((dt, float(v) / (sum(g) / 3), float(v), sum(g) / 3))
 pts_housing = pts
-add("housing", "US median home price", "home", "quarterly", pts)
+add("housing", "US median new-home price", "home", "quarterly", pts)
 
 # electricity: EIA bulk, cents/kWh -> $/MWh
 z = zipfile.ZipFile(io.BytesIO(get("https://www.eia.gov/opendata/bulk/ELEC.zip")))
@@ -136,6 +136,7 @@ scale = hs["usd"] and None
 mspus_first = [p for p in pts_housing if p[0] == first][0][2]
 scale = mspus_first / idx[-1][1]
 hs["points"] = [[dt, v * scale / gann[int(dt[:4])], v * scale] for dt, v in idx] + hs["points"]
+hs["note"] = "US median new-home price: Census median sales price of new houses sold (FRED MSPUS, nominal dollars, quarterly) from 1963. Before 1963 the row is Robert Shiller's nominal US home price index (1890-1962) rescaled to the 1963 Census level, so those values are approximate and are not observed median prices. It is new homes only. For existing-home price changes see the US home price index vs gold row."
 u = byid["ust10"]; first = u["points"][0][0]
 u["points"] = [[dt, v] for dt, v in H["ust10"] if dt < first] + u["points"]
 # fed funds: effective rate starts 1954-07; before that splice in the Fed discount rate (NBER M13009, NY Fed, 1914-11 to 1954-06)
