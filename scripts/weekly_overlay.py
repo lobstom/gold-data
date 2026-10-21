@@ -25,7 +25,7 @@ import csv, datetime as dt, io, json, math, os, subprocess, sys, urllib.request
 MIN_OBS = 3  # business days required for a completed week
 
 
-def _get(url, timeout=120, binary=False):
+def _get(url, timeout=45, binary=False):  # 45s: FRED tarpits blocked IPs; normal responses are ~1s
     req = urllib.request.Request(url, headers={"User-Agent": "gold-data weekly overlay"})
     data = urllib.request.urlopen(req, timeout=timeout).read()
     return data if binary else data.decode("utf8", "ignore")
@@ -168,6 +168,23 @@ def _cached(key, fetch):
     return CACHE[key]
 
 
+def _weekly_cutoff(points):
+    """Re-runnable append boundary: max(month end of the last first-of-month
+    (monthly-cadence) point, date of the most recent point). Monthly points are
+    never duplicated; already-appended weekly points continue from their last
+    Friday instead of stalling until the next month."""
+    last = points[-1][0]
+    monthly = [p[0] for p in points if p[0].endswith("-01")]
+    base = _month_end(monthly[-1]) if monthly else "0000-00-00"
+    return max(base, last)
+
+
+def _freq_weekly(freq, new_first):
+    """Keep the original 'weekly since' start date across re-runs."""
+    base, _, since = freq.partition("; weekly since ")
+    return base + "; weekly since " + (since or new_first)
+
+
 def _month_end(iso):
     y, m = int(iso[:4]), int(iso[5:7])
     ny, nm = (y + 1, 1) if m == 12 else (y, m + 1)
@@ -193,12 +210,12 @@ def apply(doc, log=print):
     applied = []
 
     # gold row itself: [date, 1.0, USD, null] (no weekly silver for oz Ag)
-    gold_cutoff = _month_end(last_monthly_gold_date)
+    gold_cutoff = _weekly_cutoff(gold_row["points"])
     new = [(f, a) for f, a in gw if f > gold_cutoff]
     if new:
         gold_row["points"] += [[f, 1.0, _r5(a), None] for f, a in new]
         gold_row.update(asof=new[-1][0], usd=_r5(new[-1][1]), goldusd=_r5(new[-1][1]),
-                        freq="monthly avg; weekly since " + new[0][0])
+                        freq=_freq_weekly(gold_row["freq"], new[0][0]))
         applied.append("gold")
 
     for rid, (src, fetch) in PRICE_ROWS.items():
@@ -212,7 +229,7 @@ def apply(doc, log=print):
             log(f"::warning::{rid} weekly fetch failed ({src}): {e}; row left on existing cadence")
             continue
         big = 1000.0 if row.get("big") else 1.0  # big rows: USD in $T, oz in billions
-        cutoff = _month_end(row["points"][-1][0])
+        cutoff = _weekly_cutoff(row["points"])
         new = [(f, v * big / gold_weekly[f], v) for f, v in pts if f in gold_weekly and f > cutoff]
         if not new:
             log(f"{rid}: no new completed weeks")
@@ -220,7 +237,7 @@ def apply(doc, log=print):
         row["points"] += [[f, _r5(o), _r5(u), None] for f, o, u in new]
         row.update(asof=new[-1][0], usd=_r5(new[-1][2]), goldusd=_r5(gold_weekly[new[-1][0]]),
                    ozau=_r5(new[-1][1]),
-                   freq=row["freq"] + "; weekly since " + new[0][0])
+                   freq=_freq_weekly(row["freq"], new[0][0]))
         applied.append(rid)
 
     for rid, (src, fetch) in RATE_ROWS.items():
@@ -233,38 +250,38 @@ def apply(doc, log=print):
         except Exception as e:
             log(f"::warning::{rid} weekly fetch failed ({src}): {e}; row left on existing cadence")
             continue
-        cutoff = _month_end(row["points"][-1][0])
+        cutoff = _weekly_cutoff(row["points"])
         new = [(f, v) for f, v in pts if f > cutoff]
         if not new:
             log(f"{rid}: no new completed weeks")
             continue
         row["points"] += [[f, round(v, 4)] for f, v in new]
         row.update(asof=new[-1][0], usd=round(new[-1][1], 4),
-                   freq=row["freq"] + "; weekly since " + new[0][0])
+                   freq=_freq_weekly(row["freq"], new[0][0]))
         applied.append(rid)
 
     # derived weekly: US dollar row (inverse of weekly gold); oz Ag leg stays null
     usd_row = byid.get("usd")
     if usd_row and "gold" in applied:
-        usd_cutoff = _month_end(usd_row["points"][-1][0])
+        usd_cutoff = _weekly_cutoff(usd_row["points"])
         new = [(f, 1.0 / a) for f, a in gw if f > usd_cutoff]
         if new:
             usd_row["points"] += [[f, _r5(o), 1.0, None] for f, o in new]
             usd_row.update(asof=new[-1][0], ozau=_r5(new[-1][1]),
-                           freq="monthly avg; weekly since " + new[0][0])
+                           freq=_freq_weekly(usd_row["freq"], new[0][0]))
             applied.append("usd")
     # gold/oil ratio from two genuine weekly series
     go_row = byid.get("goldoil")
     if go_row:
         try:
             wti_w = dict(_cached("wti", PRICE_ROWS["wti"][1]))
-            go_cutoff = _month_end(go_row["points"][-1][0])
+            go_cutoff = _weekly_cutoff(go_row["points"])
             new = [(f, gold_weekly[f] / wti_w[f]) for f in sorted(set(gold_weekly) & set(wti_w))
                    if f > go_cutoff]
             if new:
                 go_row["points"] += [[f, round(v, 4)] for f, v in new]
                 go_row.update(asof=new[-1][0], usd=round(new[-1][1], 4),
-                              freq="monthly avg; weekly since " + new[0][0])
+                              freq=_freq_weekly(go_row["freq"], new[0][0]))
                 applied.append("goldoil")
         except Exception as e:
             log(f"::warning::goldoil weekly skipped: {e}")
