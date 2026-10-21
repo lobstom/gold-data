@@ -250,8 +250,13 @@ def main():
         run=subprocess.run([sys.executable,str(ROOT/'scripts'/'build_data.py')],cwd=tmp,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=1500)
         print('build_data.py finished rc=%s' % run.returncode, dt.datetime.now(TZ).isoformat(), flush=True)
         print(run.stdout)
-        if run.returncode: raise SystemExit('Builder failed; last valid live data/snapshots retained')
-        doc=json.loads((Path(tmp)/'data.json').read_text())
+        if run.returncode:
+            live=ROOT/'data.json'
+            if not live.exists(): raise SystemExit('Builder failed and no known-good base exists; snapshots retained')
+            print('::warning::build_data.py failed; retaining known-good monthly base (repo data.json) and refreshing weekly-supported rows only', flush=True)
+            doc=json.loads(live.read_text())
+        else:
+            doc=json.loads((Path(tmp)/'data.json').read_text())
         sys.path.insert(0,str(ROOT/'scripts'))
         import weekly_overlay
         print('weekly overlay starting', dt.datetime.now(TZ).isoformat(), flush=True)
