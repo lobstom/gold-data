@@ -143,7 +143,9 @@ CACHE = {}
 
 def _cached(key, fetch):
     if key not in CACHE:
+        t0 = dt.datetime.now()
         CACHE[key] = fetch()
+        print(f"fetch {key}: {len(CACHE[key])} points in {(dt.datetime.now()-t0).total_seconds():.1f}s", flush=True)
     return CACHE[key]
 
 
