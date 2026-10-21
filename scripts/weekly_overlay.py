@@ -31,12 +31,30 @@ def _get(url, timeout=120, binary=False):
     return data if binary else data.decode("utf8", "ignore")
 
 
-def _fred(sid, cosd=None):
+def _fred(sid, cosd=None, min_rows=8, never_flat=False):
+    """FRED fredgraph.csv -> [(date, value)] with bot-block/garbage guards.
+
+    Raises (so the caller skips the row and keeps known-good history) when the
+    response looks like a block page or degraded content instead of a real
+    series: malformed rows, too few usable rows, or - only for series that
+    cannot legitimately be flat - a single distinct value across the window.
+    """
     url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
     if cosd:
         url += "&cosd=" + cosd
-    return [(r[0], float(r[1])) for r in list(csv.reader(io.StringIO(_get(url))))[1:]
-        if len(r) > 1 and r[1] not in ("", ".")]
+    out = []
+    for r in list(csv.reader(io.StringIO(_get(url))))[1:]:
+        if len(r) < 2 or r[1] in ("", "."):
+            continue
+        try:
+            out.append((dt.date.fromisoformat(r[0].strip()), float(r[1])))
+        except ValueError:
+            raise ValueError(f"FRED {sid}: malformed row {r[:2]!r} (possible bot-block page)")
+    if len(out) < min_rows:
+        raise ValueError(f"FRED {sid}: only {len(out)} usable rows, expected >= {min_rows} (possible bot-block page)")
+    if never_flat and len({v for _, v in out}) < 2:
+        raise ValueError(f"FRED {sid}: single distinct value across window (possible bot-block page)")
+    return out
 
 
 def _weeks(daily):
@@ -84,12 +102,13 @@ def eia_weekly(code):
 def fred_daily_weekly(sid):
     """FRED daily series -> completed-week averages [(friday_iso, avg)]. Recent window only."""
     cosd = (dt.date.today() - dt.timedelta(days=75)).isoformat()
-    return [(f, a) for f, a, _ in _weeks([(dt.date.fromisoformat(d), v) for d, v in _fred(sid, cosd)])]
+    volatile = sid in ("SP500", "DJIA")  # equity indexes are never flat for 75 days
+    return [(f, a) for f, a, _ in _weeks(_fred(sid, cosd, min_rows=40, never_flat=volatile))]
 
 
 def fred_weekly(sid):
     """FRED weekly series, source-published observations [(date_iso, value)]."""
-    return _fred(sid)
+    return [(d.isoformat(), v) for d, v in _fred(sid, min_rows=8)]
 
 
 def debt_weekly():
