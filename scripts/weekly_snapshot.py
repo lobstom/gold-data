@@ -43,8 +43,11 @@ def validate(doc):
         for p in pts:
             dt.date.fromisoformat(p[0])
             assert len(p) == (2 if r.get('kind') else 4), 'Legacy tuple shape changed'
-            assert all(isinstance(v, (int, float)) and math.isfinite(v) for v in p[1:]), 'Invalid observation'
-        if not r.get('kind'):
+            for j, v in enumerate(p[1:], start=1):
+                if v is None and j == 3 and not r.get('kind'):
+                    continue  # weekly point without a weekly silver source: oz Ag stays monthly
+                assert isinstance(v, (int, float)) and math.isfinite(v), 'Invalid observation'
+        if not r.get('kind') and not r.get('fixed'):
             assert r['usd'] > 0 and r['goldusd'] > 0 and r['ozau'] > 0 and r['ozag'] > 0, 'Non-positive price'
     return doc
 
@@ -159,7 +162,44 @@ def weekly_prices(now):
             oil['in_gold']=dict(value=ratio,unit='oz Au/bbl',previous_value=previous,change_pct=(ratio/previous-1)*100,
                 observation_date=oil['observation_date'],previous_observation_date=oil['previous_observation_date'],
                 convention='ratio of EIA weekly oil average to WGC same-week gold average, not average of daily ratios')
-    result['status']='available' if all(result.get(k,{}).get('status')=='available' for k in ('gold','wti','brent','uranium')) else 'partial'
+    # Extended weekly set (2026-10-21): genuine weekly/daily sources only; rates report percentage-point moves
+    import weekly_overlay as wo
+    def rate_entry(points, source, url, unit, frequency):
+        points=sorted(points)
+        assert points and all(math.isfinite(v) for _,v in points)
+        d,v=points[-1]
+        out=dict(status='available', value=v, unit=unit, observation_date=d, source=source, source_url=url, frequency=frequency, checked_at=now.isoformat())
+        if len(points)>1:
+            pd,pv=points[-2]
+            out.update(previous_observation_date=pd,previous_value=pv,
+                       change_points=round(v-pv,4),change_basis='week_over_week_percentage_points',
+                       note='Rates move in percentage points (100 bp = 1 pp), not percent.')
+        out['age_days']=(now.date()-dt.date.fromisoformat(d)).days
+        if out['age_days']>14: out['status']='overdue'
+        return out
+    extra=[
+        ('gas','USD/MMBtu','EIA Henry Hub natural gas spot weekly average','https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDw.xls','weekly average, week ending Friday',lambda: wo.eia_weekly('RNGWHHD'),False),
+        ('sp500','index points','S&P 500 daily closes (FRED SP500), completed-week average','https://fred.stlouisfed.org/series/SP500','completed-week average of daily closes, min 3 business days',lambda: wo.fred_daily_weekly('SP500'),False),
+        ('dow','index points','Dow Jones daily closes (FRED DJIA), completed-week average','https://fred.stlouisfed.org/series/DJIA','completed-week average of daily closes, min 3 business days',lambda: wo.fred_daily_weekly('DJIA'),False),
+        ('debt','USD trillion','US Treasury Debt to the Penny, end-of-week total public debt outstanding','https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/','end-of-week observation of a daily stock',wo.debt_weekly,False),
+        ('fedassets','USD trillion','Fed total assets (FRED WALCL), source weekly stock','https://fred.stlouisfed.org/series/WALCL','source-published weekly stock',lambda: [(d,v/1e6) for d,v in wo.fred_weekly('WALCL')],False),
+        ('fedtreas','USD trillion','Treasuries held by the Fed (FRED TREAST), source weekly stock','https://fred.stlouisfed.org/series/TREAST','source-published weekly stock',lambda: [(d,v/1e6) for d,v in wo.fred_weekly('TREAST')],False),
+        ('mortgage','%','Freddie Mac PMMS 30Y fixed (FRED MORTGAGE30US)','https://fred.stlouisfed.org/series/MORTGAGE30US','source-published weekly average',lambda: wo.fred_weekly('MORTGAGE30US'),True),
+        ('fedfunds','%','Fed funds effective rate (FRED DFF), completed-week average','https://fred.stlouisfed.org/series/DFF','completed-week average of daily data',lambda: wo.fred_daily_weekly('DFF'),True),
+        ('ust10','%','US 10Y Treasury yield (FRED DGS10), completed-week average','https://fred.stlouisfed.org/series/DGS10','completed-week average of daily data',lambda: wo.fred_daily_weekly('DGS10'),True),
+        ('real10','%','US 10Y TIPS real yield (FRED DFII10), completed-week average','https://fred.stlouisfed.org/series/DFII10','completed-week average of daily data',lambda: wo.fred_daily_weekly('DFII10'),True),
+        ('curve','pp','10Y minus 2Y Treasury (FRED T10Y2Y), completed-week average','https://fred.stlouisfed.org/series/T10Y2Y','completed-week average of daily data',lambda: wo.fred_daily_weekly('T10Y2Y'),True),
+    ]
+    for rid,unit,source,url,frequency,fetch,is_rate in extra:
+        try:
+            pts=fetch()
+            result[rid]=rate_entry(pts,source,url,unit,frequency) if is_rate else entry(pts,source,url,unit,frequency)
+        except Exception as e:
+            result[rid]=dict(status='unavailable',source=source,source_url=url,error=str(e),checked_at=now.isoformat())
+            print('::warning::Weekly '+rid+' unavailable: '+str(e))
+    CORE=('gold','wti','brent','uranium')
+    result['status']='available' if all(result.get(k,{}).get('status')=='available' for k in CORE) else 'partial'
+    result['extended_coverage']='Extended weekly set covers rows with genuine weekly/daily free sources. Silver, TTF, coal, electricity, housing, M2, wages, CPI, credit/GDP, Case-Shiller, DXY and the gold/silver ratio stay monthly/quarterly: no genuine free weekly source. Weekly silver conversion does not exist, so weekly points carry no oz Ag value.'
     return result
 
 def create(doc, prev, now, kind, source_commit, log=''):
@@ -172,7 +212,8 @@ def create(doc, prev, now, kind, source_commit, log=''):
                'New source observation, revision, unchanged and retrieval failure are different states.',
                'Baseline has no prior frozen Monday. Never infer zero weekly movement from unchanged monthly data.',
                'Percentage rates change in percentage points or basis points, not price percent.',
-               'Quarterly dates are quarter-start labels, not single-month values. Proxy history and rights notices remain in the widget.'])
+               'Quarterly dates are quarter-start labels, not single-month values. Proxy history and rights notices remain in the widget.',
+               "Rows with 'weekly since' in their frequency carry genuine completed-week observations after their monthly history; silver denomination of those weekly points does not exist (no weekly silver source) and stays on the monthly cadence."])
 
 def self_test():
     doc = validate(json.loads((ROOT/'data.json').read_text()))
@@ -208,7 +249,11 @@ def main():
         run=subprocess.run([sys.executable,str(ROOT/'scripts'/'build_data.py')],cwd=tmp,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=1500)
         print(run.stdout)
         if run.returncode: raise SystemExit('Builder failed; last valid live data/snapshots retained')
-        doc=validate(json.loads((Path(tmp)/'data.json').read_text()))
+        doc=json.loads((Path(tmp)/'data.json').read_text())
+        sys.path.insert(0,str(ROOT/'scripts'))
+        import weekly_overlay
+        weekly_overlay.apply(doc)
+        doc=validate(doc)
     snap=create(doc,prev,now,'monday' if args.publish else 'test',os.environ.get('GITHUB_SHA','local'),run.stdout)
     snap['weekly_prices']=weekly_prices(now)
     manifest=dict(schema_version=1, snapshot_date=snap['snapshot_date'],captured_at=snap['captured_at'], complete=True, kind=snap['kind'],
