@@ -52,6 +52,7 @@
  {"id":"taipeitimes","name":"Taipei Times","topic":"Strategy & Policy","type":"rdf","arg":"https://www.taipeitimes.com/xml/index.rss"},
  {"id":"afc","name":"Asia Frontier Capital","topic":"Markets","type":"afc","arg":"https://www.asiafrontiercapital.com"},
  {"id":"reventure","name":"Reventure App","topic":"Markets","type":"rss","arg":"https://reventureapp.blog/feed/"},
+ {"id":"flagventures","name":"Flag Ventures","topic":"Markets","type":"tilda","arg":"https://feeds.tildacdn.com/api/getfeed/?feeduid=807538834671&size=15&slice=1&sort%5Bdate%5D=desc"},
  {"id":"decouple","name":"Decouple - Chris Keefer","topic":"Energy","type":"rss","arg":"https://decouple.substack.com/feed"},
  {"id":"traderferg","name":"Trader Ferg","topic":"Energy","type":"rss","arg":"https://traderferg.substack.com/feed"},
  {"id":"nuclearbarbarians","name":"Nuclear Barbarians","topic":"Energy","type":"rss","arg":"https://nuclearbarbarians.substack.com/feed"},
