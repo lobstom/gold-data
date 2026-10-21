@@ -21,15 +21,15 @@ jobs:
         with: { python-version: '3.12' }
       - run: pip install openpyxl xlrd
       - name: Validate snapshot logic against current legacy data
-        run: python scripts/weekly_snapshot.py --self-test
+        run: python -u scripts/weekly_snapshot.py --self-test
       - name: Fetch, validate and freeze snapshot
         env:
           PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish }}
         run: |
           if [ "$PUBLISH" = "true" ]; then
-            python scripts/weekly_snapshot.py --publish
+            python -u scripts/weekly_snapshot.py --publish
           else
-            python scripts/weekly_snapshot.py
+            python -u scripts/weekly_snapshot.py
           fi
       - name: Commit validated output
         run: |
