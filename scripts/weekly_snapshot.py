@@ -192,7 +192,7 @@ def weekly_prices(now):
     ]
     for rid,unit,source,url,frequency,fetch,is_rate in extra:
         try:
-            pts=fetch()
+            pts=wo._cached(rid, fetch)
             result[rid]=rate_entry(pts,source,url,unit,frequency) if is_rate else entry(pts,source,url,unit,frequency)
         except Exception as e:
             result[rid]=dict(status='unavailable',source=source,source_url=url,error=str(e),checked_at=now.isoformat())
@@ -246,16 +246,22 @@ def main():
     if candidates:
         prev=json.loads(candidates[-1].read_text()); prev['_path']=str(candidates[-1].relative_to(ROOT))
     with tempfile.TemporaryDirectory() as tmp:
+        print('build_data.py starting', dt.datetime.now(TZ).isoformat(), flush=True)
         run=subprocess.run([sys.executable,str(ROOT/'scripts'/'build_data.py')],cwd=tmp,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=1500)
+        print('build_data.py finished rc=%s' % run.returncode, dt.datetime.now(TZ).isoformat(), flush=True)
         print(run.stdout)
         if run.returncode: raise SystemExit('Builder failed; last valid live data/snapshots retained')
         doc=json.loads((Path(tmp)/'data.json').read_text())
         sys.path.insert(0,str(ROOT/'scripts'))
         import weekly_overlay
-        weekly_overlay.apply(doc)
+        print('weekly overlay starting', dt.datetime.now(TZ).isoformat(), flush=True)
+        weekly_overlay.apply(doc, log=lambda m: print(m, flush=True))
+        print('weekly overlay done', dt.datetime.now(TZ).isoformat(), flush=True)
         doc=validate(doc)
     snap=create(doc,prev,now,'monday' if args.publish else 'test',os.environ.get('GITHUB_SHA','local'),run.stdout)
+    print('weekly_prices starting', dt.datetime.now(TZ).isoformat(), flush=True)
     snap['weekly_prices']=weekly_prices(now)
+    print('weekly_prices done', dt.datetime.now(TZ).isoformat(), flush=True)
     manifest=dict(schema_version=1, snapshot_date=snap['snapshot_date'],captured_at=snap['captured_at'], complete=True, kind=snap['kind'],
         path=str(dest.relative_to(ROOT)), data_sha256=snap['data_sha256'],snapshot_sha256=digest(snap),previous_snapshot=snap['previous_snapshot'])
     atomic(dest,snap)
