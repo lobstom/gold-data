@@ -179,8 +179,8 @@ def weekly_prices(now):
         return out
     extra=[
         ('gas','USD/MMBtu','EIA Henry Hub natural gas spot weekly average','https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDw.xls','weekly average, week ending Friday',lambda: wo.eia_weekly('RNGWHHD'),False),
-        ('sp500','index points','S&P 500 daily closes (Yahoo Finance), completed-week average','https://finance.yahoo.com/quote/%5EGSPC','completed-week average of daily closes, min 3 business days',lambda: [(f,a) for f,a,_ in wo._weeks(wo._yahoo_daily('%5EGSPC'))],False),
-        ('dow','index points','Dow Jones daily closes (Yahoo Finance), completed-week average','https://finance.yahoo.com/quote/%5EDJI','completed-week average of daily closes, min 3 business days',lambda: [(f,a) for f,a,_ in wo._weeks(wo._yahoo_daily('%5EDJI'))],False),
+        ('sp500','index points','S&P 500 daily closes (CNBC), completed-week average','https://www.cnbc.com/sp500/','completed-week average of daily closes, min 3 business days',lambda: [(f,a) for f,a,_ in wo._weeks(wo.index_daily('.SPX','%5EGSPC'))],False),
+        ('dow','index points','Dow Jones daily closes (CNBC), completed-week average','https://www.cnbc.com/dow-jones-industrial-average/','completed-week average of daily closes, min 3 business days',lambda: [(f,a) for f,a,_ in wo._weeks(wo.index_daily('.DJI','%5EDJI'))],False),
         ('debt','USD trillion','US Treasury Debt to the Penny, end-of-week total public debt outstanding','https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/','end-of-week observation of a daily stock',wo.debt_weekly,False),
         ('fedassets','USD trillion','Fed total assets (H.4.1 Table 5, Wednesday level), source weekly stock','https://www.federalreserve.gov/releases/h41/','source-published weekly stock, Wednesday level',wo.fedassets_weekly,False),
         ('fedtreas','USD trillion','Treasuries held outright by the Fed (H.4.1 Table 1, Wednesday level), source weekly stock','https://www.federalreserve.gov/releases/h41/','source-published weekly stock, Wednesday level',wo.fedtreas_weekly,False),
