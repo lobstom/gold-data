@@ -311,6 +311,35 @@ def pmms_weekly():
     return out
 
 
+
+def _cnbc_daily(symbol):
+    """CNBC daily bars -> [(date, close)]. Server-friendly, no account.
+    Undocumented endpoint (same caveat class as the WGC feed)."""
+    url = f"https://ts-api.cnbc.com/harmony/app/charts/3M.json?symbol={symbol}"
+    raw = json.loads(_get(url))
+    bars = raw.get("barData", {}).get("priceBars")
+    if not bars:
+        raise ValueError(f"CNBC {symbol}: no priceBars (possible block/change): {str(raw)[:120]!r}")
+    out = []
+    for b in bars:
+        try:
+            out.append((dt.datetime.strptime(b["tradeTime"], "%Y%m%d%H%M%S").date(), float(b["close"])))
+        except (KeyError, ValueError):
+            raise ValueError(f"CNBC {symbol}: malformed bar {str(b)[:80]!r} (possible block page)")
+    if len(out) < 30:
+        raise ValueError(f"CNBC {symbol}: only {len(out)} usable bars (possible block page)")
+    return out
+
+
+def index_daily(symbol_cnbc, symbol_yahoo):
+    """Index daily closes: CNBC primary (verified server-friendly), Yahoo fallback."""
+    try:
+        return _cnbc_daily(symbol_cnbc)
+    except Exception as e:
+        print(f"::warning::CNBC {symbol_cnbc} failed ({e}); trying Yahoo fallback", flush=True)
+        return _yahoo_daily(symbol_yahoo)
+
+
 def _r5(x):
     return float(f"{x:.5g}")
 
@@ -321,8 +350,8 @@ PRICE_ROWS = {
     "wti": ("EIA WTI Cushing spot weekly average", lambda: eia_weekly("RWTC")),
     "brent": ("EIA Europe Brent spot weekly average", lambda: eia_weekly("RBRTE")),
     "gas": ("EIA Henry Hub natural gas spot weekly average", lambda: eia_weekly("RNGWHHD")),
-    "sp500": ("S&P 500 daily closes (Yahoo Finance), completed-week average", lambda: [(f, a) for f, a, _ in _weeks(_yahoo_daily("%5EGSPC"))]),
-    "dow": ("Dow Jones daily closes (Yahoo Finance), completed-week average", lambda: [(f, a) for f, a, _ in _weeks(_yahoo_daily("%5EDJI"))]),
+    "sp500": ("S&P 500 daily closes (CNBC), completed-week average", lambda: [(f, a) for f, a, _ in _weeks(index_daily(".SPX", "%5EGSPC"))]),
+    "dow": ("Dow Jones daily closes (CNBC), completed-week average", lambda: [(f, a) for f, a, _ in _weeks(index_daily(".DJI", "%5EDJI"))]),
     "debt": ("US Treasury Debt to the Penny, end-of-week total public debt outstanding", debt_weekly),
     "fedassets": ("Fed total assets (H.4.1 Table 5, Wednesday level), source weekly stock", fedassets_weekly),
     "fedtreas": ("Treasuries held outright by the Fed (H.4.1 Table 1, Wednesday level), source weekly stock", fedtreas_weekly),
