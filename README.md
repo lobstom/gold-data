@@ -30,6 +30,7 @@ Tests use `snapshots/test-latest.json` and `snapshots/tests/<timestamp>.json`, w
 ## Sources and conventions
 - Legacy prices retain World Bank monthly averages, EIA monthly electricity, FRED native/monthly aggregates, quarterly housing/debt/credit and existing historical proxies.
 - Oil: EIA published weekly WTI Cushing and Europe Brent spot averages. Date is the source's week-ending Friday, not necessarily the latest calendar Friday.
+- Weekly overlay rows use direct sources because FRED blocks this pipeline's automated fredgraph.csv requests: S&P 500 and Dow daily closes from Yahoo Finance (completed-week averages), Treasury daily par yield curve CSVs (10Y nominal, 10Y real TIPS, 10Y-2Y spread), NY Fed EFFR API (fed funds), Fed H.4.1 data download (total assets Table 5; Treasuries held outright Table 1, Wednesday levels) and Freddie Mac PMMS xlsx (30Y mortgage). FRED remains the monthly-build source; its block does not hold up these weekly rows.
 - Uranium: UxC latest available weekly quote. Monday-evening publication and free-site delay up to 72h mean the Monday-morning cut uses the last available quote. Cameco remains month-end history. Original uranium gold conversions can use the last available monthly gold average, not same-week gold.
 - Gold: World Gold Council chart daily data, short window, aggregated to completed Monday-Friday weeks. Feed access uses curl headers. This is not labeled an LBMA fixing; an undocumented site API may change and fail explicitly.
 
