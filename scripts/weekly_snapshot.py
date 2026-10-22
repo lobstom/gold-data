@@ -179,16 +179,16 @@ def weekly_prices(now):
         return out
     extra=[
         ('gas','USD/MMBtu','EIA Henry Hub natural gas spot weekly average','https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDw.xls','weekly average, week ending Friday',lambda: wo.eia_weekly('RNGWHHD'),False),
-        ('sp500','index points','S&P 500 daily closes (FRED SP500), completed-week average','https://fred.stlouisfed.org/series/SP500','completed-week average of daily closes, min 3 business days',lambda: wo.fred_daily_weekly('SP500'),False),
-        ('dow','index points','Dow Jones daily closes (FRED DJIA), completed-week average','https://fred.stlouisfed.org/series/DJIA','completed-week average of daily closes, min 3 business days',lambda: wo.fred_daily_weekly('DJIA'),False),
+        ('sp500','index points','S&P 500 daily closes (Yahoo Finance), completed-week average','https://finance.yahoo.com/quote/%5EGSPC','completed-week average of daily closes, min 3 business days',lambda: [(f,a) for f,a,_ in wo._weeks(wo._yahoo_daily('%5EGSPC'))],False),
+        ('dow','index points','Dow Jones daily closes (Yahoo Finance), completed-week average','https://finance.yahoo.com/quote/%5EDJI','completed-week average of daily closes, min 3 business days',lambda: [(f,a) for f,a,_ in wo._weeks(wo._yahoo_daily('%5EDJI'))],False),
         ('debt','USD trillion','US Treasury Debt to the Penny, end-of-week total public debt outstanding','https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/','end-of-week observation of a daily stock',wo.debt_weekly,False),
-        ('fedassets','USD trillion','Fed total assets (FRED WALCL), source weekly stock','https://fred.stlouisfed.org/series/WALCL','source-published weekly stock',lambda: [(d,v/1e6) for d,v in wo.fred_weekly('WALCL')],False),
-        ('fedtreas','USD trillion','Treasuries held by the Fed (FRED TREAST), source weekly stock','https://fred.stlouisfed.org/series/TREAST','source-published weekly stock',lambda: [(d,v/1e6) for d,v in wo.fred_weekly('TREAST')],False),
-        ('mortgage','%','Freddie Mac PMMS 30Y fixed (FRED MORTGAGE30US)','https://fred.stlouisfed.org/series/MORTGAGE30US','source-published weekly average',lambda: wo.fred_weekly('MORTGAGE30US'),True),
-        ('fedfunds','%','Fed funds effective rate (FRED DFF), completed-week average','https://fred.stlouisfed.org/series/DFF','completed-week average of daily data',lambda: wo.fred_daily_weekly('DFF'),True),
-        ('ust10','%','US 10Y Treasury yield (FRED DGS10), completed-week average','https://fred.stlouisfed.org/series/DGS10','completed-week average of daily data',lambda: wo.fred_daily_weekly('DGS10'),True),
-        ('real10','%','US 10Y TIPS real yield (FRED DFII10), completed-week average','https://fred.stlouisfed.org/series/DFII10','completed-week average of daily data',lambda: wo.fred_daily_weekly('DFII10'),True),
-        ('curve','pp','10Y minus 2Y Treasury (FRED T10Y2Y), completed-week average','https://fred.stlouisfed.org/series/T10Y2Y','completed-week average of daily data',lambda: wo.fred_daily_weekly('T10Y2Y'),True),
+        ('fedassets','USD trillion','Fed total assets (H.4.1 Table 5, Wednesday level), source weekly stock','https://www.federalreserve.gov/releases/h41/','source-published weekly stock, Wednesday level',wo.fedassets_weekly,False),
+        ('fedtreas','USD trillion','Treasuries held outright by the Fed (H.4.1 Table 1, Wednesday level), source weekly stock','https://www.federalreserve.gov/releases/h41/','source-published weekly stock, Wednesday level',wo.fedtreas_weekly,False),
+        ('mortgage','%','Freddie Mac PMMS 30Y fixed','https://www.freddiemac.com/pmms','source-published weekly average',wo.pmms_weekly,True),
+        ('fedfunds','%','Fed funds effective rate (NY Fed EFFR), completed-week average','https://www.newyorkfed.org/markets/reference-rates/effr','completed-week average of daily data',wo.effr_daily_weekly,True),
+        ('ust10','%','US 10Y Treasury yield (Treasury daily par yield curve), completed-week average','https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026','completed-week average of daily data',lambda: wo.treasury_daily_weekly('10 Yr'),True),
+        ('real10','%','US 10Y TIPS real yield (Treasury daily real par yield curve), completed-week average','https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_yield_curve&field_tdr_date_value=2026','completed-week average of daily data',lambda: wo.treasury_daily_weekly('10 YR','daily_treasury_real_yield_curve'),True),
+        ('curve','pp','10Y minus 2Y Treasury (Treasury daily par yield curve), completed-week average','https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026','completed-week average of daily data',wo.curve_daily_weekly,True),
     ]
     for rid,unit,source,url,frequency,fetch,is_rate in extra:
         try:
