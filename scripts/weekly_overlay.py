@@ -20,7 +20,7 @@ Conventions:
 Imported by weekly_snapshot.py after build_data.py; also runnable standalone:
     python scripts/weekly_overlay.py path/to/data.json
 """
-import csv, datetime as dt, io, json, math, os, subprocess, sys, urllib.request
+import csv, datetime as dt, io, json, math, os, re, subprocess, sys, urllib.request
 
 MIN_OBS = 3  # business days required for a completed week
 
@@ -133,6 +133,184 @@ def debt_weekly():
     return [(f.isoformat(), v / 1e12) for f, v in sorted(out.items()) if f < today]
 
 
+
+def _yahoo_daily(symbol):
+    """Yahoo Finance daily closes -> [(date, close)]. Recent ~6 months only.
+    Retries across the two public query hosts: Yahoo rate-limits (429) often."""
+    import time
+    raw = None
+    last_err = None
+    for attempt, host in enumerate(("query1.finance.yahoo.com", "query2.finance.yahoo.com",
+                                    "query1.finance.yahoo.com", "query2.finance.yahoo.com")):
+        url = (f"https://{host}/v8/finance/chart/{symbol}"
+               "?range=6mo&interval=1d&includePrePost=false")
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36"})
+            raw = json.loads(urllib.request.urlopen(req, timeout=45).read().decode("utf8", "ignore"))
+            break
+        except Exception as e:
+            last_err = e
+            time.sleep(3 * (attempt + 1))
+    if raw is None:
+        raise ValueError(f"Yahoo {symbol}: fetch failed after retries: {last_err}")
+    result = raw.get("chart", {}).get("result")
+    if not result:
+        raise ValueError(f"Yahoo {symbol}: no chart result (possible block): {str(raw)[:120]!r}")
+    r0 = result[0]
+    ts = r0.get("timestamp") or []
+    closes = (r0.get("indicators", {}).get("quote", [{}])[0]).get("close") or []
+    out = []
+    for t, c in zip(ts, closes):
+        if c is None:
+            continue
+        out.append((dt.datetime.fromtimestamp(t, dt.timezone.utc).date(), float(c)))
+    if len(out) < 30:
+        raise ValueError(f"Yahoo {symbol}: only {len(out)} usable closes (possible block page)")
+    return out
+
+
+def _treasury_csv(kind, years):
+    """Treasury daily par yield curve CSV -> list of rows (header, data rows)."""
+    import csv as _csv
+    rows = []
+    for y in years:
+        url = ("https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+               f"daily-treasury-rates.csv/{y}/all?type={kind}&field_tdr_date_value={y}&page&_format=csv")
+        text = _get(url)
+        rdr = list(_csv.reader(io.StringIO(text)))
+        if len(rdr) < 10:
+            raise ValueError(f"Treasury {kind} {y}: only {len(rdr)} rows (possible block page)")
+        rows.append((rdr[0], rdr[1:]))
+    return rows
+
+
+def _treasury_daily(kind, column):
+    """Treasury daily par yield curve -> [(date, value)] for a column like '10 Yr'."""
+    today = dt.date.today()
+    years = [today.year] if today.month > 3 else [today.year, today.year - 1]
+    out = []
+    for hdr, data in _treasury_csv(kind, years):
+        try:
+            j = hdr.index(column)
+        except ValueError:
+            raise ValueError(f"Treasury {kind}: column {column!r} missing from header {hdr[:8]!r}")
+        for r in data:
+            if len(r) <= j or not r[j].strip():
+                continue
+            try:
+                out.append((dt.datetime.strptime(r[0].strip(), "%m/%d/%Y").date(), float(r[j])))
+            except ValueError:
+                raise ValueError(f"Treasury {kind}: malformed row {r[:2]!r} (possible block page)")
+    cutoff = today - dt.timedelta(days=75)
+    out = [(d, v) for d, v in out if d >= cutoff]
+    if len(out) < 40:
+        raise ValueError(f"Treasury {kind} {column}: only {len(out)} usable rows (possible block page)")
+    return sorted(out)
+
+
+def treasury_daily_weekly(column, kind="daily_treasury_yield_curve"):
+    """Treasury daily yield column -> completed-week averages [(friday_iso, avg)]."""
+    return [(f, a) for f, a, _ in _weeks(_treasury_daily(kind, column))]
+
+
+def curve_daily_weekly():
+    """10Y minus 2Y from Treasury daily par yield curve -> completed-week average spread."""
+    today = dt.date.today()
+    years = [today.year] if today.month > 3 else [today.year, today.year - 1]
+    out = []
+    for hdr, data in _treasury_csv("daily_treasury_yield_curve", years):
+        try:
+            j10, j2 = hdr.index("10 Yr"), hdr.index("2 Yr")
+        except ValueError:
+            raise ValueError(f"Treasury curve: 10 Yr/2 Yr missing from header {hdr[:8]!r}")
+        for r in data:
+            if len(r) <= j10 or not r[j10].strip() or not r[j2].strip():
+                continue
+            try:
+                out.append((dt.datetime.strptime(r[0].strip(), "%m/%d/%Y").date(),
+                            float(r[j10]) - float(r[j2])))
+            except ValueError:
+                raise ValueError(f"Treasury curve: malformed row {r[:2]!r} (possible block page)")
+    cutoff = today - dt.timedelta(days=75)
+    out = [(d, v) for d, v in out if d >= cutoff]
+    if len(out) < 40:
+        raise ValueError(f"Treasury curve: only {len(out)} usable rows (possible block page)")
+    return [(f, a) for f, a, _ in _weeks(sorted(out))]
+
+
+def effr_daily_weekly():
+    """NY Fed EFFR daily -> completed-week averages [(friday_iso, avg)]."""
+    start = (dt.date.today() - dt.timedelta(days=75)).isoformat()
+    end = dt.date.today().isoformat()
+    url = f"https://markets.newyorkfed.org/api/rates/all/search.json?startDate={start}&endDate={end}"
+    raw = json.loads(_get(url))
+    out = []
+    for r in raw.get("refRates", []):
+        if r.get("type") == "EFFR" and r.get("percentRate") is not None:
+            try:
+                out.append((dt.date.fromisoformat(r["effectiveDate"]), float(r["percentRate"])))
+            except (KeyError, ValueError):
+                raise ValueError(f"NY Fed EFFR: malformed row {str(r)[:80]!r} (possible block page)")
+    if len(out) < 30:
+        raise ValueError(f"NY Fed EFFR: only {len(out)} usable rows (possible block page)")
+    return [(f, a) for f, a, _ in _weeks(sorted(out))]
+
+
+H41_T1 = "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H41&series=f52e72511be65e16f71d4f5858951312&lastobs=60&from=&to=&filetype=csv&label=include&layout=seriescolumn&type=package"
+H41_T5 = "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H41&series=95f48646a08920cfaebeeb8eae925dea&lastobs=60&from=&to=&filetype=csv&label=include&layout=seriescolumn&type=package"
+
+
+def _h41_weekly(url, exact_desc):
+    """Fed H.4.1 data download -> [(date_iso, $millions)] for one exact series description."""
+    import csv as _csv
+    rdr = list(_csv.reader(io.StringIO(_get(url))))
+    if len(rdr) < 14:
+        raise ValueError(f"H41: only {len(rdr)} rows (possible block page)")
+    desc, dates = rdr[0], rdr[6:]
+    try:
+        j = next(i for i, d in enumerate(desc) if d.strip() == exact_desc)
+    except StopIteration:
+        raise ValueError(f"H41: series {exact_desc!r} not found (release layout changed?)")
+    out = []
+    for r in dates:
+        if len(r) <= j or not re.match(r"^\d{4}-\d{2}-\d{2}$", r[0].strip()):
+            continue
+        try:
+            out.append((r[0].strip(), float(r[j])))
+        except ValueError:
+            raise ValueError(f"H41: malformed row {r[:2]!r} (possible block page)")
+    if len(out) < 8:
+        raise ValueError(f"H41 {exact_desc[:40]}: only {len(out)} usable rows (possible block page)")
+    return out
+
+
+def fedassets_weekly():
+    """Fed total assets, H.4.1 Table 5 Wednesday level -> [(date, $trillion)]."""
+    return [(d, v / 1e6) for d, v in _h41_weekly(
+        H41_T5, "Assets: Total Assets: Total assets: Wednesday level")]
+
+
+def fedtreas_weekly():
+    """Treasuries held outright by the Fed, H.4.1 Table 1 Wednesday level -> [(date, $trillion)]."""
+    return [(d, v / 1e6) for d, v in _h41_weekly(
+        H41_T1, "Assets: Securities Held Outright: U.S. Treasury securities: Wednesday level")]
+
+
+def pmms_weekly():
+    """Freddie Mac PMMS 30Y fixed xlsx -> [(date_iso, rate)]. Source-published weekly."""
+    import openpyxl
+    wb = openpyxl.load_workbook(io.BytesIO(_get(
+        "https://www.freddiemac.com/pmms/docs/historicalweeklydata.xlsx", binary=True)), read_only=True)
+    ws = wb["Full History"]
+    out = []
+    for r in ws.iter_rows(min_row=7, values_only=True):
+        if isinstance(r[0], dt.datetime) and isinstance(r[1], (int, float)):
+            out.append((r[0].date().isoformat(), float(r[1])))
+    if len(out) < 8:
+        raise ValueError(f"PMMS: only {len(out)} usable rows (possible block page)")
+    return out
+
+
 def _r5(x):
     return float(f"{x:.5g}")
 
@@ -143,18 +321,19 @@ PRICE_ROWS = {
     "wti": ("EIA WTI Cushing spot weekly average", lambda: eia_weekly("RWTC")),
     "brent": ("EIA Europe Brent spot weekly average", lambda: eia_weekly("RBRTE")),
     "gas": ("EIA Henry Hub natural gas spot weekly average", lambda: eia_weekly("RNGWHHD")),
-    "sp500": ("S&P 500 daily closes (FRED SP500), completed-week average", lambda: fred_daily_weekly("SP500")),
-    "dow": ("Dow Jones daily closes (FRED DJIA), completed-week average", lambda: fred_daily_weekly("DJIA")),
+    "sp500": ("S&P 500 daily closes (Yahoo Finance), completed-week average", lambda: [(f, a) for f, a, _ in _weeks(_yahoo_daily("%5EGSPC"))]),
+    "dow": ("Dow Jones daily closes (Yahoo Finance), completed-week average", lambda: [(f, a) for f, a, _ in _weeks(_yahoo_daily("%5EDJI"))]),
     "debt": ("US Treasury Debt to the Penny, end-of-week total public debt outstanding", debt_weekly),
-    "fedassets": ("Fed total assets (FRED WALCL), source weekly stock", lambda: [(d, v / 1e6) for d, v in fred_weekly("WALCL")]),
-    "fedtreas": ("Treasuries held by the Fed (FRED TREAST), source weekly stock", lambda: [(d, v / 1e6) for d, v in fred_weekly("TREAST")]),
+    "fedassets": ("Fed total assets (H.4.1 Table 5, Wednesday level), source weekly stock", fedassets_weekly),
+    "fedtreas": ("Treasuries held outright by the Fed (H.4.1 Table 1, Wednesday level), source weekly stock", fedtreas_weekly),
 }
 # rate rows (kind=rate, 2-tuples): no gold conversion
 RATE_ROWS = {
-    "fedfunds": ("Fed funds effective rate (FRED DFF), completed-week average", lambda: fred_daily_weekly("DFF")),
-    "ust10": ("US 10Y Treasury yield (FRED DGS10), completed-week average", lambda: fred_daily_weekly("DGS10")),
-    "real10": ("US 10Y TIPS real yield (FRED DFII10), completed-week average", lambda: fred_daily_weekly("DFII10")),
-    "curve": ("10Y minus 2Y Treasury (FRED T10Y2Y), completed-week average", lambda: fred_daily_weekly("T10Y2Y")),
+    "fedfunds": ("Fed funds effective rate (NY Fed EFFR), completed-week average", effr_daily_weekly),
+    "ust10": ("US 10Y Treasury yield (Treasury daily par yield curve), completed-week average", lambda: treasury_daily_weekly("10 Yr")),
+    "real10": ("US 10Y TIPS real yield (Treasury daily real par yield curve), completed-week average", lambda: treasury_daily_weekly("10 YR", "daily_treasury_real_yield_curve")),
+    "curve": ("10Y minus 2Y Treasury (Treasury daily par yield curve), completed-week average", curve_daily_weekly),
+    "mortgage": ("Freddie Mac PMMS 30Y fixed, source-published weekly average", pmms_weekly),
 }
 
 
@@ -180,7 +359,10 @@ def _weekly_cutoff(points):
 
 
 def _freq_weekly(freq, new_first):
-    """Keep the original 'weekly since' start date across re-runs."""
+    """Keep the original 'weekly since' start date across re-runs.
+    Rows already natively weekly (PMMS) keep their frequency text unchanged."""
+    if freq.strip().lower().startswith("weekly"):
+        return freq
     base, _, since = freq.partition("; weekly since ")
     return base + "; weekly since " + (since or new_first)
 
@@ -230,12 +412,22 @@ def apply(doc, log=print):
             continue
         big = 1000.0 if row.get("big") else 1.0  # big rows: USD in $T, oz in billions
         cutoff = _weekly_cutoff(row["points"])
-        new = [(f, v * big / gold_weekly[f], v) for f, v in pts if f in gold_weekly and f > cutoff]
+        # Gold conversion uses the source week's completed Friday average, whatever
+        # weekday the source publishes on (EIA Friday, H.4.1 Wednesday level).
+        new = []
+        for d, v in pts:
+            dd = dt.date.fromisoformat(d)
+            if dd.weekday() > 4:
+                continue
+            wf = (dd + dt.timedelta(days=4 - dd.weekday())).isoformat()
+            if wf in gold_weekly and d > cutoff:
+                new.append((d, v * big / gold_weekly[wf], v))
         if not new:
             log(f"{rid}: no new completed weeks")
             continue
-        row["points"] += [[f, _r5(o), _r5(u), None] for f, o, u in new]
-        row.update(asof=new[-1][0], usd=_r5(new[-1][2]), goldusd=_r5(gold_weekly[new[-1][0]]),
+        row["points"] += [[d, _r5(o), _r5(u), None] for d, o, u in new]
+        row.update(asof=new[-1][0], usd=_r5(new[-1][2]),
+                   goldusd=_r5(gold_weekly[(dt.date.fromisoformat(new[-1][0]) + dt.timedelta(days=4 - dt.date.fromisoformat(new[-1][0]).weekday())).isoformat()]),
                    ozau=_r5(new[-1][1]),
                    freq=_freq_weekly(row["freq"], new[0][0]))
         applied.append(rid)
