@@ -5,6 +5,7 @@
  {"id":"bioclandestine","name":"BioClandestine","topic":"Strategy & Policy","type":"tg","arg":"bioclandestine"},
  {"id":"yurta","name":"Yurta Capital","topic":"Markets","type":"tg","arg":"yurta06"},
  {"id":"crude","name":"The Crude Chronicles","topic":"Energy","type":"rss","arg":"https://thecrudechronicles.substack.com/feed"},
+ {"id":"wisedome","name":"Operation Wisedome","topic":"Strategy & Policy","type":"wisedome","arg":"https://wisedome.org"},
  {"id":"gr","name":"Goehring & Rozencwajg","topic":"Energy","type":"rss","arg":"https://blog.gorozen.com/blog/rss.xml"},
  {"id":"bison","name":"Josh Young - Bison Insights","topic":"Energy","type":"rss","arg":"https://bisoninterests.substack.com/feed"},
  {"id":"igwt","name":"In Gold We Trust","topic":"Gold","type":"rss","arg":"https://www.incrementum.li/feed/"},
