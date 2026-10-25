@@ -263,6 +263,7 @@ def tilda(u):
     out.sort(key=lambda g: g["date"], reverse=True)
     return out
 FN = {"rss":rss,"tilda":tilda,"rssdesc":lambda u:rss(u,prefer_desc=True),"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
+FN["wisedome"] = lambda u: __import__("wisedome_feed").wisedome(u, get, clean, iso, D, re)
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
@@ -311,6 +312,7 @@ if os.environ.get("VF")=="1" or (len(sys.argv)>2 and sys.argv[2]=="vf"):
  "blueprint":"Bryan Johnson's Blueprint articles on exercise, nutrition, sleep, and longevity."
     })
 
+DESCS["wisedome"] = "Operation Wisedome journal: Cameron James Wilson's educational articles on pro se research, court records and traffic law reform."
 PROMO = {"dietdoctor": re.compile(r"\bmember benefit\b|sign up for diet doctor plus|\bfree trial\b", re.I)}
 KEYWORDS = {"debriefing": re.compile(r"econom|financ|\brails?\b|railroad|\btrad(?:e|es|ing|er|ers)\b|\bdebts?\b|\bbank|\bfund(?:s|ed|ing)?\b|\bfed\b|federal reserve|treasury|dollar|tariff|sanction|sovereign wealth|\boil\b|energy|\bgold\b|inflation|\brates?\b|credit|currenc|\bmarkets?\b|shipping|\bports?\b|supply chain|\biran|china|chinese|bessent", re.I), "attila": re.compile(r"\besg\b|fossil|energy|\bgold\b|\boil\b|bubble|\bdebt|crisis|\bcredit|value invest|economic|profit|valuing|inflation|monetary|\bprices?\b|financ|depression|commodit|uranium|\bmining|interest rate|\bfed\b|central bank|dollar|currenc|\btrade\b|stock market|\bmarkets?\b", re.I), "gcaptain": re.compile(r"oil|crude|tanker|lng|lpg|fuel|bunker|sanction|freight|hormuz|trade|tariff|shipping rate|charter|opec|energy|gas\b|pipeline|refiner|red sea|suez|panama canal|shadow fleet", re.I), "taipeitimes": re.compile(r"trade|tariff|econom|energy|nuclear|\boil\b|\bgas\b|\bgold\b|chip|tsmc|semiconductor|export|import|fiscal|\bfed\b|monetary|central bank|interest rate|inflation|defen[cs]e|military|\barms\b|sanction|supply chain|china|beijing|rare earth|dollar|yuan|currenc|shipping|strait|export control|\bai\b", re.I),}
 for s in SOURCES:
