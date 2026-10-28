@@ -1,26 +1,31 @@
 #!/usr/bin/env python3
 """Post new NTFB items to the Telegram channel @notimeforbull00.
 
+
 Sources:
-1. Ghost RSS (https://notimeforbull.com/rss/) - new blog posts, auto.
+1. Ghost RSS (https://www.notimeforbull.com/rss/) - new blog posts, auto.
 2. telegram_queue.json - manually queued items (e.g. final X-post texts).
+
 
 State (telegram_state.json) tracks posted RSS guids and drained queue ids.
 Secrets via env: TG_BOT_TOKEN. Channel: TG_CHANNEL (default @notimeforbull00).
 """
 import json, os, re, html, urllib.request, urllib.parse, xml.etree.ElementTree as ET
 
+
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
 STATE_PATH = os.path.join(REPO_DIR, "telegram_state.json")
 QUEUE_PATH = os.path.join(REPO_DIR, "telegram_queue.json")
-RSS_URL = "https://notimeforbull.com/rss/"
+RSS_URL = "https://www.notimeforbull.com/rss/"
 TOKEN = os.environ["TG_BOT_TOKEN"]
 CHANNEL = os.environ.get("TG_CHANNEL", "@notimeforbull00")
+
 
 def load_json(path, default):
     try:
         with open(path) as f: return json.load(f)
     except Exception: return default
+
 
 def tg_send(text):
     data = urllib.parse.urlencode({
@@ -31,10 +36,12 @@ def tg_send(text):
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.load(r)
 
+
 def clean_preview(raw, limit=200):
     t = re.sub(r"<[^>]+>", " ", raw or "")
     t = html.unescape(re.sub(r"\s+", " ", t)).strip()
     return (t[:limit].rsplit(" ", 1)[0] + "...") if len(t) > limit else t
+
 
 def format_post(title, preview, link):
     parts = [f"<b>{html.escape(title)}</b>"]
@@ -42,9 +49,14 @@ def format_post(title, preview, link):
     if link: parts.append(link)
     return "\n\n".join(parts)
 
+
 state = load_json(STATE_PATH, {"posted_guids": [], "drained_ids": []})
 queue = load_json(QUEUE_PATH, [])
 changed = False
+
+# Covered by approved X repost: https://t.me/notimeforbull00/6 on 2026-10-28.
+RSS_COVERED_BY_MANUAL = {"6ad7d7186522bd00013bc999"}
+
 
 # 1) RSS items
 try:
@@ -53,7 +65,7 @@ try:
     items = root.findall(".//item")
     for it in reversed(items):  # oldest first
         guid = (it.findtext("guid") or it.findtext("link") or "").strip()
-        if not guid or guid in state["posted_guids"]: continue
+        if not guid or guid in state["posted_guids"] or guid in RSS_COVERED_BY_MANUAL: continue
         title = (it.findtext("title") or "").strip()
         link = (it.findtext("link") or "").strip()
         preview = clean_preview(it.findtext("description"))
@@ -62,6 +74,7 @@ try:
         changed = True
 except Exception as e:
     print(f"RSS fetch/post failed (fail-soft): {e}")
+
 
 # 2) Manual queue (X posts etc.) - entries: {"id": str, "text": str}
 remaining = []
@@ -75,6 +88,7 @@ for q in queue:
     except Exception as e:
         print(f"Queue item {qid} failed: {e}")
         remaining.append(q)
+
 
 state["posted_guids"] = state["posted_guids"][-500:]
 state["drained_ids"] = state["drained_ids"][-500:]
