@@ -16,7 +16,7 @@ This file is a compact, dated summary of that model. It is generated from the fr
 | Gold | $4,092 per oz | 1.000 oz | 2026-10-23 | monthly avg; weekly since 2026-10-02 |
 | Silver | $64.60 per oz | 0.01496 oz | 2026-09 | monthly avg |
 | US dollar | $1.00 | 0.0002444 oz | 2026-10-23 | monthly avg; weekly since 2026-10-02 |
-| US Dollar Index | 100.0 pts | 0.02316 oz | 2026-09 | monthly avg |
+| US Dollar Index | 100.0 pts | not priced in gold | 2026-09 | monthly avg |
 
 US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series.
 
