@@ -69,6 +69,12 @@ def fmt_oz(v, big):
     return f"{v:.4g} oz"
 
 
+def not_gold_priced(o):
+    """Rows the dataset itself never converts to gold: rates, ratios, indexes,
+    and rows flagged fixed (site: 'Always in index points; conversions do not apply')."""
+    return bool(o.get("fixed")) or o.get("kind") == "rate" or o.get("unit") in ("%", "pp", "ratio", "index")
+
+
 def row(it, override=None):
     o = dict(it)
     if override:
@@ -81,7 +87,7 @@ def row(it, override=None):
         "frequency": o.get("freq"),
         "as_of": o.get("asof"),
         "latest_native": fmt_native(o, big),
-        "latest_in_gold_oz": fmt_oz(o.get("ozau"), big),
+        "latest_in_gold_oz": None if not_gold_priced(o) else fmt_oz(o.get("ozau"), big),
         "gold_usd_used": o.get("goldusd") or None,
     }
     if o.get("note"):
