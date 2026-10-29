@@ -79,8 +79,8 @@ def metadata(doc, prev, now, log):
             source = 'Cameco month-end history; UxC latest available weekly CSV input'; url = 'https://www.uxc.com/p/price'
         elif rid in {'gsr','goldoil'}:
             source = 'Derived from World Bank monthly gold and silver / WTI'
-        source_status = 'retrieved'
-        note = 'No new observation is normal between scheduled source releases.'
+        source_status = 'retrieval_not_evidenced'
+        note = 'Metadata generation does not prove upstream retrieval. No new observation can be normal between source releases.'
         if rid == 'uranium':
             source_status = 'manual_input'
             note = 'UxC weekly free-account quote may lag 72h; Monday morning cannot include that Monday evening release. Gold conversion uses last available monthly average, NOT same-week gold.'
@@ -88,8 +88,8 @@ def metadata(doc, prev, now, log):
             if (now.date()-a).days > 14: source_status = 'input_overdue'
             if 'cameco scrape failed:' in log: note += ' Cameco scrape failed; saved Cameco history used.'
         out[rid] = dict(observation_period=period(r), observation_date=r['points'][-1][0], frequency=r['freq'], source=source, source_url=url,
-                        fetched_at=now.isoformat() if source_status == 'retrieved' else None,
-                        checked_at=now.isoformat(), source_status=source_status,
+                        fetched_at=None,
+                        checked_at=None, metadata_generated_at=now.isoformat(), source_status=source_status,
                         change_status=status(r, old.get(rid)), series_sha256=digest(r), note=note)
         if not r.get('kind'):
             out[rid]['gold_conversion'] = dict(usd_per_oz=r['goldusd'], convention='quarter average' if rid=='housing' else 'source-month average; uranium latest may use last available month',
@@ -267,6 +267,15 @@ def main():
     print('weekly_prices starting', dt.datetime.now(TZ).isoformat(), flush=True)
     snap['weekly_prices']=weekly_prices(now)
     print('weekly_prices done', dt.datetime.now(TZ).isoformat(), flush=True)
+    # Effective-view metadata is separate from immutable market observations.
+    import freshness_report
+    snap['freshness'] = freshness_report.build(doc,snap,now)
+    for row in snap['freshness']['rows']:
+        rid=row['id']
+        if rid not in snap['series']: continue
+        meta=snap['series'][rid]
+        if row['source'] and row['source_evidence']=='matching frozen weekly source record' and meta['observation_date']==row['latest_point_date']:
+            meta.update(source=row['source'],source_url=row['source_url'],checked_at=row['last_evidenced_source_check_at'],fetched_at=None,source_status='matching_source_record',note='Matching dated source record. Fetch timestamp is not independently instrumented; see freshness evidence.')
     manifest=dict(schema_version=1, snapshot_date=snap['snapshot_date'],captured_at=snap['captured_at'], complete=True, kind=snap['kind'],
         path=str(dest.relative_to(ROOT)), data_sha256=snap['data_sha256'],snapshot_sha256=digest(snap),previous_snapshot=snap['previous_snapshot'])
     atomic(dest,snap)
