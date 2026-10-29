@@ -1,0 +1,375 @@
+{
+  "name": "Prices in Gold Ounces - model summary",
+  "site": "No Time For Bull (notimeforbull.com)",
+  "generated": "2026-10-29",
+  "data_updated": "2026-10-26",
+  "not_real_time": true,
+  "canonical": {
+    "page": "https://www.notimeforbull.com/prices/",
+    "data_json": "https://lobstom.github.io/gold-data/data.json",
+    "summary_json": "https://lobstom.github.io/gold-data/summary.json",
+    "monday_snapshot_manifest": "https://lobstom.github.io/gold-data/snapshots/latest.json"
+  },
+  "groups": [
+    {
+      "group": "Money",
+      "series": [
+        {
+          "id": "gold",
+          "label": "Gold",
+          "unit": "oz",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "$4,092 per oz",
+          "latest_in_gold_oz": "1.000 oz",
+          "gold_usd_used": 4092.2
+        },
+        {
+          "id": "silver",
+          "label": "Silver",
+          "unit": "oz",
+          "frequency": "monthly avg",
+          "as_of": "2026-09",
+          "latest_native": "$64.60 per oz",
+          "latest_in_gold_oz": "0.01496 oz",
+          "gold_usd_used": 4319.0
+        },
+        {
+          "id": "usd",
+          "label": "US dollar",
+          "unit": "$1",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "$1.00",
+          "latest_in_gold_oz": "0.0002444 oz",
+          "gold_usd_used": 4319.0,
+          "note": "US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series."
+        },
+        {
+          "id": "dxy",
+          "label": "US Dollar Index",
+          "unit": "index pt",
+          "frequency": "monthly avg",
+          "as_of": "2026-09",
+          "latest_native": "100.0 pts",
+          "latest_in_gold_oz": "0.02316 oz",
+          "gold_usd_used": 4319.0,
+          "note": "US Dollar Index (DXY) is rebuilt from FRED exchange rates with the ICE DXY formula (from 1980) and spliced to the Fed major currencies index before 1980. It is shown in index points in every unit mode and is not the ICE-published series."
+        }
+      ]
+    },
+    {
+      "group": "Commodities and energy",
+      "series": [
+        {
+          "id": "uranium",
+          "label": "Uranium U3O8 (spot)",
+          "unit": "lb",
+          "frequency": "month-end history, latest UxC weekly",
+          "as_of": "2026-10-12",
+          "latest_native": "$89.80 per lb",
+          "latest_in_gold_oz": "0.02079 oz",
+          "gold_usd_used": 4319.0
+        },
+        {
+          "id": "wti",
+          "label": "Crude oil (WTI)",
+          "unit": "bbl",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-16",
+          "latest_native": "$99.93 per bbl",
+          "latest_in_gold_oz": "0.02405 oz",
+          "gold_usd_used": 4154.4
+        },
+        {
+          "id": "brent",
+          "label": "Crude oil (Brent)",
+          "unit": "bbl",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-16",
+          "latest_native": "$125.59 per bbl",
+          "latest_in_gold_oz": "0.03023 oz",
+          "gold_usd_used": 4154.4
+        },
+        {
+          "id": "gas",
+          "label": "Natural gas (US)",
+          "unit": "MMBtu",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-16",
+          "latest_native": "$3.20 per MMBtu",
+          "latest_in_gold_oz": "0.0007703 oz",
+          "gold_usd_used": 4154.4
+        },
+        {
+          "id": "ttf",
+          "label": "Natural gas (Europe, TTF)",
+          "unit": "MMBtu",
+          "frequency": "monthly avg",
+          "as_of": "2026-09",
+          "latest_native": "$25.42 per MMBtu",
+          "latest_in_gold_oz": "0.005886 oz",
+          "gold_usd_used": 4319.0
+        },
+        {
+          "id": "coal",
+          "label": "Coal (Australian, Newcastle)",
+          "unit": "tonne",
+          "frequency": "monthly avg",
+          "as_of": "2026-09",
+          "latest_native": "$147.10 per tonne",
+          "latest_in_gold_oz": "0.03406 oz",
+          "gold_usd_used": 4319.0
+        },
+        {
+          "id": "elec",
+          "label": "US electricity (all sectors)",
+          "unit": "MWh",
+          "frequency": "monthly avg",
+          "as_of": "2026-08",
+          "latest_native": "$148.70 per MWh",
+          "latest_in_gold_oz": "0.03371 oz",
+          "gold_usd_used": 4411.0
+        }
+      ]
+    },
+    {
+      "group": "Housing",
+      "series": [
+        {
+          "id": "housing",
+          "label": "US median new-home price",
+          "unit": "home",
+          "frequency": "quarterly",
+          "as_of": "2026-04",
+          "latest_native": "$410,700 per home",
+          "latest_in_gold_oz": "91.0 oz",
+          "gold_usd_used": 4512.0,
+          "note": "US median new-home price: Census median sales price of new houses sold (FRED MSPUS, nominal dollars, quarterly) from 1963. Before 1963 the row is a Shiller-based nominal US home price index (1890-1962, closely tracking but not an exact copy of the Robert Shiller series) rescaled to the 1963 Census level, so those values are approximate and are not observed median prices. From 1963 the series covers new homes only; the earlier part is a rescaled all-home index. For existing-home price changes see the US home price index vs gold row."
+        },
+        {
+          "id": "cshomegold",
+          "label": "US home price index vs gold, Jan 2000 = 100",
+          "unit": "index pt",
+          "frequency": "monthly (3-month average, published about two months late)",
+          "as_of": "2026-07",
+          "latest_native": "23.5 pts",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": 4073.0,
+          "note": "US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Price Index (repeat sales of single-family homes, FRED CSUSHPINSA, from 1987) divided by the monthly average gold price, with both set to 100 in January 2000. It is an index, not ounces per home, and it is shown in index points in every unit mode. Case-Shiller is a three-month average and is revised."
+        }
+      ]
+    },
+    {
+      "group": "Markets",
+      "series": [
+        {
+          "id": "sp500",
+          "label": "S&P 500 (price index)",
+          "unit": "index pt",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "7,689.5 pts",
+          "latest_in_gold_oz": "1.879 oz",
+          "gold_usd_used": 4092.2
+        },
+        {
+          "id": "dow",
+          "label": "Dow Jones Industrial Average",
+          "unit": "index pt",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "52,480.0 pts",
+          "latest_in_gold_oz": "12.8 oz",
+          "gold_usd_used": 4092.2
+        },
+        {
+          "id": "ahe",
+          "label": "Avg hourly earnings (production workers)",
+          "unit": "hour",
+          "frequency": "monthly",
+          "as_of": "2026-09",
+          "latest_native": "$32.60 per hour",
+          "latest_in_gold_oz": "0.007548 oz",
+          "gold_usd_used": 4319.0
+        },
+        {
+          "id": "m2",
+          "label": "US M2 money supply",
+          "unit": "total",
+          "frequency": "monthly, seasonally adjusted",
+          "as_of": "2026-08",
+          "latest_native": "$23.34 trillion",
+          "latest_in_gold_oz": "5.29 billion oz",
+          "gold_usd_used": 4411.0
+        }
+      ]
+    },
+    {
+      "group": "Debt and the Fed's balance sheet",
+      "series": [
+        {
+          "id": "debt",
+          "label": "Who owns the federal debt (and the Fed's balance sheet)",
+          "unit": "total",
+          "frequency": "quarter-end stock (annual before 1966); weekly since 2026-08-28",
+          "as_of": "2026-10-23",
+          "latest_native": "$40.44 trillion",
+          "latest_in_gold_oz": "9.88 billion oz",
+          "gold_usd_used": 4092.2,
+          "note": "Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned."
+        },
+        {
+          "id": "publicdebt",
+          "label": "Federal debt held by the public",
+          "unit": "total",
+          "frequency": "quarter-end stock",
+          "as_of": "2026-06-30",
+          "latest_native": "$31.71 trillion",
+          "latest_in_gold_oz": "7.50 billion oz",
+          "gold_usd_used": 4228.0,
+          "note": "Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum."
+        },
+        {
+          "id": "govdebt",
+          "label": "Federal debt held by government accounts",
+          "unit": "total",
+          "frequency": "quarter-end stock",
+          "as_of": "2026-06-30",
+          "latest_native": "$7.76 trillion",
+          "latest_in_gold_oz": "1.83 billion oz",
+          "gold_usd_used": 4228.0,
+          "note": "Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum."
+        },
+        {
+          "id": "fedassets",
+          "label": "Fed total assets",
+          "unit": "total",
+          "frequency": "month-end: last weekly stock; weekly since 2026-10-07",
+          "as_of": "2026-10-21",
+          "latest_native": "$6.75 trillion",
+          "latest_in_gold_oz": "1.65 billion oz",
+          "gold_usd_used": 4092.2,
+          "note": "Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum."
+        },
+        {
+          "id": "fedtreas",
+          "label": "Treasuries held by the Fed",
+          "unit": "total",
+          "frequency": "month-end: last weekly stock; weekly since 2026-10-07",
+          "as_of": "2026-10-21",
+          "latest_native": "$4.57 trillion",
+          "latest_in_gold_oz": "1.12 billion oz",
+          "gold_usd_used": 4092.2,
+          "note": "Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum."
+        },
+        {
+          "id": "credit",
+          "label": "US total credit market debt / GDP",
+          "unit": "%",
+          "frequency": "quarterly",
+          "as_of": "2026-04",
+          "latest_native": "365%",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        }
+      ]
+    },
+    {
+      "group": "Interest rates (percent, not priced in gold)",
+      "series": [
+        {
+          "id": "mortgage",
+          "label": "30Y mortgage (PMMS); all-term MIRS proxy before 1971",
+          "unit": "%",
+          "frequency": "weekly PMMS; annual all-term proxy 1963-1970",
+          "as_of": "2026-10-22",
+          "latest_native": "7.32%",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        },
+        {
+          "id": "fedfunds",
+          "label": "Fed funds (effective); discount rate before 1954",
+          "unit": "%",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "3.88%",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        },
+        {
+          "id": "ust10",
+          "label": "US 10Y Treasury yield",
+          "unit": "%",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "5.072%",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        },
+        {
+          "id": "real10",
+          "label": "US 10Y real yield (TIPS)",
+          "unit": "%",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "2.726%",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        },
+        {
+          "id": "curve",
+          "label": "Yield curve: 10Y minus 2Y Treasury (pp)",
+          "unit": "pp",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-23",
+          "latest_native": "0.33 pp",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        }
+      ]
+    },
+    {
+      "group": "Ratios and price indexes",
+      "series": [
+        {
+          "id": "gsr",
+          "label": "Gold / silver ratio (oz Ag per oz Au)",
+          "unit": "ratio",
+          "frequency": "monthly avg",
+          "as_of": "2026-09",
+          "latest_native": "66.9",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        },
+        {
+          "id": "goldoil",
+          "label": "Gold / oil ratio (WTI bbl per oz Au)",
+          "unit": "ratio",
+          "frequency": "monthly avg; weekly since 2026-10-02",
+          "as_of": "2026-10-16",
+          "latest_native": "41.6",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        },
+        {
+          "id": "cpi",
+          "label": "US CPI (all items, 1982-84=100)",
+          "unit": "index",
+          "frequency": "monthly",
+          "as_of": "2026-09",
+          "latest_native": "336.9",
+          "latest_in_gold_oz": null,
+          "gold_usd_used": null
+        }
+      ]
+    }
+  ],
+  "caveats": [
+    "Fed Treasuries are part of Fed assets and public debt; public debt includes Fed and foreign holders. Government-account debt plus public debt equals total debt at matching dates. Do not add overlapping rows.",
+    "Latest uranium may use an earlier month's average metal price. This is not a same-day spot ratio.",
+    "Points after each row's monthly/quarterly history are genuine completed-week observations (Friday-labeled; at least 3 business days for averages). Priced in gold using the same week's World Gold Council weekly average. Stocks (debt, Fed balance sheet) are end-of-week or source-published weekly observations, not averages. Nothing is forward-filled from monthly data; rows without a weekly source keep their existing cadence.",
+    "No free weekly silver source exists, so weekly points carry no oz Ag value: silver denomination of weekly points ends at the last monthly point, and row-level oz Ag keeps the last monthly conversion. Gold and USD denominations are genuine weekly."
+  ]
+}
