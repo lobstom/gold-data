@@ -52,7 +52,7 @@
           "frequency": "monthly avg",
           "as_of": "2026-09",
           "latest_native": "100.0 pts",
-          "latest_in_gold_oz": "0.02316 oz",
+          "latest_in_gold_oz": null,
           "gold_usd_used": 4319.0,
           "note": "US Dollar Index (DXY) is rebuilt from FRED exchange rates with the ICE DXY formula (from 1980) and spliced to the Fed major currencies index before 1980. It is shown in index points in every unit mode and is not the ICE-published series."
         }
