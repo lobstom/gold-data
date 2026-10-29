@@ -22,6 +22,8 @@ jobs:
       - run: pip install openpyxl xlrd
       - name: Validate snapshot logic against current legacy data
         run: python -u scripts/weekly_snapshot.py --self-test
+      - name: Test row-specific freshness logic
+        run: python -m unittest discover -s scripts -p test_freshness_report.py
       - name: Fetch, validate and freeze snapshot
         env:
           PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish }}
@@ -31,11 +33,13 @@ jobs:
           else
             python -u scripts/weekly_snapshot.py
           fi
+      - name: Report effective-row observation vintages
+        run: python scripts/freshness_report.py
       - name: Commit validated output
         run: |
           git config user.name "data-bot"
           git config user.email "data-bot@users.noreply.github.com"
-          git add data.json scripts/cameco.csv snapshots/
+          git add data.json scripts/cameco.csv snapshots/ reports/
           git diff --cached --quiet || git commit -m "Weekly data snapshot"
           git pull --rebase
           git push
