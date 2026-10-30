@@ -209,6 +209,7 @@ items.sort(key=lambda i: order.index(i["id"]) if i["id"] in order else 99)
 doc = {"updated": datetime.date.today().isoformat(), "items": items}
 import sys; sys.path.insert(0, here)
 import extras; extras.extend(doc, get)  # CPI, yield curve, credit/GDP, ratios, recessions
+import copper; copper.apply(doc)
 import lumber; lumber.apply(doc)  # fail closed before writing on source error
 json.dump(doc, open("data.json", "w"), separators=(",", ":"))
 print("ok", [(i["id"], i["asof"]) for i in items])
