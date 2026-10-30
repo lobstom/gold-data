@@ -13,4 +13,10 @@ class LumberTests(unittest.TestCase):
   self.assertEqual(len(r['points']),12);self.assertEqual(r['points'][-1],['2023-12-01',0.3,600,30]);self.assertEqual(r['asof'],'2023-12')
  def test_reject_unmatched(self):
   with self.assertRaises(AssertionError):lumber.make_row({'items':[{'id':'gold','points':[]},{'id':'silver','points':[]}]},{'2023-01-01':600})
+ def test_weekly_first_excluded(self):
+  d={'items':[{'id':rid,'freq':'monthly avg; weekly since 2024-03-01','points':[[f'2023-{m:02}-01',1,v] for m in range(1,13)]+[['2024-03-01',1,1]]} for rid,v in [('gold',2000),('silver',20)]]}
+  daily={f'2023-{m:02}-{day:02}':600 for m in range(1,13) for day in range(1,15)}
+  daily.update({f'2024-03-{day:02}':600 for day in range(1,15)})
+  r=lumber.make_row(d,daily,dt.datetime(2024,4,20,tzinfo=dt.timezone.utc))
+  self.assertEqual(r['asof'],'2023-12');self.assertEqual(r['points'][-1][1],0.3)
 if __name__=='__main__':unittest.main()
