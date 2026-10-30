@@ -77,10 +77,15 @@ def metadata(doc, prev, now, log):
             source = 'EIA Electric Power Monthly'; url = 'https://www.eia.gov/electricity/monthly/'
         elif rid == 'uranium':
             source = 'Cameco month-end history; UxC latest available weekly CSV input'; url = 'https://www.uxc.com/p/price'
+        elif rid == 'lumber':
+            source = r['source']; url = r['source_url']
         elif rid in {'gsr','goldoil'}:
             source = 'Derived from World Bank monthly gold and silver / WTI'
         source_status = 'retrieval_not_evidenced'
         note = 'Metadata generation does not prove upstream retrieval. No new observation can be normal between source releases.'
+        if rid == 'lumber':
+            source_status = 'retrieved'
+            note = r['source_note']
         if rid == 'uranium':
             source_status = 'manual_input'
             note = 'UxC weekly free-account quote may lag 72h; Monday morning cannot include that Monday evening release. Gold conversion uses last available monthly average, NOT same-week gold.'
@@ -262,6 +267,8 @@ def main():
         print('weekly overlay starting', dt.datetime.now(TZ).isoformat(), flush=True)
         weekly_overlay.apply(doc, log=lambda m: print(m, flush=True))
         print('weekly overlay done', dt.datetime.now(TZ).isoformat(), flush=True)
+        import lumber
+        lumber.apply(doc, log=lambda m: print(m, flush=True), now=now)
         doc=validate(doc)
     snap=create(doc,prev,now,'monday' if args.publish else 'test',os.environ.get('GITHUB_SHA','local'),run.stdout)
     print('weekly_prices starting', dt.datetime.now(TZ).isoformat(), flush=True)
