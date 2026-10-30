@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "row_id": "elec",
+      "checked_at": "2026-10-30T13:35:02-07:00",
+      "source": "US Energy Information Administration",
+      "source_url": "https://www.eia.gov/electricity/monthly/",
+      "release_date": "2026-10-23",
+      "latest_published_period": "2026-08",
+      "next_release_date": "2026-11-24",
+      "matched_model_period": "2026-08",
+      "finding": "current_publisher_vintage",
+      "note": "August 2026 is the latest published Electric Power Monthly period. The age flag is a review heuristic, not a missed-ingestion claim. This verifies release period, not the stored price value or gold denominator."
+    },
+    {
+      "row_id": "m2",
+      "checked_at": "2026-10-30T13:35:02-07:00",
+      "source": "Federal Reserve H.6",
+      "source_url": "https://www.federalreserve.gov/releases/h6/current/default.htm",
+      "release_date": "2026-10-27",
+      "latest_published_period": "2026-09",
+      "matched_model_period": "2026-08",
+      "finding": "new_release_after_frozen_cut",
+      "note": "Table 1 contains September 2026 seasonally adjusted M2, 23413.9 billion USD. Release is after the intentional October 26 model cut. This is next-refresh evidence, not failed ingestion; no stored data or gold conversion is changed."
+    }
+  ]
+}
