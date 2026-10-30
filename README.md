@@ -42,3 +42,7 @@ Run local checks with `python scripts/weekly_snapshot.py --self-test`. A normal 
 - Legacy LBS was delisted May 2023. It is not spliced into this row. Different contract/delivery terms and futures rolling can affect comparisons. This is not a spot or retail lumber price or an investable total-return series.
 - The existing Monday refresh fetches lumber; failure leaves the validated live cut unchanged. A manual lumber-only workflow can update just this row without refreshing other observations or altering immutable Monday snapshots. The model-wide updated date is not advanced by the isolated addition; row source_checked_at records its own retrieval.
 - Source history https://finance.yahoo.com/quote/LBR%3DF/history/ ; contract https://www.cmegroup.com/articles/faqs/lumber-futures-faq.html ; transition https://www.cmegroup.com/notices/ser/2023/04/SER-9183.html .
+
+
+## Copper
+World Bank Pink Sheet Copper monthly averages, USD per metric tonne. LME grade A minimum 99.9935% purity cathodes/wire bar settlement benchmark, not live/retail/scrap quotes. Workbook history begins January 1960; only months matching actual monthly model gold and silver are included, without forward-filling or early synthetic ratios. Current incomplete month excluded. The base and weekly runners refresh this monthly row; existing immutable Monday snapshots are not rewritten. Source: https://www.worldbank.org/en/research/commodity-markets .
