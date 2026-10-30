@@ -108,7 +108,7 @@ def main():
 
     groups = [
         ("Money", take(["gold", "silver", "usd", "dxy"])),
-        ("Commodities and energy", take(["uranium", "wti", "brent", "gas", "ttf", "coal", "lumber", "elec"])),
+        ("Commodities and energy", take(["copper", "uranium", "wti", "brent", "gas", "ttf", "coal", "lumber", "elec"])),
         ("Housing", take(["housing", "cshomegold"])),
         ("Markets", take(["sp500", "dow", "ahe", "m2"])),
         ("Debt and the Fed's balance sheet", take(["debt", "publicdebt", "govdebt", "fedassets", "fedtreas", "credit"])),
