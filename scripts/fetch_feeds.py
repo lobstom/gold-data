@@ -323,6 +323,7 @@ for s in SOURCES:
             got = treasury()
         else:
             got = FN[s["type"]](s["arg"])
+        if s.get("allow_urls"): got = [g for g in got if g["url"] in s["allow_urls"]]
         if s["id"] in FILTER: got = [g for g in got if not noisy(g["title"])]
             
         if s.get("author"):  # optional sources.json key: keep only items whose dc:creator matches
@@ -384,7 +385,7 @@ for s in SOURCES:
         got = [g for g in got if g["title"]]
         for g in got: g.update(source=s["id"])
         items += got
-        res.append({**{k:s[k] for k in("id","name","topic")},"desc":DESCS.get(s["id"],""),"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
+        res.append({**{k:s[k] for k in("id","name","topic")},"desc":s.get("desc", DESCS.get(s["id"],"")),"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
     except Exception as ex:
         print("FAIL",s["id"],ex,file=sys.stderr)
         old=[i for i in prev["items"] if i["source"]==s["id"]]
@@ -394,7 +395,7 @@ for s in SOURCES:
         old = [g for g in old if g["title"]]
         if s["id"] in PROMO: old = [i for i in old if not PROMO[s["id"]].search(i.get("title","")+" "+i.get("summary",""))]
         items+=old
-        res.append({**{k:s[k] for k in("id","name","topic")},"desc":DESCS.get(s["id"],""),"ok":False,"count":len(old),"latest":old[0]["date"] if old else None,"error":str(ex)[:120]})
+        res.append({**{k:s[k] for k in("id","name","topic")},"desc":s.get("desc", DESCS.get(s["id"],"")),"ok":False,"count":len(old),"latest":old[0]["date"] if old else None,"error":str(ex)[:120]})
 items.sort(key=lambda x:x["date"], reverse=True)
 json.dump({"generated":iso(now),"sources":res,"items":items}, open(sys.argv[1] if len(sys.argv)>1 else "feeds.json","w"), ensure_ascii=False, separators=(",",":"))
 print(len(items),"items;", sum(r["ok"] for r in res),"/",len(res),"sources ok")
