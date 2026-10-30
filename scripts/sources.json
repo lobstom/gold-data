@@ -515,6 +515,14 @@
       "topic": "Health",
       "type": "rss",
       "arg": "https://chriskresser.com/feed/"
+    },
+    {
+      "id": "daralsabaek",
+      "name": "Dar Al-Sabaek",
+      "topic": "Gold",
+      "type": "darnews",
+      "arg": "https://api.daralsabaek.com/api/news?pageNo=0&PageSize=10",
+      "desc": "Kuwaiti bullion company publishing English gold and silver market reports on monetary policy, currencies, yields and geopolitics. Dealer perspective; publication dates may differ from the events described."
     }
   ],
   "vf": [
