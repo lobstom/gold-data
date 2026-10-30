@@ -262,7 +262,26 @@ def tilda(u):
         out.append({"title": t, "url": url, "date": iso(dt), "summary": sm})
     out.sort(key=lambda g: g["date"], reverse=True)
     return out
-FN = {"rss":rss,"tilda":tilda,"rssdesc":lambda u:rss(u,prefer_desc=True),"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
+def darnews(u):
+    payload=json.loads(get(u))
+    if payload.get("succeeded") is not True: raise ValueError("Dar news API unsuccessful")
+    rows=payload["result"]["homeNewsModel"]
+    out=[]
+    relevant=re.compile(r"gold|silver|bullion|precious metal|central.bank|\bfed\b|interest rate|monetary|treasury|yields?|dollar",re.I)
+    promo=re.compile(r"shop|discount|promotion|buy now|special offer|giveaway|sale event",re.I)
+    for row in rows:
+        title=clean(row.get("titleEn"),160)
+        if not title or not relevant.search(title) or promo.search(title): continue
+        ident=int(row["id"])
+        stamp=re.sub(r"(\.\d{6})\d+", r"\1", row["createdOn"])
+        dt=D.datetime.fromisoformat(stamp.replace("Z","+00:00"))
+        if dt.tzinfo is None: raise ValueError("Dar publication time missing timezone")
+        note="Publisher-listed publication date; events described may be older."
+        if row.get("newsDate"): note+=" Publisher news-date field: "+row["newsDate"][:10]+"."
+        out.append({"title":title,"url":"https://daralsabaek.com/news/"+str(ident),"date":iso(dt),"summary":note})
+    return out
+
+FN = {"darnews":darnews,"rss":rss,"tilda":tilda,"rssdesc":lambda u:rss(u,prefer_desc=True),"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
 FN["wisedome"] = lambda u: __import__("wisedome_feed").wisedome(u, get, clean, iso, D, re)
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
