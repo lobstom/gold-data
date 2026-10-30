@@ -282,24 +282,6 @@
       "arg": "https://anasalhajjieoa.substack.com/feed"
     },
     {
-      "id": "almuhanna",
-      "name": "Ibrahim AlMuhanna",
-      "topic": "Energy",
-      "type": "rss",
-      "arg": "https://www.ibrahimalmuhanna.com/rss.xml",
-      "desc": "Former adviser to four Saudi energy ministers; interviews and commentary on Saudi oil policy and OPEC. Archived content, most recently dated 2022.",
-      "allow_urls": [
-        "https://www.spglobal.com/commodityinsights/en/market-insights/latest-news/oil/070822-saudi-oil-whisperer-muhanna-warns-against-doubting-kingdoms-production-capacity",
-        "https://www.energypolicy.columbia.edu/saudi-arabia-s-outsized-impact-global-oil",
-        "https://saudigazette.com.sa/article/542172",
-        "https://www.reuters.com/article/saudi-oil-opec/oil-prices-to-rise-to-60-as-opec-likely-to-extend-cuts-former-saudi-adviser-idUSL8N1M70AX",
-        "https://www.reuters.com/article/us-saudi-oil/oil-market-needs-an-anchor-saudi-adviser-says-idUSKCN0S31F820151009",
-        "https://www.businessinsider.com/saudi-oil-advisor-the-depression-in-oil-prices-and-demand-is-a-temporary-unnatural-situation-2015-4",
-        "https://www.wsj.com/articles/opec-warns-us-oil-boom-could-decline-by-year-end-1426508843",
-        "https://www.ief.org/_resources/files/events/extraordinary-ief-ministerial-meeting/speeches-paris-to-riyadh.pdf"
-      ]
-    },
-    {
       "id": "criterium",
       "name": "Criterium Energy",
       "topic": "Energy",
