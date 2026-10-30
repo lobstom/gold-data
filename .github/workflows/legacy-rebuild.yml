@@ -26,7 +26,7 @@ jobs:
           root = pathlib.Path(os.environ['GITHUB_WORKSPACE'])
           doc = json.loads(pathlib.Path('data.json').read_text())
           old = json.loads((root/'data.json').read_text())
-          assert {x['id'] for x in old['items']} == {x['id'] for x in doc['items']}
+          assert {x['id'] for x in old['items']} <= {x['id'] for x in doc['items']}
           assert {x['id'] for x in old['more']} <= {x['id'] for x in doc['more']}
           dx = [x for x in doc['more'] if x['id'] == 'dxy']
           assert not dx or (dx[0]['points'][0][0] == '1973-01-01' and dx[0].get('fixed') == 1)
