@@ -1,0 +1,33 @@
+name: Add or refresh copper only
+on:
+  workflow_dispatch:
+permissions: { contents: write }
+concurrency: { group: refresh, cancel-in-progress: false }
+jobs:
+  copper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install openpyxl
+      - name: Add copper without changing other observations or immutable snapshots
+        run: |
+          cp data.json /tmp/before-copper.json
+          python scripts/copper.py data.json
+          python - <<'PY'
+          import json
+          old=json.load(open('/tmp/before-copper.json'));new=json.load(open('data.json'))
+          old['items']=[r for r in old['items'] if r['id']!='copper']
+          new['items']=[r for r in new['items'] if r['id']!='copper']
+          assert old==new, 'Unrelated data changed'
+          PY
+          python scripts/weekly_snapshot.py --self-test
+      - name: Commit copper row only
+        run: |
+          git config user.name "data-bot"
+          git config user.email "data-bot@users.noreply.github.com"
+          git add data.json
+          git diff --cached --quiet || git commit -m "Add World Bank copper commodity; preserve all other observations"
+          git pull --rebase
+          git push
