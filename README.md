@@ -35,3 +35,10 @@ Tests use `snapshots/test-latest.json` and `snapshots/tests/<timestamp>.json`, w
 - Gold: World Gold Council chart daily data, short window, aggregated to completed Monday-Friday weeks. Feed access uses curl headers. This is not labeled an LBMA fixing; an undocumented site API may change and fail explicitly.
 
 Run local checks with `python scripts/weekly_snapshot.py --self-test`. A normal invocation fetches/validates all legacy data, captures weekly sources and saves an isolated test. Only `--publish` writes the production Monday cut.
+
+## Lumber addition (29 October 2026)
+- Lumber is CME LBR rolling-nearby futures via Yahoo Finance LBR=F, quoted in USD per 1,000 board feet. The 27,500-board-foot contract size is not the row unit.
+- Daily closes are averaged by completed calendar month, then divided by the same month’s model gold/silver averages. First full month is September 2022; launch-partial August and unfinished current months are excluded.
+- Legacy LBS was delisted May 2023. It is not spliced into this row. Different contract/delivery terms and futures rolling can affect comparisons. This is not a spot or retail lumber price or an investable total-return series.
+- The existing Monday refresh fetches lumber; failure leaves the validated live cut unchanged. A manual lumber-only workflow can update just this row without refreshing other observations or altering immutable Monday snapshots. The model-wide updated date is not advanced by the isolated addition; row source_checked_at records its own retrieval.
+- Source history https://finance.yahoo.com/quote/LBR%3DF/history/ ; contract https://www.cmegroup.com/articles/faqs/lumber-futures-faq.html ; transition https://www.cmegroup.com/notices/ser/2023/04/SER-9183.html .
