@@ -1,6 +1,6 @@
 import copy,datetime as dt,json,unittest
 from pathlib import Path
-from freshness_report import build,describe_period,effective_rows
+from freshness_report import build,describe_period,effective_rows,apply_release_evidence,markdown
 class FreshnessTests(unittest.TestCase):
  def setUp(self):
   self.now=dt.datetime.fromisoformat('2026-10-29T08:40:00-07:00');self.row={'id':'wti','label':'WTI','asof':'2026-10-16','freq':'monthly avg; weekly since 2026-10-02','points':[['2026-10-16',1,2,None]],'goldusd':2,'usd':2};self.doc={'items':[self.row],'updated':'2026-10-26'}
@@ -34,4 +34,20 @@ class FreshnessTests(unittest.TestCase):
  def test_all_effective_rows_included(self):
   d=copy.deepcopy(self.doc);d['more_v3']=[dict(self.row,id='extra')];d['overrides_v3']={'wti':dict(self.row,usd=99)}
   rs=build(d,{},self.now)['rows'];self.assertEqual(len(rs),2)
+class ReleaseEvidenceTests(unittest.TestCase):
+ setUp=FreshnessTests.setUp
+ def evidence(self, **kw):
+  return {'checks':[dict(row_id='wti',matched_model_period='2026-10-16',checked_at='2026-10-28T12:00:00-07:00',source='EIA',source_url='https://www.eia.gov/',release_date='2026-10-28',latest_published_period='2026-10-16',note='Dated check only',**kw)]}
+ def test_dated_release_does_not_upgrade_value_check(self):
+  row=apply_release_evidence(build(self.doc,{},self.now),self.evidence())['rows'][0]
+  self.assertIn('publisher_release_evidence',row);self.assertIsNone(row['last_evidenced_source_check_at']);self.assertFalse(row['source_rechecked_now']);self.assertIsNone(row['next_release_at'])
+ def test_mismatch_not_attached(self):
+  e=self.evidence();e['checks'][0]['matched_model_period']='2026-10-23'
+  self.assertNotIn('publisher_release_evidence',apply_release_evidence(build(self.doc,{},self.now),e)['rows'][0])
+ def test_future_check_not_attached(self):
+  e=self.evidence();e['checks'][0]['checked_at']='2026-10-30T12:00:00-07:00'
+  self.assertNotIn('publisher_release_evidence',apply_release_evidence(build(self.doc,{},self.now),e)['rows'][0])
+ def test_markdown_boundaries(self):
+  report=apply_release_evidence(build(self.doc,{},self.now),self.evidence())
+  text=markdown(report);self.assertIn('Dated publisher release checks',text);self.assertIn('not verify stored values',text)
 if __name__=='__main__':unittest.main()
