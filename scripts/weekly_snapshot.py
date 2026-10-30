@@ -77,13 +77,13 @@ def metadata(doc, prev, now, log):
             source = 'EIA Electric Power Monthly'; url = 'https://www.eia.gov/electricity/monthly/'
         elif rid == 'uranium':
             source = 'Cameco month-end history; UxC latest available weekly CSV input'; url = 'https://www.uxc.com/p/price'
-        elif rid == 'lumber':
+        elif rid in ('lumber','copper'):
             source = r['source']; url = r['source_url']
         elif rid in {'gsr','goldoil'}:
             source = 'Derived from World Bank monthly gold and silver / WTI'
         source_status = 'retrieval_not_evidenced'
         note = 'Metadata generation does not prove upstream retrieval. No new observation can be normal between source releases.'
-        if rid == 'lumber':
+        if rid in ('lumber','copper'):
             source_status = 'retrieved'
             note = r['source_note']
         if rid == 'uranium':
@@ -267,6 +267,8 @@ def main():
         print('weekly overlay starting', dt.datetime.now(TZ).isoformat(), flush=True)
         weekly_overlay.apply(doc, log=lambda m: print(m, flush=True))
         print('weekly overlay done', dt.datetime.now(TZ).isoformat(), flush=True)
+        import copper
+        copper.apply(doc, log=lambda m: print(m, flush=True), now=now)
         import lumber
         lumber.apply(doc, log=lambda m: print(m, flush=True), now=now)
         doc=validate(doc)
