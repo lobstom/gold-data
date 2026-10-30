@@ -523,6 +523,14 @@
       "type": "darnews",
       "arg": "https://api.daralsabaek.com/api/news?pageNo=0&PageSize=10",
       "desc": "Kuwaiti bullion company publishing English gold and silver market reports on monetary policy, currencies, yields and geopolitics. Dealer perspective; publication dates may differ from the events described."
+    },
+    {
+      "id": "kencao",
+      "name": "Ken Cao",
+      "topic": "Markets",
+      "type": "rss",
+      "arg": "https://caoken.net/feed/",
+      "desc": "Macro investor writing on China, debt, property markets and geopolitics, with a critical view of CCP governance. Blog archive; latest post February 3, 2026."
     }
   ],
   "vf": [
