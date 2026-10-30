@@ -27,8 +27,13 @@ def fetch_daily(now=None):
 
 def make_row(doc,daily,now=None):
     now=now or dt.datetime.now(dt.timezone.utc)
-    gold={p[0][:7]:p[2] for r in doc['items'] if r['id']=='gold' for p in r['points'] if p[0].endswith('-01')}
-    silver={p[0][:7]:p[2] for r in doc['items'] if r['id']=='silver' for p in r['points'] if p[0].endswith('-01')}
+    def monthly_metal(rid):
+        row=next(r for r in doc['items'] if r['id']==rid)
+        # A completed-week Friday can fall on the first of a month. Do not
+        # mistake it for a monthly average if a failed base build is reused.
+        cutoff=row.get('freq','').split('weekly since ')[-1] if 'weekly since ' in row.get('freq','') else '9999-12-31'
+        return {p[0][:7]:p[2] for p in row['points'] if p[0].endswith('-01') and p[0]<cutoff}
+    gold=monthly_metal('gold');silver=monthly_metal('silver')
     groups={}
     for day,v in sorted(daily.items()):
         month=day[:7]
