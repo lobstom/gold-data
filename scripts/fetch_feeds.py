@@ -283,6 +283,7 @@ def darnews(u):
 
 FN = {"darnews":darnews,"rss":rss,"tilda":tilda,"rssdesc":lambda u:rss(u,prefer_desc=True),"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
 FN["wisedome"] = lambda u: __import__("wisedome_feed").wisedome(u, get, clean, iso, D, re)
+FN["gunbay"] = lambda u: __import__("gunbay_feed").gunbay(u, get, clean, iso, D, re)
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
