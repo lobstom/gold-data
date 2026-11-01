@@ -22,6 +22,8 @@ def gunbay(u, get, clean, iso, D, re, max_items=12):
         dt = None
         try:
             a = get(base + o["href"])
+            h1 = re.search(r"<h1[^>]*>(.*?)</h1>", a, re.S)
+            if h1 and clean(h1.group(1), 300): o["title"] = clean(h1.group(1), 160)
             dm = re.search(r"(January|February|March|April|May|June|July|August|September|October|November|December) (\d{1,2}), (\d{4})", a[:200000][a.find("<main") if "<main" in a else 0:])
             if dm: dt = D.datetime.strptime(" ".join(dm.groups()), "%B %d %Y").replace(tzinfo=D.timezone.utc)
         except Exception: pass
