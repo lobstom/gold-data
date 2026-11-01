@@ -366,6 +366,7 @@ for s in SOURCES:
         if s["id"]=="bowtiedmara":
             for g in ded: g["summary"]=re.sub(r"^Welcome(?: back)? [^!]{1,40}!\s*", "", g["summary"] or "")
         if s["id"]=="armstrong": ded = [g for g in ded if not g["title"].startswith("PRIVATE BLOG")]
+        if s["id"]=="mavericks": ded = [g for g in ded if "need to be logged in" not in (g.get("summary") or "").lower() and (g.get("summary") or "").strip()]
         if s["id"]=="hfir":
             for g in ded:
                 g["title"]=re.sub(r"^\(Public\)\s*", "", g["title"])
