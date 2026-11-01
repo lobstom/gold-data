@@ -60,6 +60,14 @@
       "desc": "Gun Bay Global Advisory health articles on nutrition, metabolic and integrative health."
     },
     {
+      "id": "heretics",
+      "name": "Economic Heretics (Handre)",
+      "topic": "Markets",
+      "type": "rss",
+      "arg": "https://handre.substack.com/feed",
+      "desc": "Handre's weekly Substack deep dive into Austrian economics: sound money, free markets and why central planning fails."
+    },
+    {
       "id": "wisedome",
       "name": "Operation Wisedome",
       "topic": "Strategy & Policy",
