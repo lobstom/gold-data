@@ -14,7 +14,7 @@ def gunbay(u, get, clean, iso, D, re, max_items=12):
         lab = re.search(r'class="post-(?:card-)?cat">([^<]+)<|class="post-category">([^<]+)<', body)
         label = html_text(lab.group(1) or lab.group(2)) if lab else ""
         if not t: continue
-        out.append({"href": href, "cat": cat, "label": label, "title": clean(re.sub(r"(?<![:?.!,;])<br\s*/?>", ": ", re.sub(r"(?<=[:?.!,;])<br\s*/?>", " ", t.group(1))), 160),
+        out.append({"href": href, "cat": cat, "label": label, "title": clean(re.sub(r"<br\s*/?>", " ", re.sub(r"(?<![:?.!,;])<br\s*/?>(?=\s*<em)", ": ", t.group(1))), 160),
                     "summary": clean(p_.group(1) if p_ else ""), "month": (d.group(1).strip() if d else "")})
     keep = [o for o in out if ("wealth-health" in o["cat"].split()) == health]
     items = []
