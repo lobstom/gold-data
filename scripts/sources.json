@@ -36,6 +36,14 @@
       "arg": "https://thecrudechronicles.substack.com/feed"
     },
     {
+      "id": "mavericks",
+      "name": "Mavericks Project",
+      "topic": "Markets",
+      "type": "rss",
+      "arg": "https://mavericksproject.org/feed/",
+      "desc": "Mavericks Project: monthly newsletter on monetary systems, wealth protection and sovereignty. Members-only issues are skipped."
+    },
+    {
       "id": "wisedome",
       "name": "Operation Wisedome",
       "topic": "Strategy & Policy",
