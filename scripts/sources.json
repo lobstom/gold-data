@@ -68,6 +68,14 @@
       "desc": "Handre's weekly Substack deep dive into Austrian economics: sound money, free markets and why central planning fails."
     },
     {
+      "id": "sirius",
+      "name": "The Sirius Report",
+      "topic": "Strategy & Policy",
+      "type": "rss",
+      "arg": "https://www.thesiriusreport.com/feed/",
+      "desc": "Independent analysis of global politics, economics and precious metals by Paul (pseudonymous, formerly a physicist and banker) and Ken. Self-funded; critical of Western policy toward Russia and China."
+    },
+    {
       "id": "wisedome",
       "name": "Operation Wisedome",
       "topic": "Strategy & Policy",
