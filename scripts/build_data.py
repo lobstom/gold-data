@@ -118,7 +118,7 @@ for m, (dt, v) in sorted(mon.items()):
     g = gold.get(f"{m[:4]}M{m[5:7]}", last_gold); pts.append((dt, v / g, v, g))
 if pts:
     add("uranium", "Uranium U3O8 (spot)", "lb", "month-end history, latest UxC weekly", pts)
-    if latest: items[-1]["asof"] = latest[0]
+    if latest: items[-1]["asof"] = max(latest[0], pts[-1][0])
 # long-run history (annual early points, fixed files built once; see footer for sources), prepended before each series starts
 H = json.load(open(os.path.join(here, "history.json")))
 gann = {}
