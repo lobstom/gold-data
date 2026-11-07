@@ -81,6 +81,16 @@ def feedly(u):
         out.append({"title":clean(it.get("title",""),160),"url":url,"date":iso(dt),"summary":clean(body)})
     if not out: raise RuntimeError("feedly stream empty")
     return out
+def rss2json(u):
+    """Free rss2json mirror for Substack feeds the runner IP cannot reach."""
+    d = json.loads(get("https://api.rss2json.com/v1/api.json?rss_url=" + urllib.parse.quote(u, safe="")))
+    out=[]
+    for it in d.get("items", []):
+        try: dt = D.datetime.strptime(it["pubDate"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=D.timezone.utc)
+        except Exception: continue
+        out.append({"title":clean(it.get("title",""),160),"url":it.get("link",""),"date":iso(dt),"summary":clean(it.get("description") or it.get("content") or "")})
+    if not out: raise RuntimeError("rss2json empty")
+    return out
 def felder(u):
     """Felder's RSS descriptions are boilerplate excerpts; pull the first real
     paragraph from each article page instead (weekly pub, so ~10 fetches/run)."""
@@ -283,7 +293,7 @@ def darnews(u):
         out.append({"title":title,"url":"https://daralsabaek.com/news/"+str(ident),"date":iso(dt),"summary":note})
     return out
 
-FN = {"darnews":darnews,"rss":rss,"tilda":tilda,"rssdesc":lambda u:rss(u,prefer_desc=True),"felder":felder,"feedly":feedly,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
+FN = {"darnews":darnews,"rss":rss,"tilda":tilda,"rssdesc":lambda u:rss(u,prefer_desc=True),"felder":felder,"feedly":feedly,"rss2json":rss2json,"rsssocial":lambda u:rss(u,True),"tg":tg,"xsyn":xsyn,"wpj":wpj,"rdf":rdf,"afc":afc}
 FN["wisedome"] = lambda u: __import__("wisedome_feed").wisedome(u, get, clean, iso, D, re)
 FN["gunbay"] = lambda u: __import__("gunbay_feed").gunbay(u, get, clean, iso, D, re)
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
@@ -374,6 +384,8 @@ for s in SOURCES:
             for g in ded:
                 g["title"]=re.sub(r"^\(Public\)\s*", "", g["title"])
                 g["summary"]=re.sub(r"\s*Read more\s*$", "", g["summary"] or "")
+        if s["id"]=="sirius":
+            for g in ded: g["summary"]=re.sub(r"\s*\[read more\].*$", "", g["summary"] or "", flags=re.I|re.S).strip()
         if s["id"]=="jkemp":
             for g in ded: g["summary"]=re.sub(r"\s*Download\s*$", "", g["summary"] or "")
         if s["id"]=="debriefing": ded = [g for g in ded if len((g["title"] or "").strip())>=60]
