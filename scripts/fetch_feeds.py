@@ -20,6 +20,8 @@ def get(u):
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt == 0:
                 time.sleep(25); continue
+            if e.code in (403, 502) and "thesiriusreport.com" in u:
+                return get_substack_proxied(u)
             if e.code == 403 and ("substack.com" in u or "marksdailyapple.com" in u or "hfir.com" in u or "malone.news" in u or "midwesterndoctor.com" in u or "pierrekorymedicalmusings.com" in u):
                 return get_substack_proxied(u)
             raise
