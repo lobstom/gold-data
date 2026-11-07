@@ -71,7 +71,7 @@
       "id": "sirius",
       "name": "The Sirius Report",
       "topic": "Strategy & Policy",
-      "type": "rss",
+      "type": "feedly",
       "arg": "https://www.thesiriusreport.com/feed/",
       "desc": "Independent analysis of global politics, economics and precious metals by Paul (pseudonymous, formerly a physicist and banker) and Ken. Self-funded; critical of Western policy toward Russia and China."
     },
