@@ -108,14 +108,6 @@
       "desc": "Ben Kelleran's interviews and commentary on investments, finance and macro."
     },
     {
-      "id": "dallinger",
-      "name": "Energy Analytics (Tim Dallinger)",
-      "topic": "Energy",
-      "type": "feedly",
-      "arg": "https://timdallinger.substack.com/feed",
-      "desc": "Weekly charts and summaries of the EIA Weekly Petroleum Status Report, plus other energy market developments."
-    },
-    {
       "id": "wisedome",
       "name": "Operation Wisedome",
       "topic": "Strategy & Policy",
