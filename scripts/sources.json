@@ -596,6 +596,8 @@
     }
   ],
   "vf": [
+    {"id": "fittowork", "name": "Fit to Work", "topic": "Training", "type": "rss", "arg": "https://lokifit.com/rss/", "desc": "Fitness, strength and nutrition advice from the Fit to Work newsletter."},
+    {"id": "strongwithdana", "name": "Strong with Dana", "topic": "Training", "type": "rss", "arg": "https://strong-with-dana.ghost.io/rss/", "desc": "Strength training and fitness writing from Dana, a personal trainer."},
     {
       "id": "kresser",
       "name": "Chris Kresser",
