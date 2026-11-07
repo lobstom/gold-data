@@ -87,7 +87,7 @@
       "id": "signalsnoise",
       "name": "Signals & Noise (Bradford Stanley, CFA)",
       "topic": "Markets",
-      "type": "rss",
+      "type": "rss2json",
       "arg": "https://bradfordstanleycfa.substack.com/feed",
       "desc": "Macro and technology analysis covering labor's share of output, federal interest costs, automation and AI."
     },
@@ -111,7 +111,7 @@
       "id": "dallinger",
       "name": "Energy Analytics (Tim Dallinger)",
       "topic": "Energy",
-      "type": "rss",
+      "type": "feedly",
       "arg": "https://timdallinger.substack.com/feed",
       "desc": "Weekly charts and summaries of the EIA Weekly Petroleum Status Report, plus other energy market developments."
     },
