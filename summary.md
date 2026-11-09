@@ -7,16 +7,16 @@ This file is a compact, dated summary of that model. It is generated from the fr
 - Full dataset (JSON): https://lobstom.github.io/gold-data/data.json
 - Machine-readable version of this summary: https://lobstom.github.io/gold-data/summary.json
 - Frozen Monday snapshot manifest: https://lobstom.github.io/gold-data/snapshots/latest.json
-- Dataset last built: 2026-11-02. Summary generated: 2026-11-02.
+- Dataset last built: 2026-11-09. Summary generated: 2026-11-09.
 
 ## Money
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Gold | $4,012 per oz | 1.000 oz | 2026-10-30 | monthly avg; weekly since 2026-10-02 |
-| Silver | $64.60 per oz | 0.01496 oz | 2026-09 | monthly avg |
-| US dollar | $1.00 | 0.0002492 oz | 2026-10-30 | monthly avg; weekly since 2026-10-02 |
-| US Dollar Index | 100.0 pts | not priced in gold | 2026-09 | monthly avg |
+| Gold | $4,018 per oz | 1.000 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| Silver | $57.00 per oz | 0.01389 oz | 2026-10 | monthly avg |
+| US dollar | $1.00 | 0.0002489 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| US Dollar Index | 102.1 pts | not priced in gold | 2026-10 | monthly avg |
 
 US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series.
 
@@ -26,14 +26,14 @@ US Dollar Index (DXY) is rebuilt from FRED exchange rates with the ICE DXY formu
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Copper (LME grade A) | $14,474 per tonne | 3.351 oz | 2026-09 | monthly avg |
-| Uranium U3O8 (spot) | $89.80 per lb | 0.02079 oz | 2026-10-12 | month-end history, latest UxC weekly |
-| Crude oil (WTI) | $107.17 per bbl | 0.02619 oz | 2026-10-23 | monthly avg; weekly since 2026-10-02 |
-| Crude oil (Brent) | $121.02 per bbl | 0.02957 oz | 2026-10-23 | monthly avg; weekly since 2026-10-02 |
-| Natural gas (US) | $3.02 per MMBtu | 0.000738 oz | 2026-10-23 | monthly avg; weekly since 2026-10-02 |
-| Natural gas (Europe, TTF) | $25.42 per MMBtu | 0.005886 oz | 2026-09 | monthly avg |
-| Coal (Australian, Newcastle) | $147.10 per tonne | 0.03406 oz | 2026-09 | monthly avg |
-| Lumber (LBR rolling futures; since Sep 2022) | $556.29 per 1,000 board ft | 0.1288 oz | 2026-09 | monthly avg |
+| Copper (LME grade A) | $14,508 per tonne | 3.534 oz | 2026-10 | monthly avg |
+| Uranium U3O8 (spot) | $91.55 per lb | 0.0223 oz | 2026-10-30 | month-end history, latest UxC weekly |
+| Crude oil (WTI) | $97.70 per bbl | 0.0238 oz | 2026-10 | monthly avg |
+| Crude oil (Brent) | $125.00 per bbl | 0.03045 oz | 2026-10 | monthly avg |
+| Natural gas (US) | $2.96 per MMBtu | 0.0007211 oz | 2026-10 | monthly avg |
+| Natural gas (Europe, TTF) | $28.50 per MMBtu | 0.006943 oz | 2026-10 | monthly avg |
+| Coal (Australian, Newcastle) | $152.30 per tonne | 0.0371 oz | 2026-10 | monthly avg |
+| Lumber (LBR rolling futures; since Sep 2022) | $525.05 per 1,000 board ft | 0.1279 oz | 2026-10 | monthly avg |
 | US electricity (all sectors) | $148.70 per MWh | 0.03371 oz | 2026-08 | monthly avg |
 
 ## Housing
@@ -51,20 +51,20 @@ US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Pri
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| S&P 500 (price index) | 7,734.3 pts | 1.699 oz | 2026-10 | monthly avg |
-| Dow Jones Industrial Average | 51,909.5 pts | 11.4 oz | 2026-10 | monthly avg |
-| Avg hourly earnings (production workers) | $32.60 per hour | 0.007548 oz | 2026-09 | monthly |
+| S&P 500 (price index) | 7,505.9 pts | 1.868 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| Dow Jones Industrial Average | 51,987.0 pts | 12.9 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| Avg hourly earnings (production workers) | $32.75 per hour | 0.007978 oz | 2026-10 | monthly |
 | US M2 money supply | $23.41 trillion | 5.42 billion oz | 2026-09 | monthly, seasonally adjusted |
 
 ## Debt and the Fed's balance sheet
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Who owns the federal debt (and the Fed's balance sheet) | $40.59 trillion | 10.12 billion oz | 2026-10-30 | quarter-end stock (annual before 1966); weekly since 2026-08-28 |
+| Who owns the federal debt (and the Fed's balance sheet) | $40.56 trillion | 10.09 billion oz | 2026-11-06 | quarter-end stock (annual before 1966); weekly since 2026-09-25 |
 | Federal debt held by the public | $31.71 trillion | 7.50 billion oz | 2026-06-30 | quarter-end stock |
 | Federal debt held by government accounts | $7.76 trillion | 1.83 billion oz | 2026-06-30 | quarter-end stock |
-| Fed total assets | $6.75 trillion | 1.68 billion oz | 2026-10-28 | month-end: last weekly stock; weekly since 2026-10-07 |
-| Treasuries held by the Fed | $4.58 trillion | 1.14 billion oz | 2026-10-28 | month-end: last weekly stock; weekly since 2026-10-07 |
+| Fed total assets | $6.75 trillion | 1.68 billion oz | 2026-11-04 | month-end: last weekly stock; weekly since 2026-11-04 |
+| Treasuries held by the Fed | $4.58 trillion | 1.14 billion oz | 2026-11-04 | month-end: last weekly stock; weekly since 2026-11-04 |
 | US total credit market debt / GDP | 365% | not priced in gold | 2026-04 | quarterly |
 
 Who owns the federal debt (and the Fed's balance sheet): Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned.
@@ -81,18 +81,18 @@ Treasuries held by the Fed: Dollar-equivalent in gold, not gold owned. Stock div
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| 30Y mortgage (PMMS); all-term MIRS proxy before 1971 | 7.24% | not priced in gold | 2026-10-29 | weekly PMMS; annual all-term proxy 1963-1970 |
-| Fed funds (effective); discount rate before 1954 | 3.88% | not priced in gold | 2026-10-30 | monthly avg; weekly since 2026-10-02 |
-| US 10Y Treasury yield | 5.14% | not priced in gold | 2026-10 | monthly avg |
-| US 10Y real yield (TIPS) | 2.79% | not priced in gold | 2026-10 | monthly avg |
-| Yield curve: 10Y minus 2Y Treasury (pp) | 0.39 pp | not priced in gold | 2026-10 | monthly avg |
+| 30Y mortgage (PMMS); all-term MIRS proxy before 1971 | 7.18% | not priced in gold | 2026-11-05 | weekly PMMS; annual all-term proxy 1963-1970 |
+| Fed funds (effective); discount rate before 1954 | 3.88% | not priced in gold | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| US 10Y Treasury yield | 4.892% | not priced in gold | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| US 10Y real yield (TIPS) | 2.628% | not priced in gold | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| Yield curve: 10Y minus 2Y Treasury (pp) | 0.34 pp | not priced in gold | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
 
 ## Ratios and price indexes
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Gold / silver ratio (oz Ag per oz Au) | 66.9 | not priced in gold | 2026-09 | monthly avg |
-| Gold / oil ratio (WTI bbl per oz Au) | 38.2 | not priced in gold | 2026-10-23 | monthly avg; weekly since 2026-10-02 |
+| Gold / silver ratio (oz Ag per oz Au) | 72.0 | not priced in gold | 2026-10 | monthly avg |
+| Gold / oil ratio (WTI bbl per oz Au) | 42.0 | not priced in gold | 2026-10 | monthly avg |
 | US CPI (all items, 1982-84=100) | 336.9 | not priced in gold | 2026-09 | monthly |
 
 ## Sources and conventions
