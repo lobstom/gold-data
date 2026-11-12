@@ -1,8 +1,8 @@
 {
   "name": "Prices in Gold Ounces - model summary",
   "site": "No Time For Bull (notimeforbull.com)",
-  "generated": "2026-11-09",
-  "data_updated": "2026-11-09",
+  "generated": "2026-11-12",
+  "data_updated": "2026-11-12",
   "not_real_time": true,
   "canonical": {
     "page": "https://www.notimeforbull.com/prices/",
@@ -75,7 +75,7 @@
           "id": "uranium",
           "label": "Uranium U3O8 (spot)",
           "unit": "lb",
-          "frequency": "month-end history, latest UxC weekly",
+          "frequency": "month-end spot average (UxC/TradeTech via Cameco)",
           "as_of": "2026-10-30",
           "latest_native": "$91.55 per lb",
           "latest_in_gold_oz": "0.0223 oz",
@@ -234,7 +234,7 @@
           "unit": "total",
           "frequency": "quarter-end stock (annual before 1966); weekly since 2026-09-25",
           "as_of": "2026-11-06",
-          "latest_native": "$40.56 trillion",
+          "latest_native": "$40.55 trillion",
           "latest_in_gold_oz": "10.09 billion oz",
           "gold_usd_used": 4018.4,
           "note": "Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned."
@@ -378,8 +378,8 @@
           "label": "US CPI (all items, 1982-84=100)",
           "unit": "index",
           "frequency": "monthly",
-          "as_of": "2026-09",
-          "latest_native": "336.9",
+          "as_of": "2026-10",
+          "latest_native": "337.5",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
         }

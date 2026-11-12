@@ -7,7 +7,7 @@ This file is a compact, dated summary of that model. It is generated from the fr
 - Full dataset (JSON): https://lobstom.github.io/gold-data/data.json
 - Machine-readable version of this summary: https://lobstom.github.io/gold-data/summary.json
 - Frozen Monday snapshot manifest: https://lobstom.github.io/gold-data/snapshots/latest.json
-- Dataset last built: 2026-11-09. Summary generated: 2026-11-09.
+- Dataset last built: 2026-11-12. Summary generated: 2026-11-12.
 
 ## Money
 
@@ -27,7 +27,7 @@ US Dollar Index (DXY) is rebuilt from FRED exchange rates with the ICE DXY formu
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
 | Copper (LME grade A) | $14,508 per tonne | 3.534 oz | 2026-10 | monthly avg |
-| Uranium U3O8 (spot) | $91.55 per lb | 0.0223 oz | 2026-10-30 | month-end history, latest UxC weekly |
+| Uranium U3O8 (spot) | $91.55 per lb | 0.0223 oz | 2026-10-30 | month-end spot average (UxC/TradeTech via Cameco) |
 | Crude oil (WTI) | $97.70 per bbl | 0.0238 oz | 2026-10 | monthly avg |
 | Crude oil (Brent) | $125.00 per bbl | 0.03045 oz | 2026-10 | monthly avg |
 | Natural gas (US) | $2.96 per MMBtu | 0.0007211 oz | 2026-10 | monthly avg |
@@ -60,7 +60,7 @@ US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Pri
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Who owns the federal debt (and the Fed's balance sheet) | $40.56 trillion | 10.09 billion oz | 2026-11-06 | quarter-end stock (annual before 1966); weekly since 2026-09-25 |
+| Who owns the federal debt (and the Fed's balance sheet) | $40.55 trillion | 10.09 billion oz | 2026-11-06 | quarter-end stock (annual before 1966); weekly since 2026-09-25 |
 | Federal debt held by the public | $31.71 trillion | 7.50 billion oz | 2026-06-30 | quarter-end stock |
 | Federal debt held by government accounts | $7.76 trillion | 1.83 billion oz | 2026-06-30 | quarter-end stock |
 | Fed total assets | $6.75 trillion | 1.68 billion oz | 2026-11-04 | month-end: last weekly stock; weekly since 2026-11-04 |
@@ -93,7 +93,7 @@ Treasuries held by the Fed: Dollar-equivalent in gold, not gold owned. Stock div
 | --- | --- | --- | --- | --- |
 | Gold / silver ratio (oz Ag per oz Au) | 72.0 | not priced in gold | 2026-10 | monthly avg |
 | Gold / oil ratio (WTI bbl per oz Au) | 42.0 | not priced in gold | 2026-10 | monthly avg |
-| US CPI (all items, 1982-84=100) | 336.9 | not priced in gold | 2026-09 | monthly |
+| US CPI (all items, 1982-84=100) | 337.5 | not priced in gold | 2026-10 | monthly |
 
 ## Sources and conventions
 

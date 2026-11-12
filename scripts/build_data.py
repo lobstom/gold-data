@@ -117,7 +117,11 @@ pts = []
 for m, (dt, v) in sorted(mon.items()):
     g = gold.get(f"{m[:4]}M{m[5:7]}", last_gold); pts.append((dt, v / g, v, g))
 if pts:
-    add("uranium", "Uranium U3O8 (spot)", "lb", "month-end history, latest UxC weekly", pts)
+    endpoint_uxc = latest is not None and latest[0] > max(cam)
+    add("uranium", "Uranium U3O8 (spot)", "lb", "month-end history; latest dated UxC input" if endpoint_uxc else "month-end spot average (UxC/TradeTech via Cameco)", pts)
+    items[-1]["source"] = "Dated manual UxC input" if endpoint_uxc else "Cameco month-end industry-average UxC/TradeTech spot price"
+    items[-1]["source_url"] = "https://www.uxc.com/p/price" if endpoint_uxc else "https://www.cameco.com/invest/markets/uranium-price"
+    items[-1]["source_note"] = "Current endpoint comes from the named source. Historical dated UxC input and Cameco month-end history retain their original conventions."
     if latest: items[-1]["asof"] = max(latest[0], pts[-1][0])
 # long-run history (annual early points, fixed files built once; see footer for sources), prepended before each series starts
 H = json.load(open(os.path.join(here, "history.json")))
