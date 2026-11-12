@@ -673,6 +673,54 @@
       "topic": "Longevity",
       "type": "rss",
       "arg": "https://blueprint.bryanjohnson.com/blogs/news.atom"
+    },
+{
+        "id": "robbwolf",
+        "name": "Robb Wolf",
+        "topic": "Paleo",
+        "type": "rss",
+        "arg": "https://robbwolf.com/feed",
+        "desc": "Paleo nutrition and health writing from Robb Wolf, author of The Paleo Solution."
+    },
+{
+        "id": "strongerbyscience",
+        "name": "Stronger By Science",
+        "topic": "Strength",
+        "type": "rss",
+        "arg": "https://strongerbyscience.com/feed",
+        "desc": "Evidence-based strength and nutrition articles from Greg Nuckols and team."
+    },
+{
+        "id": "thereadystate",
+        "name": "The Ready State",
+        "topic": "Mobility",
+        "type": "rss",
+        "arg": "https://thereadystate.com/feed/",
+        "desc": "Mobility and movement advice from Kelly Starrett's The Ready State."
+    },
+{
+        "id": "precisionnutrition",
+        "name": "Precision Nutrition",
+        "topic": "Nutrition",
+        "type": "rss",
+        "arg": "https://precisionnutrition.com/feed",
+        "desc": "Nutrition coaching articles from Precision Nutrition."
+    },
+{
+        "id": "nomnompaleo",
+        "name": "Nom Nom Paleo",
+        "topic": "Paleo",
+        "type": "rss",
+        "arg": "https://nomnompaleo.com/feed",
+        "desc": "Paleo recipes and cooking from Michelle Tam's Nom Nom Paleo."
+    },
+{
+        "id": "breakingmuscle",
+        "name": "Breaking Muscle",
+        "topic": "Training",
+        "type": "rss",
+        "arg": "https://breakingmuscle.com/feed",
+        "desc": "Training, strength and fitness articles from Breaking Muscle."
     }
   ]
 }
