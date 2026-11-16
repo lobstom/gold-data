@@ -129,6 +129,14 @@
       "arg": "https://bisoninterests.substack.com/feed"
     },
     {
+      "id": "fofoa",
+      "name": "FOFOA",
+      "topic": "Gold",
+      "type": "rss",
+      "arg": "https://fofoa.blogspot.com/feeds/posts/default",
+      "desc": "Long-form Freegold essays; low frequency"
+    },
+    {
       "id": "igwt",
       "name": "In Gold We Trust",
       "topic": "Gold",
