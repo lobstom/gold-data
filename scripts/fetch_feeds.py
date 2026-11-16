@@ -16,7 +16,10 @@ def get(u):
     import time
     for attempt in range(2):
         try:
-            return urllib.request.urlopen(urllib.request.Request(u, headers=(HDRS_MIN if "savory.global" in u else HDRS)), timeout=25).read().decode("utf-8","replace")
+            body = urllib.request.urlopen(urllib.request.Request(u, headers=(HDRS_MIN if "savory.global" in u else HDRS)), timeout=25).read().decode("utf-8","replace")
+            if u == "https://capitalwars.substack.com/feed" and not list(ET.fromstring(body).iter("item")):
+                return get_substack_proxied(u)
+            return body
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt == 0:
                 time.sleep(25); continue
@@ -53,15 +56,21 @@ def get_substack_proxied(u):
                 html.escape(p_.get("title","") or ""), html.escape(p_.get("canonical_url","") or ""),
                 pub, html.escape(p_.get("description","") or p_.get("subtitle","") or "")))
         return '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>%s</channel></rss>' % "".join(items)
+    def require_items(body):
+        # Capital Wars can return HTTP 200 with empty RSS on runner/proxy IPs.
+        # Try the next existing route; never mark that response as a healthy feed.
+        if u.startswith("https://capitalwars.substack.com/") and not list(ET.fromstring(body).iter("item")):
+            raise RuntimeError("Capital Wars feed returned 0 items")
+        return body
     try:
-        return fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(u, safe=""))
+        return require_items(fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(u, safe="")))
     except Exception:
         pass
     try:
-        return synth(fetch("https://r.jina.ai/" + archive, timeout=45))
+        return require_items(synth(fetch("https://r.jina.ai/" + archive, timeout=45)))
     except Exception:
         pass
-    return synth(fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(archive, safe="")))
+    return require_items(synth(fetch("https://api.allorigins.win/raw?url=" + urllib.parse.quote(archive, safe=""))))
 
 def feedly(u):
     """Feedly reader cache (streams API, no auth, low rate) for sites whose
@@ -159,6 +168,8 @@ def rss(u, s_social=False, prefer_desc=False):
             url = it.findtext("link")
         if t.startswith("Quote post") or not t: t = clean(body, 300) or t
         out.append({"title":t,"url":url,"date":iso(dt),"summary":"" if s_social else clean(body)})
+    if u.startswith("https://capitalwars.substack.com/") and not out:
+        raise RuntimeError("Capital Wars feed returned 0 items")
     return out
 def oembed_text(u):
     try:
