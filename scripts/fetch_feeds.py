@@ -12,6 +12,7 @@ FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
 def get_capitalwars(u):
     """Retry this source only; empty RSS is a failed fetch, never healthy."""
     import time
+    last = None
     for attempt in range(3):
         try:
             body = urllib.request.urlopen(urllib.request.Request(u, headers=HDRS), timeout=25).read().decode("utf-8", "replace")
@@ -21,11 +22,13 @@ def get_capitalwars(u):
                 raise RuntimeError("Capital Wars feed returned 0 items")
             return body
         except Exception as ex:
+            if isinstance(ex, urllib.error.HTTPError) and ex.code in (403, 429):
+                raise
+            last = ex
             print("Capital Wars direct attempt", attempt + 1, "failed:", ex, file=sys.stderr)
             if attempt < 2:
                 time.sleep((10, 30)[attempt])
-    print("Capital Wars direct attempts exhausted; trying existing proxy routes", file=sys.stderr)
-    return get_substack_proxied(u)
+    raise last
 
 def get(u):
     if u == "https://capitalwars.substack.com/feed":
