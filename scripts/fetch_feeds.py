@@ -9,7 +9,27 @@ PER_SOURCE = 15
 import os; SOURCES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sources.json")))["ntfb"]
 import os
 FIX={"TheDebriefing17":"/tmp/x.html","SecScottBessent":"/tmp/b.html"}
+def get_capitalwars(u):
+    """Retry this source only; empty RSS is a failed fetch, never healthy."""
+    import time
+    for attempt in range(3):
+        try:
+            body = urllib.request.urlopen(urllib.request.Request(u, headers=HDRS), timeout=25).read().decode("utf-8", "replace")
+            count = len(list(ET.fromstring(body).iter("item")))
+            print("Capital Wars direct attempt", attempt + 1, "items", count, file=sys.stderr)
+            if not count:
+                raise RuntimeError("Capital Wars feed returned 0 items")
+            return body
+        except Exception as ex:
+            print("Capital Wars direct attempt", attempt + 1, "failed:", ex, file=sys.stderr)
+            if attempt < 2:
+                time.sleep((10, 30)[attempt])
+    print("Capital Wars direct attempts exhausted; trying existing proxy routes", file=sys.stderr)
+    return get_substack_proxied(u)
+
 def get(u):
+    if u == "https://capitalwars.substack.com/feed":
+        return get_capitalwars(u)
     if os.environ.get("PROTO"):
         for k,v in FIX.items():
             if u.endswith(k): return open(v).read()
@@ -17,8 +37,6 @@ def get(u):
     for attempt in range(2):
         try:
             body = urllib.request.urlopen(urllib.request.Request(u, headers=(HDRS_MIN if "savory.global" in u else HDRS)), timeout=25).read().decode("utf-8","replace")
-            if u == "https://capitalwars.substack.com/feed" and not list(ET.fromstring(body).iter("item")):
-                return get_substack_proxied(u)
             return body
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt == 0:
@@ -432,6 +450,8 @@ for s in SOURCES:
         for g in got: g.update(source=s["id"])
         items += got
         res.append({**{k:s[k] for k in("id","name","topic")},"desc":s.get("desc", DESCS.get(s["id"],"")),"ok":True,"count":len(got),"latest":got[0]["date"] if got else None})
+        if s["id"] == "capitalwars":
+            res[-1]["cache_updated_at"] = iso(now)
     except Exception as ex:
         print("FAIL",s["id"],ex,file=sys.stderr)
         old=[i for i in prev["items"] if i["source"]==s["id"]]
@@ -442,6 +462,10 @@ for s in SOURCES:
         if s["id"] in PROMO: old = [i for i in old if not PROMO[s["id"]].search(i.get("title","")+" "+i.get("summary",""))]
         items+=old
         res.append({**{k:s[k] for k in("id","name","topic")},"desc":s.get("desc", DESCS.get(s["id"],"")),"ok":False,"count":len(old),"latest":old[0]["date"] if old else None,"error":str(ex)[:120]})
+        if s["id"] == "capitalwars" and old:
+            prior = next((r for r in prev["sources"] if r["id"] == s["id"]), {})
+            if prior.get("cache_updated_at"):
+                res[-1]["cache_updated_at"] = prior["cache_updated_at"]
 items.sort(key=lambda x:x["date"], reverse=True)
 json.dump({"generated":iso(now),"sources":res,"items":items}, open(sys.argv[1] if len(sys.argv)>1 else "feeds.json","w"), ensure_ascii=False, separators=(",",":"))
 print(len(items),"items;", sum(r["ok"] for r in res),"/",len(res),"sources ok")
