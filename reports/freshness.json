@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-16T06:03:48.344199-08:00",
+  "generated_at": "2026-11-16T07:33:30.071738-08:00",
   "data_updated_label": "2026-11-16",
   "frozen_snapshot_captured_at": "2026-11-16T06:02:58.954862-08:00",
   "checks_performed": "local observation metadata inspection only; no live upstream source checks",

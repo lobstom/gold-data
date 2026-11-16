@@ -1,6 +1,6 @@
 # Observation freshness report
 
-Generated 2026-11-16T06:03:48.344199-08:00.
+Generated 2026-11-16T07:33:30.071738-08:00.
 Model update label 2026-11-16. This is not the observation date of every row.
 This generator performs no live upstream retrieval. Dated manual publisher checks, where available, are listed separately below. Other release expectations remain unverified; age flags are review prompts, not missed-release claims.
 
