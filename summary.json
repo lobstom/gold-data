@@ -1,8 +1,8 @@
 {
   "name": "Prices in Gold Ounces - model summary",
   "site": "No Time For Bull (notimeforbull.com)",
-  "generated": "2026-11-12",
-  "data_updated": "2026-11-12",
+  "generated": "2026-11-16",
+  "data_updated": "2026-11-16",
   "not_real_time": true,
   "canonical": {
     "page": "https://www.notimeforbull.com/prices/",
@@ -18,11 +18,11 @@
           "id": "gold",
           "label": "Gold",
           "unit": "oz",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
-          "latest_native": "$4,018 per oz",
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
+          "latest_native": "$3,989 per oz",
           "latest_in_gold_oz": "1.000 oz",
-          "gold_usd_used": 4018.4
+          "gold_usd_used": 3988.6
         },
         {
           "id": "silver",
@@ -38,10 +38,10 @@
           "id": "usd",
           "label": "US dollar",
           "unit": "$1",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
           "latest_native": "$1.00",
-          "latest_in_gold_oz": "0.0002489 oz",
+          "latest_in_gold_oz": "0.0002507 oz",
           "gold_usd_used": 4105.0,
           "note": "US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series."
         },
@@ -85,31 +85,31 @@
           "id": "wti",
           "label": "Crude oil (WTI)",
           "unit": "bbl",
-          "frequency": "monthly avg",
-          "as_of": "2026-10",
-          "latest_native": "$97.70 per bbl",
-          "latest_in_gold_oz": "0.0238 oz",
-          "gold_usd_used": 4105.0
+          "frequency": "monthly avg; weekly since 2026-11-06",
+          "as_of": "2026-11-06",
+          "latest_native": "$95.97 per bbl",
+          "latest_in_gold_oz": "0.02388 oz",
+          "gold_usd_used": 4018.4
         },
         {
           "id": "brent",
           "label": "Crude oil (Brent)",
           "unit": "bbl",
-          "frequency": "monthly avg",
-          "as_of": "2026-10",
-          "latest_native": "$125.00 per bbl",
-          "latest_in_gold_oz": "0.03045 oz",
-          "gold_usd_used": 4105.0
+          "frequency": "monthly avg; weekly since 2026-11-06",
+          "as_of": "2026-11-06",
+          "latest_native": "$100.41 per bbl",
+          "latest_in_gold_oz": "0.02499 oz",
+          "gold_usd_used": 4018.4
         },
         {
           "id": "gas",
           "label": "Natural gas (US)",
           "unit": "MMBtu",
-          "frequency": "monthly avg",
-          "as_of": "2026-10",
-          "latest_native": "$2.96 per MMBtu",
-          "latest_in_gold_oz": "0.0007211 oz",
-          "gold_usd_used": 4105.0
+          "frequency": "monthly avg; weekly since 2026-11-06",
+          "as_of": "2026-11-06",
+          "latest_native": "$2.61 per MMBtu",
+          "latest_in_gold_oz": "0.0006495 oz",
+          "gold_usd_used": 4018.4
         },
         {
           "id": "ttf",
@@ -187,21 +187,21 @@
           "id": "sp500",
           "label": "S&P 500 (price index)",
           "unit": "index pt",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
-          "latest_native": "7,505.9 pts",
-          "latest_in_gold_oz": "1.868 oz",
-          "gold_usd_used": 4018.4
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
+          "latest_native": "7,568.9 pts",
+          "latest_in_gold_oz": "1.898 oz",
+          "gold_usd_used": 3988.6
         },
         {
           "id": "dow",
           "label": "Dow Jones Industrial Average",
           "unit": "index pt",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
-          "latest_native": "51,987.0 pts",
-          "latest_in_gold_oz": "12.9 oz",
-          "gold_usd_used": 4018.4
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
+          "latest_native": "52,351.0 pts",
+          "latest_in_gold_oz": "13.1 oz",
+          "gold_usd_used": 3988.6
         },
         {
           "id": "ahe",
@@ -233,10 +233,10 @@
           "label": "Who owns the federal debt (and the Fed's balance sheet)",
           "unit": "total",
           "frequency": "quarter-end stock (annual before 1966); weekly since 2026-09-25",
-          "as_of": "2026-11-06",
-          "latest_native": "$40.55 trillion",
-          "latest_in_gold_oz": "10.09 billion oz",
-          "gold_usd_used": 4018.4,
+          "as_of": "2026-11-13",
+          "latest_native": "$40.61 trillion",
+          "latest_in_gold_oz": "10.18 billion oz",
+          "gold_usd_used": 3988.6,
           "note": "Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned."
         },
         {
@@ -266,10 +266,10 @@
           "label": "Fed total assets",
           "unit": "total",
           "frequency": "month-end: last weekly stock; weekly since 2026-11-04",
-          "as_of": "2026-11-04",
-          "latest_native": "$6.75 trillion",
-          "latest_in_gold_oz": "1.68 billion oz",
-          "gold_usd_used": 4018.4,
+          "as_of": "2026-11-11",
+          "latest_native": "$6.76 trillion",
+          "latest_in_gold_oz": "1.69 billion oz",
+          "gold_usd_used": 3988.6,
           "note": "Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum."
         },
         {
@@ -277,10 +277,10 @@
           "label": "Treasuries held by the Fed",
           "unit": "total",
           "frequency": "month-end: last weekly stock; weekly since 2026-11-04",
-          "as_of": "2026-11-04",
-          "latest_native": "$4.58 trillion",
-          "latest_in_gold_oz": "1.14 billion oz",
-          "gold_usd_used": 4018.4,
+          "as_of": "2026-11-11",
+          "latest_native": "$4.59 trillion",
+          "latest_in_gold_oz": "1.15 billion oz",
+          "gold_usd_used": 3988.6,
           "note": "Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum."
         },
         {
@@ -303,8 +303,8 @@
           "label": "30Y mortgage (PMMS); all-term MIRS proxy before 1971",
           "unit": "%",
           "frequency": "weekly PMMS; annual all-term proxy 1963-1970",
-          "as_of": "2026-11-05",
-          "latest_native": "7.18%",
+          "as_of": "2026-11-12",
+          "latest_native": "7.11%",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
         },
@@ -312,8 +312,8 @@
           "id": "fedfunds",
           "label": "Fed funds (effective); discount rate before 1954",
           "unit": "%",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
           "latest_native": "3.88%",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
@@ -322,9 +322,9 @@
           "id": "ust10",
           "label": "US 10Y Treasury yield",
           "unit": "%",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
-          "latest_native": "4.892%",
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
+          "latest_native": "5.0275%",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
         },
@@ -332,9 +332,9 @@
           "id": "real10",
           "label": "US 10Y real yield (TIPS)",
           "unit": "%",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
-          "latest_native": "2.628%",
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
+          "latest_native": "2.8025%",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
         },
@@ -342,9 +342,9 @@
           "id": "curve",
           "label": "Yield curve: 10Y minus 2Y Treasury (pp)",
           "unit": "pp",
-          "frequency": "monthly avg; weekly since 2026-11-06",
-          "as_of": "2026-11-06",
-          "latest_native": "0.34 pp",
+          "frequency": "completed-week average (2026-11-09 to 2026-11-13); not Friday close",
+          "as_of": "2026-11-13",
+          "latest_native": "0.27 pp",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
         }
@@ -367,9 +367,9 @@
           "id": "goldoil",
           "label": "Gold / oil ratio (WTI bbl per oz Au)",
           "unit": "ratio",
-          "frequency": "monthly avg",
-          "as_of": "2026-10",
-          "latest_native": "42.0",
+          "frequency": "monthly avg; weekly since 2026-11-06",
+          "as_of": "2026-11-06",
+          "latest_native": "41.9",
           "latest_in_gold_oz": null,
           "gold_usd_used": null
         },

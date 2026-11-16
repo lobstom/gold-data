@@ -90,6 +90,15 @@ def row(it, override=None):
         "latest_in_gold_oz": None if not_gold_priced(o) else fmt_oz(o.get("ozau"), big),
         "gold_usd_used": o.get("goldusd") or None,
     }
+    # A completed-week label is not a Friday closing quote.
+    if o["id"] in {"gold", "sp500", "dow", "ust10", "real10", "curve", "fedfunds", "usd"}:
+        try:
+            end = datetime.date.fromisoformat(o.get("asof", ""))
+        except ValueError:
+            end = None
+        if end and "weekly" in o.get("freq", ""):
+            start = end - datetime.timedelta(days=4)
+            out["frequency"] = f"completed-week average ({start.isoformat()} to {end.isoformat()}); not Friday close"
     if o.get("note"):
         out["note"] = o["note"]
     return out
