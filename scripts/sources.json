@@ -22,6 +22,14 @@
       "arg": "bioclandestine"
     },
     {
+      "id": "capitalwars",
+      "name": "Capital Wars",
+      "topic": "Markets",
+      "type": "rss",
+      "arg": "https://capitalwars.substack.com/feed",
+      "desc": "Michael Howell's Substack on global liquidity."
+    },
+    {
       "id": "yurta",
       "name": "Yurta Capital",
       "topic": "Markets",
