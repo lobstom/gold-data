@@ -1,7 +1,7 @@
 {
   "name": "Prices in Gold Ounces - model summary",
   "site": "No Time For Bull (notimeforbull.com)",
-  "generated": "2026-11-16",
+  "generated": "2026-11-17",
   "data_updated": "2026-11-16",
   "not_real_time": true,
   "canonical": {
@@ -204,6 +204,28 @@
           "gold_usd_used": 3988.6
         },
         {
+          "id": "zn",
+          "label": "10Y Treasury futures (ZN reference quote)",
+          "unit": "$100k face (reference)",
+          "frequency": "completed-week average of final settlements; history from 2026-11-13",
+          "as_of": "2026-11-13",
+          "latest_native": "105.996875 per $100 face; $105,996.88 reference per $100k face",
+          "latest_in_gold_oz": "26.6 oz",
+          "gold_usd_used": 3988.6,
+          "note": "CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return."
+        },
+        {
+          "id": "zb",
+          "label": "Treasury bond futures (ZB reference quote)",
+          "unit": "$100k face (reference)",
+          "frequency": "completed-week average of final settlements; history from 2026-11-13",
+          "as_of": "2026-11-13",
+          "latest_native": "106.806250 per $100 face; $106,806.25 reference per $100k face",
+          "latest_in_gold_oz": "26.8 oz",
+          "gold_usd_used": 3988.6,
+          "note": "CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return."
+        },
+        {
           "id": "ahe",
           "label": "Avg hourly earnings (production workers)",
           "unit": "hour",
@@ -388,6 +410,7 @@
   ],
   "caveats": [
     "Fed Treasuries are part of Fed assets and public debt; public debt includes Fed and foreign holders. Government-account debt plus public debt equals total debt at matching dates. Do not add overlapping rows.",
+    "CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return.",
     "Latest uranium may use an earlier month's average metal price. This is not a same-day spot ratio.",
     "Points after each row's monthly/quarterly history are genuine completed-week observations (Friday-labeled; at least 3 business days for averages). Priced in gold using the same week's World Gold Council weekly average. Stocks (debt, Fed balance sheet) are end-of-week or source-published weekly observations, not averages. Nothing is forward-filled from monthly data; rows without a weekly source keep their existing cadence.",
     "No free weekly silver source exists, so weekly points carry no oz Ag value: silver denomination of weekly points ends at the last monthly point, and row-level oz Ag keeps the last monthly conversion. Gold and USD denominations are genuine weekly."
