@@ -39,6 +39,8 @@ def build(doc,snapshot,now):
         exact_weekly=(w.get('observation_date')==last and w.get('status') in ('available','overdue') and w.get('value') is not None and (round(w['value'],4) if r.get('kind') else float(f"{w['value']:.5g}"))==r.get('usd'))
         if exact_weekly:
             source=w.get('source');url=w.get('source_url');checked=w.get('checked_at') if rid!='uranium' else None;basis='matching frozen weekly source record' if rid!='uranium' else 'matching stored input file; checked_at is file inspection, not authenticated upstream retrieval'
+        elif r.get('treasury'):
+            source=r.get('source');url=r.get('source_url');checked=r.get('source_checked_at');basis='dated browser input matched to selected final contracts; capture timestamp, not a fresh retrieval'
         elif same and ('weekly' not in low):
             source=m.get('source');url=m.get('source_url');checked=None;basis='frozen attribution only; legacy check timestamp does not prove source retrieval'
         else:source=url=checked=None;basis='no matching source-check evidence for this effective row'
@@ -49,6 +51,11 @@ def build(doc,snapshot,now):
             gold_week=(date_value(last)+dt.timedelta(days=4-date_value(last).weekday())).isoformat()
             if exact_weekly and g.get('observation_date')==gold_week and g.get('value') is not None and r.get('goldusd')==float(f"{g['value']:.5g}"):
                 gold.update(timing='same-week gold denominator evidenced; stock observations remain point-in-time, not weekly averages',same_period_verified=True)
+            if r.get('treasury'):
+                gold_row=effective_rows(doc).get('gold',{})
+                matching=[p for p in gold_row.get('points',[]) if p[0]==last]
+                if matching and matching[0][2]==r.get('goldusd'):
+                    gold.update(timing='same completed-week model gold denominator; futures reference quote equivalent, not an investment return',same_period_verified=True)
             if rid=='uranium':gold['timing']='latest uranium may use monthly gold; do not label a synchronized weekly ratio'
         out.append({'id':rid,'label':r.get('label',rid),'observation_period':period,'asof_label':r['asof'],'latest_point_date':last,'date_semantics':semantics,'frequency':f,'age_from_label_days':days,'age_review_threshold_days':threshold,'age_review_status':review,'source':source,'source_url':url,'last_evidenced_source_check_at':checked,'source_evidence':basis,'source_rechecked_now':False,'next_release_at':None,'release_expectation':'not verified by this report; age threshold is not a publisher release calendar','gold_conversion':gold})
     return {'schema_version':1,'generated_at':generated,'data_updated_label':doc.get('updated'),'frozen_snapshot_captured_at':snapshot.get('captured_at'),'checks_performed':'local observation metadata inspection only; no live upstream source checks','summary':{'rows':len(out),'old_vintage_review':sum(r['age_review_status']=='review_old_vintage' for r in out),'future_date_errors':sum(r['age_review_status']=='future_date_error' for r in out)},'rows':out}
