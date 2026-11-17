@@ -99,6 +99,9 @@ def metadata(doc, prev, now, log):
         if not r.get('kind'):
             out[rid]['gold_conversion'] = dict(usd_per_oz=r['goldusd'], convention='quarter average' if rid=='housing' else 'source-month average; uranium latest may use last available month',
                 caveat='Historical/proxy segments retain original series conventions; not a synchronized weekly spot ratio.')
+    for r in doc.get('more_v3', []):
+        if not r.get('treasury'): continue
+        out[r['id']] = dict(observation_period=r['asof'], observation_date=r['asof'], frequency=r['freq'], source=r['source'], source_url=r['source_url'], checked_at=r['source_checked_at'], fetched_at=r['source_checked_at'], metadata_generated_at=now.isoformat(), source_status='dated_browser_input', change_status=status(r, next((q for q in (prev or {}).get('data', {}).get('more_v3', []) if q['id']==r['id']), None)), series_sha256=digest(r), note=r['note'], gold_conversion=dict(usd_per_oz=r['goldusd'], convention='same completed-week average', caveat='Futures reference quote equivalent, not an investment return'))
     return out
 
 def weekly_prices(now):
@@ -271,6 +274,8 @@ def main():
         copper.apply(doc, log=lambda m: print(m, flush=True), now=now)
         import lumber
         lumber.apply(doc, log=lambda m: print(m, flush=True), now=now)
+        import treasury
+        treasury.apply(doc, log=lambda m: print(m, flush=True), now=now)
         doc=validate(doc)
     snap=create(doc,prev,now,'monday' if args.publish else 'test',os.environ.get('GITHUB_SHA','local'),run.stdout)
     print('weekly_prices starting', dt.datetime.now(TZ).isoformat(), flush=True)
