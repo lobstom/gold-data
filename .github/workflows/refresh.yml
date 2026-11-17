@@ -24,6 +24,8 @@ jobs:
         run: python -u scripts/weekly_snapshot.py --self-test
       - name: Test row-specific freshness logic
         run: python -m unittest discover -s scripts -p test_freshness_report.py
+      - name: Test dated Treasury futures inputs and roll rules
+        run: python -m unittest discover -s scripts -p test_treasury.py
       - name: Fetch, validate and freeze snapshot
         env:
           PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish }}
