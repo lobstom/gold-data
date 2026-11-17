@@ -30,7 +30,27 @@ def get_capitalwars(u):
                 time.sleep((10, 30)[attempt])
     raise last
 
+def get_superspiked(u):
+    """Official Murti RSS only. Empty HTTP 200 is failure, not fresh success."""
+    import time
+    last = None
+    for attempt in range(3):
+        try:
+            body = urllib.request.urlopen(urllib.request.Request(u, headers=HDRS), timeout=25).read().decode("utf-8", "replace")
+            if not list(ET.fromstring(body).iter("item")):
+                raise RuntimeError("Super-Spiked feed returned 0 items")
+            return body
+        except Exception as ex:
+            if isinstance(ex, urllib.error.HTTPError) and ex.code in (403, 429):
+                raise
+            last = ex
+            if attempt < 2:
+                time.sleep((10, 30)[attempt])
+    raise last
+
 def get(u):
+    if u == "https://arjunmurti.substack.com/feed":
+        return get_superspiked(u)
     if u == "https://capitalwars.substack.com/feed":
         return get_capitalwars(u)
     if os.environ.get("PROTO"):
@@ -189,6 +209,8 @@ def rss(u, s_social=False, prefer_desc=False):
             url = it.findtext("link")
         if t.startswith("Quote post") or not t: t = clean(body, 300) or t
         out.append({"title":t,"url":url,"date":iso(dt),"summary":"" if s_social else clean(body)})
+    if u == "https://arjunmurti.substack.com/feed" and not out:
+        raise RuntimeError("Super-Spiked feed parsed 0 items")
     if u.startswith("https://capitalwars.substack.com/") and not out:
         raise RuntimeError("Capital Wars feed returned 0 items")
     return out
