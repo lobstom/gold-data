@@ -4,10 +4,10 @@ No Time For Bull prices commodities, energy, housing, markets, money and debt in
 This file is a compact, dated summary of that model. It is generated from the frozen dataset; it is not real-time data.
 
 - Interactive model: https://www.notimeforbull.com/prices/
-- Full dataset (JSON): https://lobstom.github.io/gold-data/data.json
-- Machine-readable version of this summary: https://lobstom.github.io/gold-data/summary.json
-- Frozen Monday snapshot manifest: https://lobstom.github.io/gold-data/snapshots/latest.json
-- Dataset last built: 2026-11-16. Summary generated: 2026-11-16.
+- Full dataset (JSON): https://data.notimeforbull.com/data.json
+- Machine-readable version of this summary: https://data.notimeforbull.com/summary.json
+- Frozen Monday snapshot manifest: https://data.notimeforbull.com/snapshots/latest.json
+- Dataset last built: 2026-11-16. Summary generated: 2026-11-17.
 
 ## Money
 
@@ -53,8 +53,14 @@ US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Pri
 | --- | --- | --- | --- | --- |
 | S&P 500 (price index) | 7,568.9 pts | 1.898 oz | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
 | Dow Jones Industrial Average | 52,351.0 pts | 13.1 oz | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
+| 10Y Treasury futures (ZN reference quote) | 105.996875 per $100 face; $105,996.88 reference per $100k face | 26.6 oz | 2026-11-13 | completed-week average of final settlements; history from 2026-11-13 |
+| Treasury bond futures (ZB reference quote) | 106.806250 per $100 face; $106,806.25 reference per $100k face | 26.8 oz | 2026-11-13 | completed-week average of final settlements; history from 2026-11-13 |
 | Avg hourly earnings (production workers) | $32.75 per hour | 0.007978 oz | 2026-10 | monthly |
 | US M2 money supply | $23.41 trillion | 5.42 billion oz | 2026-09 | monthly, seasonally adjusted |
+
+10Y Treasury futures (ZN reference quote): CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return.
+
+Treasury bond futures (ZB reference quote): CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return.
 
 ## Debt and the Fed's balance sheet
 
@@ -105,6 +111,7 @@ Treasuries held by the Fed: Dollar-equivalent in gold, not gold owned. Stock div
 - Debt: federal debt and ownership split from Treasury/Fed sources; Fed balance sheet from H.4.1.
 - US Dollar Index rebuilt from Fed G.5 exchange rates with ICE weights, spliced with the Fed major-currencies index before 1980; levels before 1998 are approximate.
 - Fed Treasuries are part of Fed assets and public debt; public debt includes Fed and foreign holders. Government-account debt plus public debt equals total debt at matching dates. Do not add overlapping rows.
+- CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return.
 - Latest uranium may use an earlier month's average metal price. This is not a same-day spot ratio.
 - Points after each row's monthly/quarterly history are genuine completed-week observations (Friday-labeled; at least 3 business days for averages). Priced in gold using the same week's World Gold Council weekly average. Stocks (debt, Fed balance sheet) are end-of-week or source-published weekly observations, not averages. Nothing is forward-filled from monthly data; rows without a weekly source keep their existing cadence.
 - No free weekly silver source exists, so weekly points carry no oz Ag value: silver denomination of weekly points ends at the last monthly point, and row-level oz Ag keeps the last monthly conversion. Gold and USD denominations are genuine weekly.
