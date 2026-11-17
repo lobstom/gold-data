@@ -12,9 +12,9 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(HERE, "data.json")
 
 PAGE = "https://www.notimeforbull.com/prices/"
-DATA = "https://lobstom.github.io/gold-data/data.json"
-SUMMARY_JSON = "https://lobstom.github.io/gold-data/summary.json"
-SNAPSHOTS = "https://lobstom.github.io/gold-data/snapshots/latest.json"
+DATA = "https://data.notimeforbull.com/data.json"
+SUMMARY_JSON = "https://data.notimeforbull.com/summary.json"
+SNAPSHOTS = "https://data.notimeforbull.com/snapshots/latest.json"
 
 
 def fmt_usd(v, big):
