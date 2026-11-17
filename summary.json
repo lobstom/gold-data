@@ -6,9 +6,9 @@
   "not_real_time": true,
   "canonical": {
     "page": "https://www.notimeforbull.com/prices/",
-    "data_json": "https://lobstom.github.io/gold-data/data.json",
-    "summary_json": "https://lobstom.github.io/gold-data/summary.json",
-    "monday_snapshot_manifest": "https://lobstom.github.io/gold-data/snapshots/latest.json"
+    "data_json": "https://data.notimeforbull.com/data.json",
+    "summary_json": "https://data.notimeforbull.com/summary.json",
+    "monday_snapshot_manifest": "https://data.notimeforbull.com/snapshots/latest.json"
   },
   "groups": [
     {
