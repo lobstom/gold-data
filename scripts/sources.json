@@ -611,22 +611,8 @@
     }
   ],
   "vf": [
-    {
-      "id": "fittowork",
-      "name": "Fit to Work",
-      "topic": "Training",
-      "type": "rss",
-      "arg": "https://lokifit.com/rss/",
-      "desc": "Fitness, strength and nutrition advice from the Fit to Work newsletter."
-    },
-    {
-      "id": "strongwithdana",
-      "name": "Strong with Dana",
-      "topic": "Training",
-      "type": "rss",
-      "arg": "https://strong-with-dana.ghost.io/rss/",
-      "desc": "Strength training and fitness writing from Dana, a personal trainer."
-    },
+    {"id": "fittowork", "name": "Fit to Work", "topic": "Training", "type": "rss", "arg": "https://lokifit.com/rss/", "desc": "Fitness, strength and nutrition advice from the Fit to Work newsletter."},
+    {"id": "strongwithdana", "name": "Strong with Dana", "topic": "Training", "type": "rss", "arg": "https://strong-with-dana.ghost.io/rss/", "desc": "Strength training and fitness writing from Dana, a personal trainer."},
     {
       "id": "kresser",
       "name": "Chris Kresser",
@@ -711,53 +697,53 @@
       "type": "rss",
       "arg": "https://blueprint.bryanjohnson.com/blogs/news.atom"
     },
-    {
-      "id": "robbwolf",
-      "name": "Robb Wolf",
-      "topic": "Paleo",
-      "type": "rss",
-      "arg": "https://robbwolf.com/feed",
-      "desc": "Paleo nutrition and health writing from Robb Wolf, author of The Paleo Solution."
+{
+        "id": "robbwolf",
+        "name": "Robb Wolf",
+        "topic": "Paleo",
+        "type": "rss",
+        "arg": "https://robbwolf.com/feed",
+        "desc": "Paleo nutrition and health writing from Robb Wolf, author of The Paleo Solution."
     },
-    {
-      "id": "strongerbyscience",
-      "name": "Stronger By Science",
-      "topic": "Strength",
-      "type": "rss",
-      "arg": "https://strongerbyscience.com/feed",
-      "desc": "Evidence-based strength and nutrition articles from Greg Nuckols and team."
+{
+        "id": "strongerbyscience",
+        "name": "Stronger By Science",
+        "topic": "Strength",
+        "type": "rss",
+        "arg": "https://strongerbyscience.com/feed",
+        "desc": "Evidence-based strength and nutrition articles from Greg Nuckols and team."
     },
-    {
-      "id": "thereadystate",
-      "name": "The Ready State",
-      "topic": "Mobility",
-      "type": "rss",
-      "arg": "https://thereadystate.com/feed/",
-      "desc": "Mobility and movement advice from Kelly Starrett's The Ready State."
+{
+        "id": "thereadystate",
+        "name": "The Ready State",
+        "topic": "Mobility",
+        "type": "rss",
+        "arg": "https://thereadystate.com/feed/",
+        "desc": "Mobility and movement advice from Kelly Starrett's The Ready State."
     },
-    {
-      "id": "precisionnutrition",
-      "name": "Precision Nutrition",
-      "topic": "Nutrition",
-      "type": "rss",
-      "arg": "https://precisionnutrition.com/feed",
-      "desc": "Nutrition coaching articles from Precision Nutrition."
+{
+        "id": "precisionnutrition",
+        "name": "Precision Nutrition",
+        "topic": "Nutrition",
+        "type": "rss",
+        "arg": "https://precisionnutrition.com/feed",
+        "desc": "Nutrition coaching articles from Precision Nutrition."
     },
-    {
-      "id": "nomnompaleo",
-      "name": "Nom Nom Paleo",
-      "topic": "Paleo",
-      "type": "rss",
-      "arg": "https://nomnompaleo.com/feed",
-      "desc": "Paleo recipes and cooking from Michelle Tam's Nom Nom Paleo."
+{
+        "id": "nomnompaleo",
+        "name": "Nom Nom Paleo",
+        "topic": "Paleo",
+        "type": "rss",
+        "arg": "https://nomnompaleo.com/feed",
+        "desc": "Paleo recipes and cooking from Michelle Tam's Nom Nom Paleo."
     },
-    {
-      "id": "breakingmuscle",
-      "name": "Breaking Muscle",
-      "topic": "Training",
-      "type": "rss",
-      "arg": "https://breakingmuscle.com/feed",
-      "desc": "Training, strength and fitness articles from Breaking Muscle."
+{
+        "id": "breakingmuscle",
+        "name": "Breaking Muscle",
+        "topic": "Training",
+        "type": "rss",
+        "arg": "https://breakingmuscle.com/feed",
+        "desc": "Training, strength and fitness articles from Breaking Muscle."
     }
   ]
 }
