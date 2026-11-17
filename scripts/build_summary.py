@@ -34,6 +34,8 @@ def fmt_native(it, big):
     v = it.get("usd")
     if v is None:
         return None
+    if it.get("treasury"):
+        return f"{it['quote_per_100_face']:.6f} per $100 face; ${v:,.2f} reference per $100k face"
     unit = it.get("unit", "")
     sfx = it.get("sfx")
     kind = it.get("kind")
@@ -119,7 +121,7 @@ def main():
         ("Money", take(["gold", "silver", "usd", "dxy"])),
         ("Commodities and energy", take(["copper", "uranium", "wti", "brent", "gas", "ttf", "coal", "lumber", "elec"])),
         ("Housing", take(["housing", "cshomegold"])),
-        ("Markets", take(["sp500", "dow", "ahe", "m2"])),
+        ("Markets", take(["sp500", "dow", "zn", "zb", "ahe", "m2"])),
         ("Debt and the Fed's balance sheet", take(["debt", "publicdebt", "govdebt", "fedassets", "fedtreas", "credit"])),
         ("Interest rates (percent, not priced in gold)", take(["mortgage", "fedfunds", "ust10", "real10", "curve"])),
         ("Ratios and price indexes", take(["gsr", "goldoil", "cpi"])),
