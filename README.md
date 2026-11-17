@@ -46,3 +46,32 @@ Run local checks with `python scripts/weekly_snapshot.py --self-test`. A normal 
 
 ## Copper
 World Bank Pink Sheet Copper monthly averages, USD per metric tonne. LME grade A minimum 99.9935% purity cathodes/wire bar settlement benchmark, not live/retail/scrap quotes. Workbook history begins January 1960; only months matching actual monthly model gold and silver are included, without forward-filling or early synthetic ratios. Current incomplete month excluded. The base and weekly runners refresh this monthly row; existing immutable Monday snapshots are not rewritten. Source: https://www.worldbank.org/en/research/commodity-markets .
+
+## Treasury futures dated inputs (added November 17, 2026)
+
+ZN and ZB are supplemental reference-quote rows, not investable total-return indexes.
+`inputs/treasury/YYYY-MM-DD.json` archives raw final daily CME settlements for a completed week.
+The source acquisition is browser-assisted. A missing file or incomplete week is not permission to
+invent or forward-fill data. Capture both products after Friday final settlements are available,
+then commit the dated input before the Monday build. Keep all prior input files.
+
+Each input carries `schema_version: 1`, a timezone-qualified `captured_at`, source endpoints, and
+`records` containing `{product: 316 or 307, data: <unaltered final settlement response>}`.
+The module requires at least three distinct weekdays, a traded selected contract, final report status,
+and an exact same-week gold point. It never calls a quote website from the scheduled runner.
+An occasional direct-source connectivity probe can be made during acquisition, without retries or
+substituting a paid source. Failure leaves the browser-assisted route in use.
+
+`scripts/treasury.py` runs after the existing overlays. The fixed roll is the first Monday on or after
+the 20th of the month preceding quarterly delivery. The selected contract is fixed for the full week.
+Historical levels are never back-adjusted. Weekly records and CSV exports carry contract and roll fields.
+The native quote is decimal per $100 face. `usd` and point column 2 are the reference equivalent per
+$100,000 face (`quote * 1000`); gold column 1 divides that number by the matching week's gold average.
+Silver is null, not a monthly estimate. The site disables silver and real-dollar conversions for these rows.
+Older requests returned no data when checked November 17, so captured history begins November 9
+and the first completed-week observation is November 13. No prior-year change or percentile is inferred.
+
+Run `python -m unittest discover -s scripts -p test_treasury.py` before changing inputs or rules.
+The interactive site reads the supplemental rows automatically after a Monday build. The dated static
+Treasury subsection on /prices is an editorial snapshot and must retain its printed observation dates
+until separately refreshed. Published Monday snapshots are never rewritten for this addition.
