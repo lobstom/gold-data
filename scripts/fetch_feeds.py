@@ -353,6 +353,16 @@ FN["gunbay"] = lambda u: __import__("gunbay_feed").gunbay(u, get, clean, iso, D,
 try: prev=json.load(open(sys.argv[1] if len(sys.argv)>1 else "feeds.json"))
 except Exception: prev={"items":[]}
 res=[]; items=[]; now=D.datetime.now(D.timezone.utc)
+def gunbay_date_valid(item, cutoff):
+    """Skip invalid or future Gunbay dates without failing other sources."""
+    try:
+        stamp = item.get("date")
+        if not isinstance(stamp, str): return False
+        dt = D.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        return dt.tzinfo is not None and dt <= cutoff
+    except (ValueError, TypeError, OverflowError):
+        return False
+
 def noisy(t):
     t = (t or "").strip()
     if len(t) < 20: return True
@@ -409,6 +419,8 @@ for s in SOURCES:
             got = treasury()
         else:
             got = FN[s["type"]](s["arg"])
+        if s["type"] == "gunbay":
+            got = [g for g in got if gunbay_date_valid(g, now)]
         if s.get("allow_urls"): got = [g for g in got if g["url"] in s["allow_urls"]]
         if s["id"] in FILTER: got = [g for g in got if not noisy(g["title"])]
             
@@ -480,6 +492,8 @@ for s in SOURCES:
     except Exception as ex:
         print("FAIL",s["id"],ex,file=sys.stderr)
         old=[i for i in prev["items"] if i["source"]==s["id"]]
+        if s["type"] == "gunbay":
+            old = [g for g in old if gunbay_date_valid(g, now)]
         for g in old:
             g["title"] = strip_noise(g.get("title",""))
             g["summary"] = strip_noise(g.get("summary",""))
