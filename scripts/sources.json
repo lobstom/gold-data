@@ -608,6 +608,14 @@
       "topic": "Markets",
       "type": "rss",
       "arg": "https://thierryvonarvy.substack.com/feed"
+    },
+    {
+      "id": "triples",
+      "name": "Triple S Special Situations Investing",
+      "topic": "Markets",
+      "type": "rss",
+      "arg": "https://triplesinvesting.substack.com/feed",
+      "desc": "Research on special situations, distressed securities, bankruptcies, litigation and unusual investments."
     }
   ],
   "vf": [
