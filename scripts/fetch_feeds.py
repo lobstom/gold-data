@@ -48,7 +48,30 @@ def get_superspiked(u):
                 time.sleep((10, 30)[attempt])
     raise last
 
+def get_triples(u):
+    """Official Triple S RSS only; an empty response is not a healthy feed."""
+    import time
+    last = None
+    for attempt in range(3):
+        try:
+            body = urllib.request.urlopen(urllib.request.Request(u, headers=HDRS), timeout=25).read().decode("utf-8", "replace")
+            count = len(list(ET.fromstring(body).iter("item")))
+            print("Triple S direct attempt", attempt + 1, "items", count, file=sys.stderr)
+            if not count:
+                raise RuntimeError("Triple S feed returned 0 items")
+            return body
+        except Exception as ex:
+            if isinstance(ex, urllib.error.HTTPError) and ex.code in (403, 429):
+                raise
+            last = ex
+            print("Triple S direct attempt", attempt + 1, "failed:", ex, file=sys.stderr)
+            if attempt < 2:
+                time.sleep((10, 30)[attempt])
+    raise last
+
 def get(u):
+    if u == "https://triplesinvesting.substack.com/feed":
+        return get_triples(u)
     if u == "https://arjunmurti.substack.com/feed":
         return get_superspiked(u)
     if u == "https://capitalwars.substack.com/feed":
@@ -209,6 +232,8 @@ def rss(u, s_social=False, prefer_desc=False):
             url = it.findtext("link")
         if t.startswith("Quote post") or not t: t = clean(body, 300) or t
         out.append({"title":t,"url":url,"date":iso(dt),"summary":"" if s_social else clean(body)})
+    if u == "https://triplesinvesting.substack.com/feed" and not out:
+        raise RuntimeError("Triple S feed parsed 0 items")
     if u == "https://arjunmurti.substack.com/feed" and not out:
         raise RuntimeError("Super-Spiked feed parsed 0 items")
     if u.startswith("https://capitalwars.substack.com/") and not out:
