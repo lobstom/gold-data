@@ -433,6 +433,14 @@
       "arg": "https://www.taipeitimes.com/xml/index.rss"
     },
     {
+      "id": "promethean",
+      "name": "Promethean Action",
+      "topic": "Strategy & Policy",
+      "type": "rss",
+      "arg": "https://www.prometheanaction.com/latest/rss/",
+      "desc": "American System economics and strategy: industry, infrastructure and geopolitics from a pro-Trump, anti-establishment lens."
+    },
+    {
       "id": "afc",
       "name": "Asia Frontier Capital",
       "topic": "Markets",
