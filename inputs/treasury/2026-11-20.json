@@ -1,0 +1,572 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-11-21T14:44:33.514+00:00",
+  "source_method": "CME free public browser JSON, final settlements",
+  "source_endpoints": {
+    "316": "https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/316/FUT",
+    "307": "https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/307/FUT"
+  },
+  "unavailable_dates": [],
+  "records": [
+    {
+      "product": 316,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'065",
+            "high": "105'170",
+            "low": "105'045",
+            "last": "105'120",
+            "change": "+'080",
+            "settle": "105'140",
+            "volume": "1,758,571",
+            "openInterest": "6,024,816"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'010",
+            "high": "105'110",
+            "low": "104'315",
+            "last": "105'065",
+            "change": "+'080",
+            "settle": "105'085",
+            "volume": "87,758",
+            "openInterest": "109,105"
+          },
+          {
+            "month": "JUN 27",
+            "open": "105'000",
+            "high": "105'050B",
+            "low": "105'000",
+            "last": "105'000A",
+            "change": "+'085",
+            "settle": "105'030",
+            "volume": "10",
+            "openInterest": "47"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "1,846,339",
+            "openInterest": "6,133,968"
+          }
+        ],
+        "updateTime": "Monday, 16 Nov 2026 11:55 PM",
+        "dsHeader": "10-Year T-Note Future",
+        "reportType": "Final",
+        "tradeDate": "11/16/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 316,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'125",
+            "high": "105'220",
+            "low": "105'075",
+            "last": "105'170",
+            "change": "+'055",
+            "settle": "105'195",
+            "volume": "2,283,343",
+            "openInterest": "5,972,664"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'080",
+            "high": "105'170",
+            "low": "105'020",
+            "last": "105'115",
+            "change": "+'055",
+            "settle": "105'140",
+            "volume": "131,526",
+            "openInterest": "145,187"
+          },
+          {
+            "month": "JUN 27",
+            "open": "105'080",
+            "high": "105'110B",
+            "low": "104'315A",
+            "last": "105'080A",
+            "change": "+'055",
+            "settle": "105'085",
+            "volume": "1",
+            "openInterest": "57"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "2,414,870",
+            "openInterest": "6,117,908"
+          }
+        ],
+        "updateTime": "Tuesday, 17 Nov 2026 11:55 PM",
+        "dsHeader": "10-Year T-Note Future",
+        "reportType": "Final",
+        "tradeDate": "11/17/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 316,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'155",
+            "high": "105'290",
+            "low": "105'120",
+            "last": "105'240",
+            "change": "+'055",
+            "settle": "105'250",
+            "volume": "2,017,871",
+            "openInterest": "6,040,505"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'100",
+            "high": "105'235",
+            "low": "105'065",
+            "last": "105'185",
+            "change": "+'060",
+            "settle": "105'200",
+            "volume": "299,941",
+            "openInterest": "206,867"
+          },
+          {
+            "month": "JUN 27",
+            "open": "105'140",
+            "high": "105'175B",
+            "low": "105'040A",
+            "last": "105'140B",
+            "change": "+'060",
+            "settle": "105'145",
+            "volume": "1",
+            "openInterest": "58"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "2,317,813",
+            "openInterest": "6,247,430"
+          }
+        ],
+        "updateTime": "Wednesday, 18 Nov 2026 11:55 PM",
+        "dsHeader": "10-Year T-Note Future",
+        "reportType": "Final",
+        "tradeDate": "11/18/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 316,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'240",
+            "high": "105'310",
+            "low": "105'160",
+            "last": "105'295",
+            "change": "+'030",
+            "settle": "105'280",
+            "volume": "3,104,890",
+            "openInterest": "5,954,926"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'185",
+            "high": "105'265",
+            "low": "105'110",
+            "last": "105'240B",
+            "change": "+'035",
+            "settle": "105'235",
+            "volume": "857,610",
+            "openInterest": "382,874"
+          },
+          {
+            "month": "JUN 27",
+            "open": "105'180",
+            "high": "105'200B",
+            "low": "105'075A",
+            "last": "105'180A",
+            "change": "+'035",
+            "settle": "105'180",
+            "volume": "5",
+            "openInterest": "58"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "3,962,505",
+            "openInterest": "6,337,858"
+          }
+        ],
+        "updateTime": "Thursday, 19 Nov 2026 11:55 PM",
+        "dsHeader": "10-Year T-Note Future",
+        "reportType": "Final",
+        "tradeDate": "11/19/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 316,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'295",
+            "high": "106'285",
+            "low": "105'290",
+            "last": "106'195",
+            "change": "+'310",
+            "settle": "106'270",
+            "volume": "5,027,880",
+            "openInterest": "5,584,172"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'255",
+            "high": "106'240",
+            "low": "105'255",
+            "last": "106'155",
+            "change": "+'315",
+            "settle": "106'230",
+            "volume": "2,284,568",
+            "openInterest": "890,302"
+          },
+          {
+            "month": "JUN 27",
+            "open": "106'100",
+            "high": "106'170B",
+            "low": "106'100",
+            "last": "106'165A",
+            "change": "+'315",
+            "settle": "106'175",
+            "volume": "2",
+            "openInterest": "63"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "7,312,450",
+            "openInterest": "6,474,537"
+          }
+        ],
+        "updateTime": "Friday, 20 Nov 2026 11:55 PM",
+        "dsHeader": "10-Year T-Note Future",
+        "reportType": "Final",
+        "tradeDate": "11/20/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 307,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'09",
+            "high": "105'24",
+            "low": "105'07",
+            "last": "105'11",
+            "change": "+'08",
+            "settle": "105'17",
+            "volume": "427,701",
+            "openInterest": "1,952,188"
+          },
+          {
+            "month": "MAR 27",
+            "open": "104'22",
+            "high": "105'06",
+            "low": "104'20",
+            "last": "104'25",
+            "change": "+'08",
+            "settle": "104'31",
+            "volume": "29,697",
+            "openInterest": "31,626"
+          },
+          {
+            "month": "JUN 27",
+            "open": "104'16",
+            "high": "104'24",
+            "low": "104'09A",
+            "last": "104'16A",
+            "change": "+'07",
+            "settle": "104'19",
+            "volume": "3",
+            "openInterest": "28"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "457,401",
+            "openInterest": "1,983,842"
+          }
+        ],
+        "updateTime": "Monday, 16 Nov 2026 11:55 PM",
+        "dsHeader": "U.S. Treasury Bond Future",
+        "reportType": "Final",
+        "tradeDate": "11/16/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 307,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'10",
+            "high": "105'27",
+            "low": "105'05",
+            "last": "105'18",
+            "change": "+'03",
+            "settle": "105'20",
+            "volume": "459,191",
+            "openInterest": "1,931,035"
+          },
+          {
+            "month": "MAR 27",
+            "open": "104'29",
+            "high": "105'09",
+            "low": "104'20",
+            "last": "104'31B",
+            "change": "+'03",
+            "settle": "105'02",
+            "volume": "31,212",
+            "openInterest": "46,829"
+          },
+          {
+            "month": "JUN 27",
+            "open": "104'15",
+            "high": "104'25B",
+            "low": "104'08A",
+            "last": "104'20A",
+            "change": "+'03",
+            "settle": "104'22",
+            "volume": "26",
+            "openInterest": "29"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "490,429",
+            "openInterest": "1,977,893"
+          }
+        ],
+        "updateTime": "Tuesday, 17 Nov 2026 11:55 PM",
+        "dsHeader": "U.S. Treasury Bond Future",
+        "reportType": "Final",
+        "tradeDate": "11/17/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 307,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "105'16",
+            "high": "106'13",
+            "low": "105'13",
+            "last": "106'08",
+            "change": "+'20",
+            "settle": "106'08",
+            "volume": "556,953",
+            "openInterest": "1,903,081"
+          },
+          {
+            "month": "MAR 27",
+            "open": "104'29",
+            "high": "105'27",
+            "low": "104'27",
+            "last": "105'23",
+            "change": "+'21",
+            "settle": "105'23",
+            "volume": "88,723",
+            "openInterest": "64,890"
+          },
+          {
+            "month": "JUN 27",
+            "open": "104'16",
+            "high": "105'11",
+            "low": "104'15A",
+            "last": "105'11A",
+            "change": "+'21",
+            "settle": "105'11",
+            "volume": "12",
+            "openInterest": "42"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "645,688",
+            "openInterest": "1,968,013"
+          }
+        ],
+        "updateTime": "Wednesday, 18 Nov 2026 11:55 PM",
+        "dsHeader": "U.S. Treasury Bond Future",
+        "reportType": "Final",
+        "tradeDate": "11/18/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 307,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "106'07",
+            "high": "106'17",
+            "low": "105'25",
+            "last": "106'09",
+            "change": "+'01",
+            "settle": "106'09",
+            "volume": "721,920",
+            "openInterest": "1,883,270"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'23",
+            "high": "106'01",
+            "low": "105'07",
+            "last": "105'22",
+            "change": "0",
+            "settle": "105'23",
+            "volume": "208,060",
+            "openInterest": "122,132"
+          },
+          {
+            "month": "JUN 27",
+            "open": "104'29",
+            "high": "105'10",
+            "low": "104'27A",
+            "last": "105'10A",
+            "change": "0",
+            "settle": "105'11",
+            "volume": "63",
+            "openInterest": "42"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "930,043",
+            "openInterest": "2,005,444"
+          }
+        ],
+        "updateTime": "Thursday, 19 Nov 2026 11:55 PM",
+        "dsHeader": "U.S. Treasury Bond Future",
+        "reportType": "Final",
+        "tradeDate": "11/19/2026",
+        "empty": false
+      }
+    },
+    {
+      "product": 307,
+      "data": {
+        "settlements": [
+          {
+            "month": "DEC 26",
+            "open": "106'10",
+            "high": "107'27",
+            "low": "106'09",
+            "last": "107'09",
+            "change": "+1'11",
+            "settle": "107'20",
+            "volume": "1,298,437",
+            "openInterest": "1,748,834"
+          },
+          {
+            "month": "MAR 27",
+            "open": "105'25",
+            "high": "107'10",
+            "low": "105'25",
+            "last": "106'24",
+            "change": "+1'12",
+            "settle": "107'03",
+            "volume": "672,313",
+            "openInterest": "258,238"
+          },
+          {
+            "month": "JUN 27",
+            "open": "106'14",
+            "high": "106'21B",
+            "low": "106'14",
+            "last": "106'15B",
+            "change": "+1'12",
+            "settle": "106'23",
+            "volume": "13",
+            "openInterest": "103"
+          },
+          {
+            "month": "Total",
+            "open": "-",
+            "high": "-",
+            "low": "-",
+            "last": "-",
+            "change": "0",
+            "settle": "-",
+            "volume": "1,970,763",
+            "openInterest": "2,007,175"
+          }
+        ],
+        "updateTime": "Friday, 20 Nov 2026 11:55 PM",
+        "dsHeader": "U.S. Treasury Bond Future",
+        "reportType": "Final",
+        "tradeDate": "11/20/2026",
+        "empty": false
+      }
+    }
+  ]
+}
