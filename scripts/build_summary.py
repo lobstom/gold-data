@@ -141,7 +141,7 @@ def main():
     }
     doc, comparison_lines = augment(d, doc, open(SRC, "rb").read())
     with open(os.path.join(HERE, "summary.json"), "w") as f:
-        json.dump(doc, f, indent=2)
+        f.write(json.dumps(doc, indent=2).rstrip("\n") + "\n")
 
     L = []
     L.append("# Prices in Gold Ounces - model summary")
@@ -200,7 +200,7 @@ def main():
                 L.extend([r['note'], ""])
             L.extend(["[Existing model, sources and notes](https://www.notimeforbull.com/prices/)", ""])
     with open(os.path.join(HERE, "summary.md"), "w") as f:
-        f.write("\n".join(L))
+        f.write("\n".join(L).rstrip("\n") + "\n")
     print(f"wrote summary.json and summary.md: {sum(len(s) for _, s in groups)} series in {len([g for g, s in groups if s])} groups")
 
 
