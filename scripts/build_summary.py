@@ -7,6 +7,7 @@ Values are copied from the frozen dataset; each row keeps its own as-of date.
 Nothing here is real-time.
 """
 import json, datetime, os
+from visibility_comparisons import augment
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(HERE, "data.json")
@@ -138,6 +139,7 @@ def main():
         "groups": [{"group": g, "series": s} for g, s in groups if s],
         "caveats": [v for v in (d.get("v3_notes") or {}).values() if isinstance(v, str)] + [v for v in (d.get("weekly_notes") or {}).values() if isinstance(v, str)],
     }
+    doc, comparison_lines = augment(d, doc, open(SRC, "rb").read())
     with open(os.path.join(HERE, "summary.json"), "w") as f:
         json.dump(doc, f, indent=2)
 
@@ -190,6 +192,13 @@ def main():
     L.append("")
     L.append("Values priced in gold use the gold price of the same period as each row (weekly rows use weekly averages; monthly rows use monthly averages). Rows carry their own as-of dates and update at their native frequency. Republication rights for underlying sources remain with those sources.")
     L.append("")
+    L.extend(["", "## Historical gold comparisons", "", "Dated full-history comparisons use the time-weighted median, not an annual average. Histories differ and may contain proxies. Percentiles are not forecasts or rankings of investment merit.", ""])
+    for group in doc['groups']:
+        for r in group['series']:
+            L.extend(["### " + r['label'], "", r.get('citation_sentence_gold') or r['historical_comparison_gold']['reason'], ""])
+            if r.get('note'):
+                L.extend([r['note'], ""])
+            L.extend(["[Existing model, sources and notes](https://www.notimeforbull.com/prices/)", ""])
     with open(os.path.join(HERE, "summary.md"), "w") as f:
         f.write("\n".join(L))
     print(f"wrote summary.json and summary.md: {sum(len(s) for _, s in groups)} series in {len([g for g, s in groups if s])} groups")
