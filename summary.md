@@ -7,7 +7,7 @@ This file is a compact, dated summary of that model. It is generated from the fr
 - Full dataset (JSON): https://data.notimeforbull.com/data.json
 - Machine-readable version of this summary: https://data.notimeforbull.com/summary.json
 - Frozen Monday snapshot manifest: https://data.notimeforbull.com/snapshots/latest.json
-- Dataset last built: 2026-11-16. Summary generated: 2026-11-17.
+- Dataset last built: 2026-11-16. Summary generated: 2026-11-23.
 
 ## Money
 
@@ -118,3 +118,240 @@ Treasuries held by the Fed: Dollar-equivalent in gold, not gold owned. Stock div
 - Weekly row sources: EIA Europe Brent spot weekly average; 10Y minus 2Y Treasury (Treasury daily par yield curve), completed-week average; US Treasury Debt to the Penny, end-of-week total public debt outstanding; Dow Jones daily closes (CNBC), completed-week average; Fed total assets (H.4.1 Table 5, Wednesday level), source weekly stock; Fed funds effective rate (NY Fed EFFR), completed-week average; Treasuries held outright by the Fed (H.4.1 Table 1, Wednesday level), source weekly stock; EIA Henry Hub natural gas spot weekly average; Freddie Mac PMMS 30Y fixed, source-published weekly average; US 10Y TIPS real yield (Treasury daily real par yield curve), completed-week average; S&P 500 daily closes (CNBC), completed-week average; US 10Y Treasury yield (Treasury daily par yield curve), completed-week average; EIA WTI Cushing spot weekly average
 
 Values priced in gold use the gold price of the same period as each row (weekly rows use weekly averages; monthly rows use monthly averages). Rows carry their own as-of dates and update at their native frequency. Republication rights for underlying sources remain with those sources.
+
+
+## Historical gold comparisons
+
+Dated full-history comparisons use the time-weighted median, not an annual average. Histories differ and may contain proxies. Percentiles are not forecasts or rankings of investment merit.
+
+### Gold
+
+Gold priced in gold is the constant, not a valuation comparison.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Silver
+
+As of 2026-10, Silver: 0.013886 troy oz of gold per oz, 58.6% below its 1791-07-01 to 2026-10-01 time-weighted median of 0.03358 troy oz of gold per oz (No Time For Bull model; monthly avg). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual or derived history.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US dollar
+
+As of 2026-11-13, US dollar: 0.00025072 troy oz of gold per $1, 99.5% below its 1791-07-01 to 2026-11-13 time-weighted median of 0.048379 troy oz of gold per $1 (No Time For Bull model; completed-week average (2026-11-09 to 2026-11-13); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual history derived from the gold series.
+
+US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US Dollar Index
+
+Native rate, ratio or index, not a price in gold ounces.
+
+US Dollar Index (DXY) is rebuilt from FRED exchange rates with the ICE DXY formula (from 1980) and spliced to the Fed major currencies index before 1980. It is shown in index points in every unit mode and is not the ICE-published series.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Copper (LME grade A)
+
+As of 2026-10, Copper (LME grade A): 3.5342 troy oz of gold per tonne, 42.8% below its 1960-01-01 to 2026-10-01 time-weighted median of 6.1825 troy oz of gold per tonne (No Time For Bull model; monthly avg). Full-history comparison; histories may include proxies. See this row's source and method notes.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Uranium U3O8 (spot)
+
+As of 2026-10-30, Uranium U3O8 (spot): 0.022302 troy oz of gold per lb, 26.1% below its 1988-01-01 to 2026-10-30 time-weighted median of 0.030174 troy oz of gold per lb (No Time For Bull model; month-end spot average (UxC/TradeTech via Cameco)). Full-history comparison; histories may include proxies. See this row's source and method notes.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Crude oil (WTI)
+
+As of 2026-11-06, Crude oil (WTI): 0.023882 troy oz of gold per bbl, 53.6% below its 1861-07-01 to 2026-11-06 time-weighted median of 0.051429 troy oz of gold per bbl (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1982, annual oil history.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Crude oil (Brent)
+
+As of 2026-11-06, Crude oil (Brent): 0.024987 troy oz of gold per bbl, 48.9% below its 1861-07-01 to 2026-11-06 time-weighted median of 0.048857 troy oz of gold per bbl (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual oil proxy.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Natural gas (US)
+
+As of 2026-11-06, Natural gas (US): 0.00064951 troy oz of gold per MMBtu, 82.6% below its 1922-07-01 to 2026-11-06 time-weighted median of 0.00373 troy oz of gold per MMBtu (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual wellhead proxy.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Natural gas (Europe, TTF)
+
+As of 2026-10, Natural gas (Europe, TTF): 0.0069428 troy oz of gold per MMBtu, 26.5% below its 1960-01-01 to 2026-10-01 time-weighted median of 0.0094398 troy oz of gold per MMBtu (No Time For Bull model; monthly avg). Full-history comparison; histories may include proxies. See this row's source and method notes. Before April 2015, European import-price proxy, not TTF.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Coal (Australian, Newcastle)
+
+As of 2026-10, Coal (Australian, Newcastle): 0.037101 troy oz of gold per tonne, 60.0% below its 1970-01-01 to 2026-10-01 time-weighted median of 0.092857 troy oz of gold per tonne (No Time For Bull model; monthly avg). Full-history comparison; histories may include proxies. See this row's source and method notes.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Lumber (LBR rolling futures; since Sep 2022)
+
+As of 2026-10, Lumber (LBR rolling futures; since Sep 2022): 0.1279 troy oz of gold per 1,000 board ft, 39.1% below its 2022-09-01 to 2026-10-01 time-weighted median of 0.20987 troy oz of gold per 1,000 board ft (No Time For Bull model; monthly avg). Full-history comparison; histories may include proxies. See this row's source and method notes.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US electricity (all sectors)
+
+As of 2026-08, US electricity (all sectors): 0.033711 troy oz of gold per MWh, 80.7% below its 1960-07-01 to 2026-08-01 time-weighted median of 0.17512 troy oz of gold per MWh (No Time For Bull model; monthly avg). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 2001, annual history.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US median new-home price
+
+As of 2026-07, US median new-home price: 92.158 troy oz of gold per home, 65.0% below its 1890-07-01 to 2026-07-01 time-weighted median of 263.44 troy oz of gold per home (No Time For Bull model; quarterly). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1963, a rescaled home-price index, not observed median new-home prices; full-history comparison is approximate.
+
+US median new-home price: Census median sales price of new houses sold (FRED MSPUS, nominal dollars, quarterly) from 1963. Before 1963 the row is a Shiller-based nominal US home price index (1890-1962, closely tracking but not an exact copy of the Robert Shiller series) rescaled to the 1963 Census level, so those values are approximate and are not observed median prices. From 1963 the series covers new homes only; the earlier part is a rescaled all-home index. For existing-home price changes see the US home price index vs gold row.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US home price index vs gold, Jan 2000 = 100
+
+Native rate, ratio or index, not a price in gold ounces.
+
+US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Price Index (repeat sales of single-family homes, FRED CSUSHPINSA, from 1987) divided by the monthly average gold price, with both set to 100 in January 2000. It is an index, not ounces per home, and it is shown in index points in every unit mode. Case-Shiller is a three-month average and is revised.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### S&P 500 (price index)
+
+As of 2026-11-13, S&P 500 price-index level: 1.8976 troy oz of gold per index pt, 284.2% above its 1871-01-01 to 2026-11-13 time-weighted median of 0.49395 troy oz of gold per index pt (No Time For Bull model; completed-week average (2026-11-09 to 2026-11-13); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Dow Jones Industrial Average
+
+As of 2026-11-13, Dow Jones price-index level: 13.125 troy oz of gold per index pt, 128.3% above its 1885-02-01 to 2026-11-13 time-weighted median of 5.7489 troy oz of gold per index pt (No Time For Bull model; completed-week average (2026-11-09 to 2026-11-13); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### 10Y Treasury futures (ZN reference quote)
+
+Fewer than 24 valid observations; no historical comparison.
+
+CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Treasury bond futures (ZB reference quote)
+
+Fewer than 24 valid observations; no historical comparison.
+
+CME final daily settlements, decimal quote per $100 face. Gold equivalent per $100,000 face = 1,000 x weekly mean decimal quote / same-week World Gold Council gold USD/oz. Futures reference quote only: not margin, invested capital, delivery invoice price, cash bond value or total return. Invoice pricing also uses a conversion factor and accrued interest. At least three dated final daily settlements per completed week. No silver or real-dollar conversion. Free browser history currently starts November 9, 2026; earlier requests were empty. The first weekly point is November 13, 2026. Switch to the next quarterly delivery contract on the first Monday on or after the 20th of the month before delivery; one contract for the full week. No back-adjustment. Roll weeks are marked; a level change at a roll is not an investment return.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Avg hourly earnings (production workers)
+
+As of 2026-10, Avg hourly earnings (production workers): 0.0079781 troy oz of gold per hour, 73.0% below its 1939-01-01 to 2026-10-01 time-weighted median of 0.029565 troy oz of gold per hour (No Time For Bull model; monthly). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1964, rescaled manufacturing earnings; full-history comparison is approximate.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US M2 money supply
+
+As of 2026-09, US M2 money supply: 5.4211 billion troy oz of gold, 43.5% below its 1959-01-01 to 2026-09-01 time-weighted median of 9.6025 billion troy oz of gold (No Time For Bull model; monthly, seasonally adjusted). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Who owns the federal debt (and the Fed's balance sheet)
+
+As of 2026-11-13, Total federal debt: 10.181 billion troy oz of gold, 16.6% above its 1939-06-30 to 2026-11-13 time-weighted median of 8.73241 billion troy oz of gold (No Time For Bull model; quarter-end stock (annual before 1966); weekly since 2026-09-25). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1966, annual fiscal-year history. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+
+Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Federal debt held by the public
+
+As of 2026-06-30, Federal debt held by the public: 7.49894 billion troy oz of gold, 4.5% below its 1970-03-31 to 2026-06-30 time-weighted median of 7.85497 billion troy oz of gold (No Time For Bull model; quarter-end stock). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+
+Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Federal debt held by government accounts
+
+As of 2026-06-30, Federal debt held by government accounts: 1.83464 billion troy oz of gold, 48.4% below its 1981-03-31 to 2026-06-30 time-weighted median of 3.55837 billion troy oz of gold (No Time For Bull model; quarter-end stock). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+
+Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Fed total assets
+
+As of 2026-11-11, Fed total assets: 1.6946 billion troy oz of gold, 29.2% below its 2002-12-25 to 2026-11-11 time-weighted median of 2.39401 billion troy oz of gold (No Time For Bull model; month-end: last weekly stock; weekly since 2026-11-04). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+
+Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Treasuries held by the Fed
+
+As of 2026-11-11, Treasuries held by the Fed: 1.1499 billion troy oz of gold, 31.3% below its 2002-12-25 to 2026-11-11 time-weighted median of 1.67461 billion troy oz of gold (No Time For Bull model; month-end: last weekly stock; weekly since 2026-11-04). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+
+Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US total credit market debt / GDP
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### 30Y mortgage (PMMS); all-term MIRS proxy before 1971
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Fed funds (effective); discount rate before 1954
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US 10Y Treasury yield
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US 10Y real yield (TIPS)
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Yield curve: 10Y minus 2Y Treasury (pp)
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Gold / silver ratio (oz Ag per oz Au)
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### Gold / oil ratio (WTI bbl per oz Au)
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
+
+### US CPI (all items, 1982-84=100)
+
+Native rate, ratio or index, not a price in gold ounces.
+
+[Existing model, sources and notes](https://www.notimeforbull.com/prices/)
