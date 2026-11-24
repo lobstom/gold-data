@@ -1,44 +1,46 @@
 # Observation freshness report
 
-Generated 2026-11-16T07:33:30.071738-08:00.
-Model update label 2026-11-16. This is not the observation date of every row.
+Generated 2026-11-23T16:11:43.646367-08:00.
+Model update label 2026-11-24. This is not the observation date of every row.
 This generator performs no live upstream retrieval. Dated manual publisher checks, where available, are listed separately below. Other release expectations remain unverified; age flags are review prompts, not missed-release claims.
 
 | Row | Observation period | Cadence | Age review | Last evidenced source check |
 | --- | --- | --- | --- | --- |
-| Gold | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
+| Gold | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
 | Silver | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
 | Copper (LME grade A) | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
-| Uranium U3O8 (spot) | 2026-10-30 | month-end spot average (UxC/TradeTech via Cameco) | within_age_review_threshold | Unverified |
-| Crude oil (WTI) | 2026-11-06 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| Crude oil (Brent) | 2026-11-06 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| Natural gas (US) | 2026-11-06 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
+| Uranium U3O8 (spot) | 2026-11-16 | month-end history; latest dated UxC input | within_age_review_threshold | Unverified |
+| Crude oil (WTI) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| Crude oil (Brent) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| Natural gas (US) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
 | Natural gas (Europe, TTF) | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
 | Coal (Australian, Newcastle) | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
 | Lumber (LBR rolling futures; since Sep 2022) | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
 | US electricity (all sectors) | 2026-08 | monthly avg | review_old_vintage | Unverified |
 | US median new-home price | 2026-Q3 | quarterly | within_age_review_threshold | Unverified |
 | US M2 money supply | 2026-09 | monthly, seasonally adjusted | review_old_vintage | Unverified |
-| Who owns the federal debt (and the Fed's balance sheet) | 2026-11-13 | quarter-end stock (annual before 1966); weekly since 2026-09-25 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
+| Who owns the federal debt (and the Fed's balance sheet) | 2026-11-20 | quarter-end stock (annual before 1966); weekly since 2026-09-25 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
 | Avg hourly earnings (production workers) | 2026-10 | monthly | within_age_review_threshold | Unverified |
-| S&P 500 (price index) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| Dow Jones Industrial Average | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| 30Y mortgage (PMMS); all-term MIRS proxy before 1971 | 2026-11-12 | weekly PMMS; annual all-term proxy 1963-1970 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| Fed funds (effective); discount rate before 1954 | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| US 10Y Treasury yield | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| US 10Y real yield (TIPS) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| Yield curve: 10Y minus 2Y Treasury (pp) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
+| S&P 500 (price index) | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| Dow Jones Industrial Average | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| 30Y mortgage (PMMS); all-term MIRS proxy before 1971 | 2026-11-19 | weekly PMMS; annual all-term proxy 1963-1970 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| Fed funds (effective); discount rate before 1954 | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| US 10Y Treasury yield | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| US 10Y real yield (TIPS) | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| Yield curve: 10Y minus 2Y Treasury (pp) | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
 | US total credit market debt / GDP | 2026-Q2 | quarterly | review_old_vintage | Unverified |
 | US CPI (all items, 1982-84=100) | 2026-10 | monthly | within_age_review_threshold | Unverified |
 | Gold / silver ratio (oz Ag per oz Au) | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
-| Gold / oil ratio (WTI bbl per oz Au) | 2026-11-06 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | Unverified |
+| Gold / oil ratio (WTI bbl per oz Au) | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | Unverified |
 | US home price index vs gold, Jan 2000 = 100 | 2026-08 | monthly (3-month average, published about two months late) | review_old_vintage | Unverified |
 | US Dollar Index | 2026-10 | monthly avg | within_age_review_threshold | Unverified |
-| US dollar | 2026-11-13 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | Unverified |
-| Fed total assets | 2026-11-11 | month-end: last weekly stock; weekly since 2026-11-04 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
-| Treasuries held by the Fed | 2026-11-11 | month-end: last weekly stock; weekly since 2026-11-04 | within_age_review_threshold | 2026-11-16T06:02:58.954862-08:00 |
+| US dollar | 2026-11-20 | monthly avg; weekly since 2026-11-06 | within_age_review_threshold | Unverified |
+| Fed total assets | 2026-11-18 | month-end: last weekly stock; weekly since 2026-11-04 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
+| Treasuries held by the Fed | 2026-11-18 | month-end: last weekly stock; weekly since 2026-11-04 | within_age_review_threshold | 2026-11-23T16:11:04.554337-08:00 |
 | Federal debt held by the public | 2026-Q2 | quarter-end stock | within_age_review_threshold | Unverified |
 | Federal debt held by government accounts | 2026-Q2 | quarter-end stock | within_age_review_threshold | Unverified |
+| 10Y Treasury futures (ZN reference quote) | 2026-11-20 | completed-week average of final settlements; history from 2026-11-13 | within_age_review_threshold | 2026-11-21T14:44:33.514+00:00 |
+| Treasury bond futures (ZB reference quote) | 2026-11-20 | completed-week average of final settlements; history from 2026-11-13 | within_age_review_threshold | 2026-11-21T14:44:33.514+00:00 |
 
 ## Dated publisher release checks
 

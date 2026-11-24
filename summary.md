@@ -7,15 +7,15 @@ This file is a compact, dated summary of that model. It is generated from the fr
 - Full dataset (JSON): https://data.notimeforbull.com/data.json
 - Machine-readable version of this summary: https://data.notimeforbull.com/summary.json
 - Frozen Monday snapshot manifest: https://data.notimeforbull.com/snapshots/latest.json
-- Dataset last built: 2026-11-16. Summary generated: 2026-11-23.
+- Dataset last built: 2026-11-24. Summary generated: 2026-11-24.
 
 ## Money
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Gold | $3,989 per oz | 1.000 oz | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
+| Gold | $3,755 per oz | 1.000 oz | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
 | Silver | $57.00 per oz | 0.01389 oz | 2026-10 | monthly avg |
-| US dollar | $1.00 | 0.0002507 oz | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
+| US dollar | $1.00 | 0.0002663 oz | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
 | US Dollar Index | 102.1 pts | not priced in gold | 2026-10 | monthly avg |
 
 US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series.
@@ -27,10 +27,10 @@ US Dollar Index (DXY) is rebuilt from FRED exchange rates with the ICE DXY formu
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
 | Copper (LME grade A) | $14,508 per tonne | 3.534 oz | 2026-10 | monthly avg |
-| Uranium U3O8 (spot) | $91.55 per lb | 0.0223 oz | 2026-10-30 | month-end spot average (UxC/TradeTech via Cameco) |
-| Crude oil (WTI) | $95.97 per bbl | 0.02388 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
-| Crude oil (Brent) | $100.41 per bbl | 0.02499 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
-| Natural gas (US) | $2.61 per MMBtu | 0.0006495 oz | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| Uranium U3O8 (spot) | $90.30 per lb | 0.022 oz | 2026-11-16 | month-end history; latest dated UxC input |
+| Crude oil (WTI) | $90.78 per bbl | 0.02276 oz | 2026-11-13 | monthly avg; weekly since 2026-11-06 |
+| Crude oil (Brent) | $92.78 per bbl | 0.02326 oz | 2026-11-13 | monthly avg; weekly since 2026-11-06 |
+| Natural gas (US) | $3.03 per MMBtu | 0.0007597 oz | 2026-11-13 | monthly avg; weekly since 2026-11-06 |
 | Natural gas (Europe, TTF) | $28.50 per MMBtu | 0.006943 oz | 2026-10 | monthly avg |
 | Coal (Australian, Newcastle) | $152.30 per tonne | 0.0371 oz | 2026-10 | monthly avg |
 | Lumber (LBR rolling futures; since Sep 2022) | $525.05 per 1,000 board ft | 0.1279 oz | 2026-10 | monthly avg |
@@ -51,10 +51,10 @@ US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Pri
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| S&P 500 (price index) | 7,568.9 pts | 1.898 oz | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
-| Dow Jones Industrial Average | 52,351.0 pts | 13.1 oz | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
-| 10Y Treasury futures (ZN reference quote) | 105.996875 per $100 face; $105,996.88 reference per $100k face | 26.6 oz | 2026-11-13 | completed-week average of final settlements; history from 2026-11-13 |
-| Treasury bond futures (ZB reference quote) | 106.806250 per $100 face; $106,806.25 reference per $100k face | 26.8 oz | 2026-11-13 | completed-week average of final settlements; history from 2026-11-13 |
+| S&P 500 (price index) | 7,233.4 pts | 1.926 oz | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
+| Dow Jones Industrial Average | 49,962.0 pts | 13.3 oz | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
+| 10Y Treasury futures (ZN reference quote) | 105.909375 per $100 face; $105,909.38 reference per $100k face | 28.2 oz | 2026-11-20 | completed-week average of final settlements; history from 2026-11-13 |
+| Treasury bond futures (ZB reference quote) | 106.262500 per $100 face; $106,262.50 reference per $100k face | 28.3 oz | 2026-11-20 | completed-week average of final settlements; history from 2026-11-13 |
 | Avg hourly earnings (production workers) | $32.75 per hour | 0.007978 oz | 2026-10 | monthly |
 | US M2 money supply | $23.41 trillion | 5.42 billion oz | 2026-09 | monthly, seasonally adjusted |
 
@@ -66,11 +66,11 @@ Treasury bond futures (ZB reference quote): CME final daily settlements, decimal
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| Who owns the federal debt (and the Fed's balance sheet) | $40.61 trillion | 10.18 billion oz | 2026-11-13 | quarter-end stock (annual before 1966); weekly since 2026-09-25 |
+| Who owns the federal debt (and the Fed's balance sheet) | $40.71 trillion | 10.84 billion oz | 2026-11-20 | quarter-end stock (annual before 1966); weekly since 2026-09-25 |
 | Federal debt held by the public | $31.71 trillion | 7.50 billion oz | 2026-06-30 | quarter-end stock |
 | Federal debt held by government accounts | $7.76 trillion | 1.83 billion oz | 2026-06-30 | quarter-end stock |
-| Fed total assets | $6.76 trillion | 1.69 billion oz | 2026-11-11 | month-end: last weekly stock; weekly since 2026-11-04 |
-| Treasuries held by the Fed | $4.59 trillion | 1.15 billion oz | 2026-11-11 | month-end: last weekly stock; weekly since 2026-11-04 |
+| Fed total assets | $6.74 trillion | 1.80 billion oz | 2026-11-18 | month-end: last weekly stock; weekly since 2026-11-04 |
+| Treasuries held by the Fed | $4.59 trillion | 1.22 billion oz | 2026-11-18 | month-end: last weekly stock; weekly since 2026-11-04 |
 | US total credit market debt / GDP | 365% | not priced in gold | 2026-04 | quarterly |
 
 Who owns the federal debt (and the Fed's balance sheet): Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned.
@@ -87,18 +87,18 @@ Treasuries held by the Fed: Dollar-equivalent in gold, not gold owned. Stock div
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
-| 30Y mortgage (PMMS); all-term MIRS proxy before 1971 | 7.11% | not priced in gold | 2026-11-12 | weekly PMMS; annual all-term proxy 1963-1970 |
-| Fed funds (effective); discount rate before 1954 | 3.88% | not priced in gold | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
-| US 10Y Treasury yield | 5.0275% | not priced in gold | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
-| US 10Y real yield (TIPS) | 2.8025% | not priced in gold | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
-| Yield curve: 10Y minus 2Y Treasury (pp) | 0.27 pp | not priced in gold | 2026-11-13 | completed-week average (2026-11-09 to 2026-11-13); not Friday close |
+| 30Y mortgage (PMMS); all-term MIRS proxy before 1971 | 7.28% | not priced in gold | 2026-11-19 | weekly PMMS; annual all-term proxy 1963-1970 |
+| Fed funds (effective); discount rate before 1954 | 3.88% | not priced in gold | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
+| US 10Y Treasury yield | 5.05% | not priced in gold | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
+| US 10Y real yield (TIPS) | 2.868% | not priced in gold | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
+| Yield curve: 10Y minus 2Y Treasury (pp) | 0.29 pp | not priced in gold | 2026-11-20 | completed-week average (2026-11-16 to 2026-11-20); not Friday close |
 
 ## Ratios and price indexes
 
 | Series | Latest | In gold | As of | Frequency |
 | --- | --- | --- | --- | --- |
 | Gold / silver ratio (oz Ag per oz Au) | 72.0 | not priced in gold | 2026-10 | monthly avg |
-| Gold / oil ratio (WTI bbl per oz Au) | 41.9 | not priced in gold | 2026-11-06 | monthly avg; weekly since 2026-11-06 |
+| Gold / oil ratio (WTI bbl per oz Au) | 43.9 | not priced in gold | 2026-11-13 | monthly avg; weekly since 2026-11-06 |
 | US CPI (all items, 1982-84=100) | 337.5 | not priced in gold | 2026-10 | monthly |
 
 ## Sources and conventions
@@ -138,7 +138,7 @@ As of 2026-10, Silver: 0.013886 troy oz of gold per oz, 58.6% below its 1791-07-
 
 ### US dollar
 
-As of 2026-11-13, US dollar: 0.00025072 troy oz of gold per $1, 99.5% below its 1791-07-01 to 2026-11-13 time-weighted median of 0.048379 troy oz of gold per $1 (No Time For Bull model; completed-week average (2026-11-09 to 2026-11-13); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual history derived from the gold series.
+As of 2026-11-20, US dollar: 0.00026631 troy oz of gold per $1, 99.4% below its 1791-07-01 to 2026-11-20 time-weighted median of 0.048379 troy oz of gold per $1 (No Time For Bull model; completed-week average (2026-11-16 to 2026-11-20); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual history derived from the gold series.
 
 US dollar priced in gold: 1 USD = 1 / gold price in USD. Derived from this page's gold row (same sources and dates: World Bank monthly averages, MeasuringWorth annual history before 1960); not a separate data series.
 
@@ -160,25 +160,25 @@ As of 2026-10, Copper (LME grade A): 3.5342 troy oz of gold per tonne, 42.8% bel
 
 ### Uranium U3O8 (spot)
 
-As of 2026-10-30, Uranium U3O8 (spot): 0.022302 troy oz of gold per lb, 26.1% below its 1988-01-01 to 2026-10-30 time-weighted median of 0.030174 troy oz of gold per lb (No Time For Bull model; month-end spot average (UxC/TradeTech via Cameco)). Full-history comparison; histories may include proxies. See this row's source and method notes.
+As of 2026-11-16, Uranium U3O8 (spot): 0.021998 troy oz of gold per lb, 27.1% below its 1988-01-01 to 2026-11-16 time-weighted median of 0.030174 troy oz of gold per lb (No Time For Bull model; month-end history; latest dated UxC input). Full-history comparison; histories may include proxies. See this row's source and method notes.
 
 [Existing model, sources and notes](https://www.notimeforbull.com/prices/)
 
 ### Crude oil (WTI)
 
-As of 2026-11-06, Crude oil (WTI): 0.023882 troy oz of gold per bbl, 53.6% below its 1861-07-01 to 2026-11-06 time-weighted median of 0.051429 troy oz of gold per bbl (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1982, annual oil history.
+As of 2026-11-13, Crude oil (WTI): 0.02276 troy oz of gold per bbl, 55.7% below its 1861-07-01 to 2026-11-13 time-weighted median of 0.051429 troy oz of gold per bbl (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1982, annual oil history.
 
 [Existing model, sources and notes](https://www.notimeforbull.com/prices/)
 
 ### Crude oil (Brent)
 
-As of 2026-11-06, Crude oil (Brent): 0.024987 troy oz of gold per bbl, 48.9% below its 1861-07-01 to 2026-11-06 time-weighted median of 0.048857 troy oz of gold per bbl (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual oil proxy.
+As of 2026-11-13, Crude oil (Brent): 0.023261 troy oz of gold per bbl, 52.4% below its 1861-07-01 to 2026-11-13 time-weighted median of 0.048857 troy oz of gold per bbl (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual oil proxy.
 
 [Existing model, sources and notes](https://www.notimeforbull.com/prices/)
 
 ### Natural gas (US)
 
-As of 2026-11-06, Natural gas (US): 0.00064951 troy oz of gold per MMBtu, 82.6% below its 1922-07-01 to 2026-11-06 time-weighted median of 0.00373 troy oz of gold per MMBtu (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual wellhead proxy.
+As of 2026-11-13, Natural gas (US): 0.00075967 troy oz of gold per MMBtu, 79.6% below its 1922-07-01 to 2026-11-13 time-weighted median of 0.00373 troy oz of gold per MMBtu (No Time For Bull model; monthly avg; weekly since 2026-11-06). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1960, annual wellhead proxy.
 
 [Existing model, sources and notes](https://www.notimeforbull.com/prices/)
 
@@ -224,13 +224,13 @@ US home price index vs gold: the S&P CoreLogic Case-Shiller US National Home Pri
 
 ### S&P 500 (price index)
 
-As of 2026-11-13, S&P 500 price-index level: 1.8976 troy oz of gold per index pt, 284.2% above its 1871-01-01 to 2026-11-13 time-weighted median of 0.49395 troy oz of gold per index pt (No Time For Bull model; completed-week average (2026-11-09 to 2026-11-13); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes.
+As of 2026-11-20, S&P 500 price-index level: 1.9263 troy oz of gold per index pt, 290.0% above its 1871-01-01 to 2026-11-20 time-weighted median of 0.49395 troy oz of gold per index pt (No Time For Bull model; completed-week average (2026-11-16 to 2026-11-20); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes.
 
 [Existing model, sources and notes](https://www.notimeforbull.com/prices/)
 
 ### Dow Jones Industrial Average
 
-As of 2026-11-13, Dow Jones price-index level: 13.125 troy oz of gold per index pt, 128.3% above its 1885-02-01 to 2026-11-13 time-weighted median of 5.7489 troy oz of gold per index pt (No Time For Bull model; completed-week average (2026-11-09 to 2026-11-13); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes.
+As of 2026-11-20, Dow Jones price-index level: 13.305 troy oz of gold per index pt, 131.4% above its 1885-02-01 to 2026-11-20 time-weighted median of 5.7489 troy oz of gold per index pt (No Time For Bull model; completed-week average (2026-11-16 to 2026-11-20); not Friday close). Full-history comparison; histories may include proxies. See this row's source and method notes.
 
 [Existing model, sources and notes](https://www.notimeforbull.com/prices/)
 
@@ -264,7 +264,7 @@ As of 2026-09, US M2 money supply: 5.4211 billion troy oz of gold, 43.5% below i
 
 ### Who owns the federal debt (and the Fed's balance sheet)
 
-As of 2026-11-13, Total federal debt: 10.181 billion troy oz of gold, 16.6% above its 1939-06-30 to 2026-11-13 time-weighted median of 8.73241 billion troy oz of gold (No Time For Bull model; quarter-end stock (annual before 1966); weekly since 2026-09-25). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1966, annual fiscal-year history. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+As of 2026-11-20, Total federal debt: 10.842 billion troy oz of gold, 24.2% above its 1939-06-30 to 2026-11-20 time-weighted median of 8.73241 billion troy oz of gold (No Time For Bull model; quarter-end stock (annual before 1966); weekly since 2026-09-25). Full-history comparison; histories may include proxies. See this row's source and method notes. Before 1966, annual fiscal-year history. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
 
 Ownership split: approximate quarter end. Fed stocks use the last Wednesday in the quarter-end month. Foreign holders are US Treasury TIC estimates of foreign holdings of Treasury securities at quarter-end months (official vs private/other). Other domestic holders are a residual: total debt minus government accounts minus Fed Treasuries minus TIC foreign holdings. TIC and Treasury/Fed debt definitions differ, so the residual is approximate. Non-Treasury Fed assets are NOT federal debt. Dollar-equivalent gold, not gold owned.
 
@@ -288,7 +288,7 @@ Dollar-equivalent in gold, not gold owned. Stock divided by same-month average m
 
 ### Fed total assets
 
-As of 2026-11-11, Fed total assets: 1.6946 billion troy oz of gold, 29.2% below its 2002-12-25 to 2026-11-11 time-weighted median of 2.39401 billion troy oz of gold (No Time For Bull model; month-end: last weekly stock; weekly since 2026-11-04). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+As of 2026-11-18, Fed total assets: 1.7953 billion troy oz of gold, 23.2% below its 2002-12-25 to 2026-11-18 time-weighted median of 2.33717 billion troy oz of gold (No Time For Bull model; month-end: last weekly stock; weekly since 2026-11-04). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
 
 Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum.
 
@@ -296,7 +296,7 @@ Dollar-equivalent in gold, not gold owned. Stock divided by same-month average m
 
 ### Treasuries held by the Fed
 
-As of 2026-11-11, Treasuries held by the Fed: 1.1499 billion troy oz of gold, 31.3% below its 2002-12-25 to 2026-11-11 time-weighted median of 1.67461 billion troy oz of gold (No Time For Bull model; month-end: last weekly stock; weekly since 2026-11-04). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
+As of 2026-11-18, Treasuries held by the Fed: 1.2216 billion troy oz of gold, 27.1% below its 2002-12-25 to 2026-11-18 time-weighted median of 1.67461 billion troy oz of gold (No Time For Bull model; month-end: last weekly stock; weekly since 2026-11-04). Full-history comparison; histories may include proxies. See this row's source and method notes. Dollar-equivalent in gold, not gold owned; overlapping balance rows must not be added.
 
 Dollar-equivalent in gold, not gold owned. Stock divided by same-month average metal price. Overlaps other balance rows; do not sum.
 
