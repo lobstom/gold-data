@@ -1,7 +1,7 @@
 name: Telegram channel posts
 on:
   schedule:
-    - cron: "17 * * * *"   # hourly, offset from the feeds job
+    - cron: "43 * * * *"   # hourly, offset from the feeds job
   workflow_dispatch:
 permissions:
   contents: write
